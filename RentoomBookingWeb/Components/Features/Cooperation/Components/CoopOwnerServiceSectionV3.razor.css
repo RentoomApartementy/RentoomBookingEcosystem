@@ -5,8 +5,9 @@
     align-items: center;
     width: 100%;
     padding: 6rem max(24px, calc((100% - 1180px) / 2));
-    background: #eef4ef;
-    border-bottom: 1px solid rgba(31,90,65,.08);
+    background: #f7f3ec;
+    border-top: 1px solid rgba(148,95,40,.08);
+    border-bottom: 1px solid rgba(148,95,40,.08);
     box-sizing: border-box;
 }
 
@@ -44,7 +45,7 @@
 
 .coop-v3-owner-benefits article {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1rem;
     min-height: 122px;
     padding: 1.5rem;
@@ -75,10 +76,17 @@
 }
 
 .coop-v3-owner-benefits h3 {
-    color: #222;
+    color: #1f5a41;
     font-size: 1rem;
     line-height: 1.45;
     margin: 0;
+}
+
+.coop-v3-owner-benefit-description {
+    color: #666;
+    font-size: .9rem;
+    line-height: 1.55;
+    margin: .4rem 0 0;
 }
 
 @media (max-width: 900px) {

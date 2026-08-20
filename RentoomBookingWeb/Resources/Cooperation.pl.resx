@@ -1,152 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
   <resheader name="version">
-    <value>1.3</value>
+    <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CooperationText" xml:space="preserve">
-        <value>Współpraca</value>
-    </data>
-  <data name="WhyUsText" xml:space="preserve">
-        <value>O nas i dlaczego my?</value>
-    </data>
-  <data name="ExperienceText1" xml:space="preserve">
-        <value>Doświadczenie
-</value>
-    </data>
-  <data name="Experience2Text" xml:space="preserve">
-        <value>Rentoom Apartamenty to nowoczesna marka zarządzająca najmem krótkoterminowym w Toruniu. Zaufało nam już ponad 100 inwestorów. Zarządzamy ponad 150 apartamentami i obsługujemy rocznie ponad 7000 rezerwacji.
-</value>
-    </data>
-  <data name="QualityText1" xml:space="preserve">
-        <value>Jakość</value>
-    </data>
-  <data name="QualityText2" xml:space="preserve">
-        <value>Zajmujemy się całym procesem – od profesjonalnego przygotowania mieszkania i skutecznej promocji, przez dynamiczne zarządzanie ceną, aż po całodobową obsługę gości, sprzątanie i serwis techniczny. Zapewniamy przejrzyste rozliczenia i pełną transparentność finansową.</value>
-    </data>
-  <data name="ProfessionalismText1" xml:space="preserve">
-        <value>Profesjonalizm</value>
-    </data>
-  <data name="Professionalism2" xml:space="preserve">
-        <value>Dzięki doświadczeniu i sprawdzonemu modelowi działania możliwe jest osiąganie przychodów sięgających nawet 30% wartości nieruchomości rocznie*.</value>
-    </data>
-  <data name="InnovationText1" xml:space="preserve">
-        <value>Innowacyjność</value>
-    </data>
-  <data name="InnovationText2" xml:space="preserve">
-        <value>Dodatkowo nasz Program Partnerski, oferujący rabaty do restauracji i atrakcji w Toruniu, zwiększa atrakcyjność apartamentów i wpływa na ich obłożenie.
-</value>
-    </data>
-  <data name="AdvantagesOfCooperation" xml:space="preserve">
-        <value>Zalety współpracy
-</value>
-    </data>
-  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
-        <value>Bezobsługowa inwestycja</value>
-    </data>
-  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
-        <value>Oferowana przez nas obsługa jest kompletna. Możesz spać spokojnie, my pracujemy za Ciebie.</value>
-    </data>
-  <data name="IncomeOptimizationText1" xml:space="preserve">
-        <value>Optymalizacja dochodu</value>
-    </data>
-  <data name="IncomeOptimizationText2" xml:space="preserve">
-        <value>Na bieżąco monitorujemy rynek i dostosowujemy ceny za wynajem apartamentu pod Twój zysk.</value>
-    </data>
-  <data name="ReadyToHelpText1" xml:space="preserve">
-        <value>Gotowi do pomocy 24/7
-</value>
-    </data>
-  <data name="ReadyToHelpText2" xml:space="preserve">
-        <value>Gwarantujemy naszym wspólnym klientom obsługę przez całą dobę, siedem dni w tygodniu.
-
-</value>
-    </data>
-  <data name="FillOutForm" xml:space="preserve">
-        <value>Jesli chcesz nawiązać współpracę, wypełnij formularz
-</value>
-    </data>
-  <data name="Name" xml:space="preserve">
-        <value>Imię</value>
-    </data>
-  <data name="LastName" xml:space="preserve">
-        <value>Nazwisko</value>
-    </data>
-  <data name="PhoneNumber" xml:space="preserve">
-        <value>Numer telefonu</value>
-    </data>
-  <data name="NumberOfApartments" xml:space="preserve">
-        <value>Ilość mieszkań</value>
-    </data>
-  <data name="District" xml:space="preserve">
-        <value>Dzielnica Torunia</value>
-    </data>
-  <data name="Send" xml:space="preserve">
-        <value>Wyślij</value>
-    </data>
-  <data name="CooperationText1" xml:space="preserve">
-        <value>Współpraca</value>
-    </data>
-  <data name="Email" xml:space="preserve">
-        <value>Email</value>
-    </data>
-  <data name="MessageContent" xml:space="preserve">
-        <value>Treść wiadomości</value>
-    </data>
-  <data name="ConsentText" xml:space="preserve">
-        <value>Wyrażam zgodę na przetwarzanie moich danych osobowych w celu kontaktu i obsługi zapytania</value>
-    </data>
-  <data name="Privacypolicy" xml:space="preserve">
-        <value>polityka prywatności</value>
-    </data>
-  <data name="Sending" xml:space="preserve">
-        <value>Wysyłanie...</value>
-    </data>
-  <data name="RequiredFieldsError" xml:space="preserve">
-        <value>Uzupełnij wszystkie pola formularza.</value>
-    </data>
-  <data name="InvalidEmailError" xml:space="preserve">
-        <value>Podaj poprawny adres e-mail.</value>
-    </data>
-  <data name="InvalidApartmentsCountError" xml:space="preserve">
-        <value>Podaj prawidłową liczbę mieszkań.</value>
-    </data>
-  <data name="ConsentRequiredError" xml:space="preserve">
-        <value>Zaakceptuj zgodę na przetwarzanie danych.</value>
-    </data>
-  <data name="SubmitSuccess" xml:space="preserve">
-        <value>Dziękujemy. Formularz został wysłany do Bitrix.</value>
-    </data>
-  <data name="SubmitError" xml:space="preserve">
-        <value>Nie udało się wysłać formularza. Spróbuj ponownie za chwilę.</value>
-    </data>
-  <data name="SubmitPartialError" xml:space="preserve">
-        <value>Kontakt mógł zostać zapisany, ale nie udało się utworzyć deala. Sprawdź Bitrix przed ponowną wysyłką.</value>
-    </data>
-  <data name="Cooperation_MetaKeywords" xml:space="preserve">
-    <value>zarządzanie najmem toruń, obsługa apartamentów, bezobsługowa inwestycja, rentoom współpraca, optymalizacja zysku z najmu, wynajem krótkoterminowy toruń</value>
-  </data>
-  <data name="Cooperation_MetaDescription" xml:space="preserve">
-    <value>Zmień swój apartament w bezobsługową inwestycję z Rentoom. Oferujemy kompleksowe zarządzanie najmem w Toruniu, optymalizację dochodu i obsługę gości 24/7. Postaw na jakość i doświadczenie.</value>
-  </data>
-  <data name="Cooperation_OgTitle" xml:space="preserve">
-    <value>Współpraca - Rentoom | Profesjonalne Zarządzanie Najmem</value>
-  </data>
-  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
     <value>Współpraca</value>
   </data>
-  <data name="Cooperation_OgDescription" xml:space="preserve">
-    <value>Jesteśmy liderem rynku w Toruniu. Oferujemy pełną obsługę, innowacyjne technologie i maksymalizację Twoich zysków. Śpij spokojnie, my pracujemy na Ciebie.</value>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>O nas i dlaczego my?</value>
   </data>
-  <data name="Cooperation_PageTitle" xml:space="preserve">
-    <value>Współpraca - Rentoom | Zarządzanie Najmem Toruń</value>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Doświadczenie
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty to nowoczesna marka zarządzająca najmem krótkoterminowym w Toruniu. Zaufało nam już ponad 100 inwestorów. Zarządzamy ponad 150 apartamentami i obsługujemy rocznie ponad 7000 rezerwacji.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Jakość</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Zajmujemy się całym procesem – od profesjonalnego przygotowania mieszkania i skutecznej promocji, przez dynamiczne zarządzanie ceną, aż po całodobową obsługę gości, sprzątanie i serwis techniczny. Zapewniamy przejrzyste rozliczenia i pełną transparentność finansową.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Profesjonalizm</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Dzięki doświadczeniu i sprawdzonemu modelowi działania możliwe jest osiąganie przychodów sięgających nawet 30% wartości nieruchomości rocznie*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Innowacyjność</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Dodatkowo nasz Program Partnerski, oferujący rabaty do restauracji i atrakcji w Toruniu, zwiększa atrakcyjność apartamentów i wpływa na ich obłożenie.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Zalety współpracy
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Bezobsługowa inwestycja</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>Oferowana przez nas obsługa jest kompletna. Możesz spać spokojnie, my pracujemy za Ciebie.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Optymalizacja dochodu</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Na bieżąco monitorujemy rynek i dostosowujemy ceny za wynajem apartamentu pod Twój zysk.</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Gotowi do pomocy 24/7
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Gwarantujemy naszym wspólnym klientom obsługę przez całą dobę, siedem dni w tygodniu.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Jesli chcesz nawiązać współpracę, wypełnij formularz
+</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Imię</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Nazwisko</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Numer telefonu</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Ilość mieszkań</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Dzielnica Torunia</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Wyślij</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Współpraca</value>
   </data>
   <data name="AboutUsImageAlt" xml:space="preserve">
     <value>Zdjęcie</value>
@@ -157,8 +209,6 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kontakt</value>
   </data>
-
-  <!-- V2 Landing Page: Hero -->
   <data name="Coop_Hero_Eyebrow" xml:space="preserve">
     <value>Rentoom · współpraca dla właścicieli</value>
   </data>
@@ -198,8 +248,6 @@
   <data name="Coop_Hero_Stat4_Label" xml:space="preserve">
     <value>na rynku najmu krótkoterminowego</value>
   </data>
-
-  <!-- V2 Landing Page: Features -->
   <data name="Coop_Features_Eyebrow" xml:space="preserve">
     <value>Nasza przewaga</value>
   </data>
@@ -230,8 +278,6 @@
   <data name="Coop_Feature4_Desc" xml:space="preserve">
     <value>Panel właściciela, comiesięczne rozliczenie i jedna osoba kontaktowa. Ty patrzysz na przelew, my na resztę.</value>
   </data>
-
-  <!-- V2 Landing Page: Calculator -->
   <data name="Coop_Calc_Eyebrow" xml:space="preserve">
     <value>Kalkulator przychodu</value>
   </data>
@@ -493,8 +539,6 @@
   <data name="Coop_Calc_Zl" xml:space="preserve">
     <value>zł</value>
   </data>
-
-  <!-- V2 Landing Page: Services -->
   <data name="Coop_Services_Eyebrow" xml:space="preserve">
     <value>Co bierze na siebie Rentoom</value>
   </data>
@@ -523,7 +567,7 @@
     <value>Kontakt z gośćmi</value>
   </data>
   <data name="Coop_Service4_Desc" xml:space="preserve">
-    <value>Odpowiadamy w kilkanaście minut, 7 dni w tygodniu, po polsku i angielsku.</value>
+    <value>Odbieramy telefony i odpowiadamy na wiadomości w kilkanaście minut, 7 dni w tygodniu, po polsku i angielsku.</value>
   </data>
   <data name="Coop_Service5_Title" xml:space="preserve">
     <value>Sprzątanie i pranie</value>
@@ -540,8 +584,6 @@
   <data name="Coop_Services_BeforeAfterCaption" xml:space="preserve">
     <value>Przed / po — metamorfoza apartamentu Horizon. 3 tygodnie prac, +31% średniej stawki za dobę.</value>
   </data>
-
-  <!-- V2 Landing Page: Testimonials -->
   <data name="Coop_Testimonials_Eyebrow" xml:space="preserve">
     <value>Opinie właścicieli</value>
   </data>
@@ -575,8 +617,6 @@
   <data name="Coop_Testimonial3_Context" xml:space="preserve">
     <value>3 apartamenty, Wrocław</value>
   </data>
-
-  <!-- V2 Landing Page: Comparison -->
   <data name="Coop_Compare_Eyebrow" xml:space="preserve">
     <value>Porównanie modeli</value>
   </data>
@@ -646,8 +686,6 @@
   <data name="Coop_Compare_Row_Accounting_Long" xml:space="preserve">
     <value>Częściowo</value>
   </data>
-
-  <!-- V2 Landing Page: Process -->
   <data name="Coop_Process_Eyebrow" xml:space="preserve">
     <value>Jak zaczynamy współpracę</value>
   </data>
@@ -690,8 +728,6 @@
   <data name="Coop_Process6_Desc" xml:space="preserve">
     <value>Publikujemy ogłoszenia, ustawiamy ceny — pierwsze rezerwacje zwykle w 72 h.</value>
   </data>
-
-  <!-- V2 Landing Page: Team -->
   <data name="Coop_Team_Eyebrow" xml:space="preserve">
     <value>Zespół</value>
   </data>
@@ -699,61 +735,68 @@
     <value>Ludzie, którzy realnie zajmą się Twoim mieszkaniem.</value>
   </data>
   <data name="Coop_Team1_Name" xml:space="preserve">
-    <value>Gosia</value>
+    <value>Małgorzata Gardzielewska</value>
   </data>
   <data name="Coop_Team1_Role" xml:space="preserve">
-    <value>Design &amp; home staging</value>
+    <value>Koordynator ds. utrzymania czystości i logistyki</value>
   </data>
   <data name="Coop_Team1_Desc" xml:space="preserve">
-    <value>Tchnie nowe życie w Waszą przestrzeń — tak, żeby robiła efekt wow już na pierwszym zdjęciu.</value>
+    <value>Dba, by każdy apartament był gotowy na czas — od porządku po zapas pościeli.</value>
   </data>
   <data name="Coop_Team2_Name" xml:space="preserve">
-    <value>Krystian</value>
+    <value>Monika Kwiatkowska</value>
   </data>
   <data name="Coop_Team2_Role" xml:space="preserve">
-    <value>Revenue &amp; współpraca z właścicielami</value>
+    <value>Kierownik ds. utrzymania i sprzedaży</value>
   </data>
   <data name="Coop_Team2_Desc" xml:space="preserve">
-    <value>Trzyma pieczę nad cenami i budowaniem wartości dla właścicieli.</value>
+    <value>Łączy sprawne działanie apartamentów z tym, co najważniejsze: pełnym kalendarzem.</value>
   </data>
   <data name="Coop_Team3_Name" xml:space="preserve">
-    <value>Mati</value>
+    <value>Weronika Feliniak</value>
   </data>
   <data name="Coop_Team3_Role" xml:space="preserve">
-    <value>Dane i prognozy</value>
+    <value>Specjalistka ds. marketingu</value>
   </data>
   <data name="Coop_Team3_Desc" xml:space="preserve">
-    <value>Liczy obłożenie, sezonowość i realne widełki wypłat — bez obiecywania gruszek na wierzbie.</value>
+    <value>Buduje widoczność Rentoom i zamienia dobry pobyt w kolejną rezerwację.</value>
   </data>
   <data name="Coop_Team4_Name" xml:space="preserve">
-    <value>Ola</value>
+    <value>Andrzej Pietkiewicz</value>
   </data>
   <data name="Coop_Team4_Role" xml:space="preserve">
-    <value>Opieka nad gośćmi</value>
+    <value>Specjalista ds. technicznego utrzymania apartamentów</value>
   </data>
   <data name="Coop_Team4_Desc" xml:space="preserve">
-    <value>Odpisuje szybciej niż większość recepcji i pilnuje ocen 5 gwiazdek.</value>
+    <value>Naprawia, usprawnia i pilnuje, by wszystko działało bez niespodzianek.</value>
   </data>
   <data name="Coop_Team5_Name" xml:space="preserve">
-    <value>Zespół pralni</value>
+    <value>Małgorzata Jędrusik</value>
   </data>
   <data name="Coop_Team5_Role" xml:space="preserve">
-    <value>Housekeeping</value>
+    <value>Projektantka wnętrz</value>
   </data>
   <data name="Coop_Team5_Desc" xml:space="preserve">
-    <value>Pilnują, żeby pościel w Waszych apartamentach zawsze była świeża i pachnąca.</value>
+    <value>Tworzy wnętrza, które dobrze wyglądają, dobrze działają i przyciągają gości.</value>
   </data>
   <data name="Coop_Team6_Name" xml:space="preserve">
-    <value>Bartek</value>
+    <value>Krystian Kujawa</value>
   </data>
   <data name="Coop_Team6_Role" xml:space="preserve">
-    <value>Techniczne i usterki</value>
+    <value>Dyrektor operacyjny</value>
   </data>
   <data name="Coop_Team6_Desc" xml:space="preserve">
-    <value>Cieknący kran czy zepsuty zamek — rozwiązane, zanim gość zdąży napisać.</value>
+    <value>Spina pracę zespołu i dba, by Rentoom działał sprawnie każdego dnia.</value>
   </data>
-
-  <!-- V2 Landing Page: FAQ -->
+  <data name="Coop_Team7_Name" xml:space="preserve">
+    <value>Bartosz Jędrusik</value>
+  </data>
+  <data name="Coop_Team7_Role" xml:space="preserve">
+    <value>Prezes</value>
+  </data>
+  <data name="Coop_Team7_Desc" xml:space="preserve">
+    <value>Nadaje kierunek firmie i zamienia ambitne plany w konkretne działania.</value>
+  </data>
   <data name="Coop_Faq_Eyebrow" xml:space="preserve">
     <value>FAQ</value>
   </data>
@@ -802,8 +845,6 @@
   <data name="Coop_Faq7_A" xml:space="preserve">
     <value>Co miesiąc dostajesz szczegółowy raport z listą rezerwacji, kosztami i wypłatą. Jeden PDF, czytelny dla Ciebie i Twojej księgowej.</value>
   </data>
-
-  <!-- V2 Landing Page: CTA -->
   <data name="Coop_Cta_Title" xml:space="preserve">
     <value>Umów bezpłatny audyt mieszkania</value>
   </data>
@@ -816,79 +857,260 @@
   <data name="Coop_Section_Cta" xml:space="preserve">
     <value>Umów bezpłatny audyt mieszkania</value>
   </data>
-
-  <!-- V2 Landing Page: Updated Meta (new view) -->
-  <data name="Coop_V2_PageTitle" xml:space="preserve">
-    <value>Współpraca z Rentoom — zarabiaj na apartamencie bez obowiązków</value>
+  <data name="Coop_V3_Hero_Title" xml:space="preserve">
+    <value>Twój apartament. Nasza opieka. Twój zysk.</value>
   </data>
-  <data name="Coop_V2_MetaDescription" xml:space="preserve">
-    <value>Przejmujemy rezerwacje, gości, sprzątanie i rozliczenia Twojego apartamentu. Sprawdź kalkulator przychodu i umów bezpłatny audyt mieszkania.</value>
+  <data name="Coop_V3_Hero_Subtitle" xml:space="preserve">
+    <value>My Przejmujemy opiekę nad twoim mieszkaniem. Monitorujemy rynek cen, dbamy o kontakt z gośćmi, zapewniamy profesjonalny serwis techniczny i sprzątający.
+Ty otrzymujesz przejrzysty raport i przelew.</value>
   </data>
-  <data name="Coop_V2_OgTitle" xml:space="preserve">
-    <value>Współpraca z Rentoom — zarabiaj na apartamencie bez obowiązków</value>
+  <data name="Coop_V3_Hero_Cta" xml:space="preserve">
+    <value>Umów bezpłatny audyt mieszkania</value>
   </data>
-  <!-- V3 Landing Page -->
-  <data name="Coop_V3_Hero_Title" xml:space="preserve"><value>Twój apartament. Nasza opieka. Twój zysk.</value></data>
-  <data name="Coop_V3_Hero_Subtitle" xml:space="preserve"><value>Przejmujemy rezerwacje, dynamiczne ceny, kontakt z gośćmi, sprzątanie, technikę i rozliczenia. Ty otrzymujesz raport i przelew.</value></data>
-  <data name="Coop_V3_Hero_Cta" xml:space="preserve"><value>Umów bezpłatny audyt mieszkania</value></data>
-  <data name="Coop_V3_Proof_Aria" xml:space="preserve"><value>Rentoom w liczbach</value></data>
-  <data name="Coop_V3_Stat_Investors" xml:space="preserve"><value>100+ inwestorów</value></data>
-  <data name="Coop_V3_Stat_Investors_Label" xml:space="preserve"><value>nam zaufało</value></data>
-  <data name="Coop_V3_Features_Eyebrow" xml:space="preserve"><value>Co robimy</value></data>
-  <data name="Coop_V3_Features_Title" xml:space="preserve"><value>Kompleksowa opieka nad Twoim apartamentem</value></data>
-  <data name="Coop_V3_Feature_Reservations_Title" xml:space="preserve"><value>Rezerwacje i ceny</value></data>
-  <data name="Coop_V3_Feature_Reservations_Desc" xml:space="preserve"><value>Dynamiczne zarządzanie cenami i kalendarzem na najważniejszych portalach.</value></data>
-  <data name="Coop_V3_Feature_Technical_Title" xml:space="preserve"><value>Technika</value></data>
-  <data name="Coop_V3_Feature_Technical_Desc" xml:space="preserve"><value>Szybkie naprawy i serwis, regularne przeglądy oraz pełna gotowość obiektu.</value></data>
-  <data name="Coop_V3_Feature_Settlements_Title" xml:space="preserve"><value>Rozliczenia</value></data>
-  <data name="Coop_V3_Feature_Settlements_Desc" xml:space="preserve"><value>Przejrzyste raporty miesięczne i dokumenty gotowe dla księgowości.</value></data>
-  <data name="Coop_V3_Feature_Photos_Title" xml:space="preserve"><value>Zdjęcia i publikacja ofert</value></data>
-  <data name="Coop_V3_Feature_Photos_Desc" xml:space="preserve"><value>Profesjonalne zdjęcia, home staging i publikacja ofert na Booking, Airbnb, Google i w kanale bezpośrednim.</value></data>
-  <data name="Coop_V3_Costs_Eyebrow" xml:space="preserve"><value>Dlaczego 20% to więcej niż 30%?</value></data>
-  <data name="Coop_V3_Costs_Title" xml:space="preserve"><value>Liczy się to, ile naprawdę zostaje właścicielowi</value></data>
-  <data name="Coop_V3_Costs_Intro" xml:space="preserve"><value>Porównaj łączne koszty współpracy, a nie tylko prowizję operatora widoczną w ofercie.</value></data>
-  <data name="Coop_V3_Costs_Row_Name" xml:space="preserve"><value>Pozycja kosztowa</value></data>
-  <data name="Coop_V3_Costs_Competitor_A" xml:space="preserve"><value>Konkurencja A</value></data>
-  <data name="Coop_V3_Costs_Competitor_B" xml:space="preserve"><value>Konkurencja B</value></data>
-  <data name="Coop_V3_Costs_Owner_Profit" xml:space="preserve"><value>Zysk właściciela</value></data>
-  <data name="Coop_V3_Costs_Portals" xml:space="preserve"><value>Prowizje portali</value></data>
-  <data name="Coop_V3_Costs_Operator" xml:space="preserve"><value>Prowizja operatora</value></data>
-  <data name="Coop_V3_Costs_Total" xml:space="preserve"><value>Łączne koszty</value></data>
-  <data name="Coop_V3_Costs_Note" xml:space="preserve"><value>Przykład dla 10 000 zł miesięcznego przychodu z rezerwacji.</value></data>
-  <data name="Coop_V3_Tech_Eyebrow" xml:space="preserve"><value>Własne systemy</value></data>
-  <data name="Coop_V3_Tech_Title" xml:space="preserve"><value>Technologia, która pracuje dla Twojego apartamentu</value></data>
-  <data name="Coop_V3_Tech_Intro" xml:space="preserve"><value>Nasze własne rozwiązania porządkują każdy etap pobytu — od przygotowania mieszkania, przez zameldowanie, po szybkie usuwanie usterek.</value></data>
-  <data name="Coop_V3_Tech_Cleaning_Title" xml:space="preserve"><value>System zarządzania pościelą i sprzątaniem</value></data>
-  <data name="Coop_V3_Tech_Cleaning_Desc" xml:space="preserve"><value>Terminowa obsługa każdego pobytu i stały standard apartamentu.</value></data>
-  <data name="Coop_V3_Tech_StayWell_Title" xml:space="preserve"><value>Aplikacja StayWell do zameldowań</value></data>
-  <data name="Coop_V3_Tech_StayWell_Desc" xml:space="preserve"><value>Zdalne zameldowanie, dane gościa, zasady pobytu, instrukcja dojazdu i otwieranie apartamentu w jednym miejscu.</value></data>
-  <data name="Coop_V3_Tech_Tickets_Title" xml:space="preserve"><value>System zgłoszeń</value></data>
-  <data name="Coop_V3_Tech_Tickets_Desc" xml:space="preserve"><value>Goście, serwis i koordynatorzy zgłaszają usterki, dzięki czemu możemy reagować od razu.</value></data>
-  <data name="Coop_V3_Tech_Image_Alt" xml:space="preserve"><value>Apartament Rentoom objęty opieką zespołu operacyjnego</value></data>
-  <data name="Coop_V3_Local_Eyebrow" xml:space="preserve"><value>Lokalna przewaga</value></data>
-  <data name="Coop_V3_Local_Title" xml:space="preserve"><value>Toruń znamy od środka.</value></data>
-  <data name="Coop_V3_Local_Intro" xml:space="preserve"><value>Nasz lokalny zespół zna budynki, dzielnice i rytm miasta. Jesteśmy blisko, gdy potrzebuje nas Twój apartament albo jego goście.</value></data>
-  <data name="Coop_V3_Process_Title" xml:space="preserve"><value>3 etapy, 6 konkretnych działań</value></data>
-  <data name="Coop_V3_Process_Stage1" xml:space="preserve"><value>Poznajemy potencjał</value></data>
-  <data name="Coop_V3_Process_Stage2" xml:space="preserve"><value>Przygotowujemy start</value></data>
-  <data name="Coop_V3_Process_Stage3" xml:space="preserve"><value>Uruchamiamy sprzedaż</value></data>
-  <data name="Coop_V3_Process_Audit" xml:space="preserve"><value>Bezpłatny audyt mieszkania</value></data>
-  <data name="Coop_V3_Process_Forecast" xml:space="preserve"><value>Prognoza przychodów</value></data>
-  <data name="Coop_V3_Process_Preparation" xml:space="preserve"><value>Przygotowanie apartamentu</value></data>
-  <data name="Coop_V3_Process_Publication" xml:space="preserve"><value>Publikacja ofert</value></data>
-  <data name="Coop_V3_Owner_Eyebrow" xml:space="preserve"><value>Obsługa właściciela</value></data>
-  <data name="Coop_V3_Owner_Title" xml:space="preserve"><value>Pełna kontrola bez codziennego zaangażowania</value></data>
-  <data name="Coop_V3_Owner_Intro" xml:space="preserve"><value>Ty podejmujesz decyzje. My dostarczamy dane, rozliczenia i bieżące wsparcie.</value></data>
-  <data name="Coop_V3_Owner_Panel" xml:space="preserve"><value>Panel właściciela online</value></data>
-  <data name="Coop_V3_Owner_Reports" xml:space="preserve"><value>Rozliczenia i raporty finansowe</value></data>
-  <data name="Coop_V3_Owner_Legal" xml:space="preserve"><value>Wsparcie prawne i administracyjne</value></data>
-  <data name="Coop_V3_Owner_Care" xml:space="preserve"><value>Dedykowana opieka właściciela</value></data>
-  <data name="Coop_V3_Faq1_A" xml:space="preserve"><value>Standardowy model to 30% all-in. Prowizje portali są po stronie Rentoom, dzięki czemu rozliczenie pozostaje czytelne i przewidywalne.</value></data>
-  <data name="Coop_V3_Floating_Cta" xml:space="preserve"><value>Umów bezpłatny audyt</value></data>
-  <data name="Coop_V3_Floating_Cta_Aria" xml:space="preserve"><value>Bezpłatny audyt apartamentu</value></data>
-  <data name="Coop_V3_Local_Intro_Start" xml:space="preserve"><value>Współpracujemy z toruńskimi markami z branży gastronomicznej, rozrywkowej i usługowej, dzięki czemu nasi goście mogą korzystać ze</value></data>
-  <data name="Coop_V3_Local_Intro_Discounts" xml:space="preserve"><value>specjalnych zniżek</value></data>
-  <data name="Coop_V3_Local_Intro_Middle" xml:space="preserve"><value>i atrakcyjnych ofert podczas pobytu. Dodatkowo organizujemy</value></data>
-  <data name="Coop_V3_Local_Intro_Business" xml:space="preserve"><value>noclegi dla firm</value></data>
-  <data name="Coop_V3_Local_Intro_End" xml:space="preserve"><value>, zapewniając komfortowe i elastyczne rozwiązania dla klientów biznesowych.</value></data>
+  <data name="Coop_V3_Proof_Aria" xml:space="preserve">
+    <value>Rentoom w liczbach</value>
+  </data>
+  <data name="Coop_V3_Stat_Investors" xml:space="preserve">
+    <value>100+ inwestorów</value>
+  </data>
+  <data name="Coop_V3_Stat_Investors_Label" xml:space="preserve">
+    <value>nam zaufało</value>
+  </data>
+  <data name="Coop_V3_Features_Eyebrow" xml:space="preserve">
+    <value>Co robimy</value>
+  </data>
+  <data name="Coop_V3_Features_Title" xml:space="preserve">
+    <value>Kompleksowa opieka nad Twoim apartamentem</value>
+  </data>
+  <data name="Coop_V3_Feature_Reservations_Title" xml:space="preserve">
+    <value>Rezerwacje i ceny</value>
+  </data>
+  <data name="Coop_V3_Feature_Reservations_Desc" xml:space="preserve">
+    <value>Dynamiczne zarządzanie cenami i kalendarzem na Booking.com, Airbnb i nie tylko.</value>
+  </data>
+  <data name="Coop_V3_Feature_Technical_Title" xml:space="preserve">
+    <value>Technika</value>
+  </data>
+  <data name="Coop_V3_Feature_Technical_Desc" xml:space="preserve">
+    <value>Szybkie naprawy i serwis, regularne przeglądy oraz pełna gotowość obiektu.</value>
+  </data>
+  <data name="Coop_V3_Feature_Settlements_Title" xml:space="preserve">
+    <value>Rozliczenia</value>
+  </data>
+  <data name="Coop_V3_Feature_Settlements_Desc" xml:space="preserve">
+    <value>Przejrzyste raporty miesięczne i dokumenty gotowe dla księgowości.</value>
+  </data>
+  <data name="Coop_V3_Feature_Photos_Title" xml:space="preserve">
+    <value>Zdjęcia i publikacja ofert</value>
+  </data>
+  <data name="Coop_V3_Feature_Photos_Desc" xml:space="preserve">
+    <value>Profesjonalne zdjęcia, home staging, publikacja i aktualizacja ofert na najważniejszych portalach bookingowych.</value>
+  </data>
+  <data name="Coop_V3_Costs_Eyebrow" xml:space="preserve">
+    <value>Dlaczego 20% to więcej niż 30%?</value>
+  </data>
+  <data name="Coop_V3_Costs_Title" xml:space="preserve">
+    <value>Liczy się to, ile naprawdę zostaje właścicielowi</value>
+  </data>
+  <data name="Coop_V3_Costs_Intro" xml:space="preserve">
+    <value>Porównaj łączne koszty współpracy, a nie tylko prowizję operatora widoczną w ofercie.</value>
+  </data>
+  <data name="Coop_V3_Costs_Row_Name" xml:space="preserve">
+    <value>Pozycja kosztowa</value>
+  </data>
+  <data name="Coop_V3_Costs_Competitor_A" xml:space="preserve">
+    <value>Konkurencja A</value>
+  </data>
+  <data name="Coop_V3_Costs_Competitor_B" xml:space="preserve">
+    <value>Konkurencja B</value>
+  </data>
+  <data name="Coop_V3_Costs_Owner_Profit" xml:space="preserve">
+    <value>Zysk właściciela</value>
+  </data>
+  <data name="Coop_V3_Costs_Portals" xml:space="preserve">
+    <value>Prowizje portali</value>
+  </data>
+  <data name="Coop_V3_Costs_Operator" xml:space="preserve">
+    <value>Prowizja operatora</value>
+  </data>
+  <data name="Coop_V3_Costs_Total" xml:space="preserve">
+    <value>Łączne koszty</value>
+  </data>
+  <data name="Coop_V3_Costs_Note" xml:space="preserve">
+    <value>Przykład dla 10 000 zł miesięcznego przychodu z rezerwacji.</value>
+  </data>
+  <data name="Coop_V3_Tech_Eyebrow" xml:space="preserve">
+    <value>Własne systemy</value>
+  </data>
+  <data name="Coop_V3_Tech_Title" xml:space="preserve">
+    <value>Technologia, która pracuje dla Twojego apartamentu</value>
+  </data>
+  <data name="Coop_V3_Tech_Intro" xml:space="preserve">
+    <value>Nasze własne rozwiązania porządkują każdy etap pobytu — od przygotowania mieszkania, przez zameldowanie, po szybkie usuwanie usterek.</value>
+  </data>
+  <data name="Coop_V3_Tech_Cleaning_Title" xml:space="preserve">
+    <value>System zarządzania pościelą i sprzątaniem</value>
+  </data>
+  <data name="Coop_V3_Tech_Cleaning_Desc" xml:space="preserve">
+    <value>Terminowa obsługa każdego pobytu i stały standard apartamentu.</value>
+  </data>
+  <data name="Coop_V3_Tech_StayWell_Title" xml:space="preserve">
+    <value>Aplikacja StayWell do zameldowań</value>
+  </data>
+  <data name="Coop_V3_Tech_StayWell_Desc" xml:space="preserve">
+    <value>Zdalne zameldowanie, dane gościa, zasady pobytu, instrukcja dojazdu i otwieranie apartamentu w jednym miejscu.</value>
+  </data>
+  <data name="Coop_V3_Tech_Tickets_Title" xml:space="preserve">
+    <value>System zgłoszeń</value>
+  </data>
+  <data name="Coop_V3_Tech_Tickets_Desc" xml:space="preserve">
+    <value>Goście, serwis i koordynatorzy zgłaszają usterki, dzięki czemu możemy reagować od razu.</value>
+  </data>
+  <data name="Coop_V3_Tech_Image_Alt" xml:space="preserve">
+    <value>Apartament Rentoom objęty opieką zespołu operacyjnego</value>
+  </data>
+  <data name="Coop_V3_Local_Eyebrow" xml:space="preserve">
+    <value>Lokalna przewaga</value>
+  </data>
+  <data name="Coop_V3_Local_Title" xml:space="preserve">
+    <value>Toruń znamy od środka.</value>
+  </data>
+  <data name="Coop_V3_Local_Intro" xml:space="preserve">
+    <value>Nasz lokalny zespół zna budynki, dzielnice i rytm miasta. Jesteśmy blisko, gdy potrzebuje nas Twój apartament albo jego goście.</value>
+  </data>
+  <data name="Coop_V3_Process_Title" xml:space="preserve">
+    <value>3 etapy, 6 konkretnych działań</value>
+  </data>
+  <data name="Coop_V3_Process_Stage1" xml:space="preserve">
+    <value>Poznajemy potencjał</value>
+  </data>
+  <data name="Coop_V3_Process_Stage2" xml:space="preserve">
+    <value>Przygotowujemy start</value>
+  </data>
+  <data name="Coop_V3_Process_Stage3" xml:space="preserve">
+    <value>Uruchamiamy sprzedaż</value>
+  </data>
+  <data name="Coop_V3_Process_Audit" xml:space="preserve">
+    <value>Bezpłatny audyt mieszkania</value>
+  </data>
+  <data name="Coop_V3_Process_Forecast" xml:space="preserve">
+    <value>Prognoza przychodów</value>
+  </data>
+  <data name="Coop_V3_Process_Preparation" xml:space="preserve">
+    <value>Przygotowanie apartamentu</value>
+  </data>
+  <data name="Coop_V3_Process_Publication" xml:space="preserve">
+    <value>Publikacja ofert</value>
+  </data>
+  <data name="Coop_V3_Owner_Eyebrow" xml:space="preserve">
+    <value>Obsługa właściciela</value>
+  </data>
+  <data name="Coop_V3_Owner_Title" xml:space="preserve">
+    <value>Pełna kontrola bez codziennego zaangażowania</value>
+  </data>
+  <data name="Coop_V3_Owner_Intro" xml:space="preserve">
+    <value>Ty podejmujesz decyzje. My dostarczamy dane, rozliczenia i bieżące wsparcie.</value>
+  </data>
+  <data name="Coop_V3_Owner_Panel" xml:space="preserve">
+    <value>Panel właściciela online</value>
+  </data>
+  <data name="Coop_V3_Owner_Panel_Desc" xml:space="preserve">
+    <value>Masz transparentny dostęp do kalendarza rezerwacji.</value>
+  </data>
+  <data name="Coop_V3_Owner_Reports" xml:space="preserve">
+    <value>Rozliczenia i raporty finansowe</value>
+  </data>
+  <data name="Coop_V3_Owner_Reports_Desc" xml:space="preserve">
+    <value>Dokładnie wiesz, ile zarabia Twoja nieruchomość.</value>
+  </data>
+  <data name="Coop_V3_Owner_Legal" xml:space="preserve">
+    <value>Wsparcie prawne i administracyjne</value>
+  </data>
+  <data name="Coop_V3_Owner_Legal_Desc" xml:space="preserve">
+    <value>Dbamy o zgodność z przepisami i przejmujemy formalności.</value>
+  </data>
+  <data name="Coop_V3_Owner_Care" xml:space="preserve">
+    <value>Dedykowana opieka właściciela</value>
+  </data>
+  <data name="Coop_V3_Owner_Care_Desc" xml:space="preserve">
+    <value>Szybko reagujemy i wspieramy Cię w każdej sytuacji.</value>
+  </data>
+  <data name="Coop_V3_Faq1_A" xml:space="preserve">
+    <value>Standardowy model to 30%. Prowizje portali są po stronie Rentoom, dzięki czemu rozliczenie pozostaje czytelne i przewidywalne.</value>
+  </data>
+  <data name="Coop_V3_Floating_Cta" xml:space="preserve">
+    <value>Umów bezpłatny audyt</value>
+  </data>
+  <data name="Coop_V3_Floating_Cta_Aria" xml:space="preserve">
+    <value>Bezpłatny audyt apartamentu</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Start" xml:space="preserve">
+    <value>Współpracujemy z toruńskimi markami z branży gastronomicznej, rozrywkowej i usługowej, dzięki czemu nasi goście mogą korzystać ze</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Discounts" xml:space="preserve">
+    <value>specjalnych zniżek</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Middle" xml:space="preserve">
+    <value>i atrakcyjnych ofert podczas pobytu. Dodatkowo organizujemy</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Business" xml:space="preserve">
+    <value>noclegi dla firm</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_End" xml:space="preserve">
+    <value>, zapewniając komfortowe i elastyczne rozwiązania dla klientów biznesowych.</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Treść wiadomości</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Wyrażam zgodę na przetwarzanie moich danych osobowych w celu kontaktu i obsługi zapytania</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>polityka prywatności</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Wysyłanie...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Uzupełnij wszystkie pola formularza.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Podaj poprawny adres e-mail.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Podaj prawidłową liczbę mieszkań.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Zaakceptuj zgodę na przetwarzanie danych.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Dziękujemy. Formularz został wysłany do Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Nie udało się wysłać formularza. Spróbuj ponownie za chwilę.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Kontakt mógł zostać zapisany, ale nie udało się utworzyć deala. Sprawdź Bitrix przed ponowną wysyłką.</value>
+  </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>zarządzanie najmem toruń, obsługa apartamentów, bezobsługowa inwestycja, rentoom współpraca, optymalizacja zysku z najmu, wynajem krótkoterminowy toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Zmień swój apartament w bezobsługową inwestycję z Rentoom. Oferujemy kompleksowe zarządzanie najmem w Toruniu, optymalizację dochodu i obsługę gości 24/7. Postaw na jakość i doświadczenie.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Współpraca - Rentoom | Profesjonalne Zarządzanie Najmem</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Współpraca</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Jesteśmy liderem rynku w Toruniu. Oferujemy pełną obsługę, innowacyjne technologie i maksymalizację Twoich zysków. Śpij spokojnie, my pracujemy na Ciebie.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Współpraca - Rentoom | Zarządzanie Najmem Toruń</value>
+  </data>
 </root>

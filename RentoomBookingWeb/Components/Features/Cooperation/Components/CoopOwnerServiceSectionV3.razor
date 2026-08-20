@@ -6,13 +6,44 @@
         <span>@L["Coop_V3_Owner_Eyebrow"]</span>
         <h2 id="coop-v3-owner-title">@L["Coop_V3_Owner_Title"]</h2>
         <p>@L["Coop_V3_Owner_Intro"]</p>
-        <CoopSectionCta />
+        @if (ShowCTAButton)
+        {
+            <CoopSectionCta Type="ButtonType.Tertiary" />
+        }
     </div>
 
     <div class="coop-v3-owner-benefits">
-        <article><span class="gicon" aria-hidden="true">space_dashboard</span><h3>@L["Coop_V3_Owner_Panel"]</h3></article>
-        <article><span class="gicon" aria-hidden="true">finance</span><h3>@L["Coop_V3_Owner_Reports"]</h3></article>
-        <article><span class="gicon" aria-hidden="true">gavel</span><h3>@L["Coop_V3_Owner_Legal"]</h3></article>
-        <article><span class="gicon" aria-hidden="true">support_agent</span><h3>@L["Coop_V3_Owner_Care"]</h3></article>
+        <article>
+            <span class="gicon" aria-hidden="true">space_dashboard</span>
+            <div>
+                <h3>@L["Coop_V3_Owner_Panel"]</h3>
+                <p class="coop-v3-owner-benefit-description">@L["Coop_V3_Owner_Panel_Desc"]</p>
+            </div>
+        </article>
+        <article>
+            <span class="gicon" aria-hidden="true">finance</span>
+            <div>
+                <h3>@L["Coop_V3_Owner_Reports"]</h3>
+                <p class="coop-v3-owner-benefit-description">@L["Coop_V3_Owner_Reports_Desc"]</p>
+            </div>
+        </article>
+        <article>
+            <span class="gicon" aria-hidden="true">gavel</span>
+            <div>
+                <h3>@L["Coop_V3_Owner_Legal"]</h3>
+                <p class="coop-v3-owner-benefit-description">@L["Coop_V3_Owner_Legal_Desc"]</p>
+            </div>
+        </article>
+        <article>
+            <span class="gicon" aria-hidden="true">support_agent</span>
+            <div>
+                <h3>@L["Coop_V3_Owner_Care"]</h3>
+                <p class="coop-v3-owner-benefit-description">@L["Coop_V3_Owner_Care_Desc"]</p>
+            </div>
+        </article>
     </div>
 </section>
+
+@code {
+    [Parameter] public bool ShowCTAButton { get; set; } = false;
+}

@@ -3,24 +3,16 @@
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
-@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 
 @{
     var normalizedVersion = Version?.Trim().ToLowerInvariant();
-    var isLegacy = string.IsNullOrEmpty(normalizedVersion);
-    var isV3 = normalizedVersion == "v3" && FeatureFlags.FeatureAllowed("cooperation-landing-v3");
-    var isV2 = normalizedVersion == "v2" && FeatureFlags.FeatureAllowed("cooperation-landing-v2");
-    var isNotFound = !isLegacy && !isV2 && !isV3;
-    var isModernLanding = isV3 || isV2;
-    var pageTitle = isModernLanding ? Localizer["Coop_V2_PageTitle"] : Localizer["Cooperation_PageTitle"];
-    var metaDesc = isModernLanding ? Localizer["Coop_V2_MetaDescription"] : Localizer["Cooperation_MetaDescription"];
-    var ogTitle = isModernLanding ? Localizer["Coop_V2_OgTitle"] : Localizer["Cooperation_OgTitle"];
+    var isV3 = string.IsNullOrEmpty(normalizedVersion) || normalizedVersion == "v3";
+    var isNotFound = !isV3;
+    var pageTitle = Localizer["Cooperation_PageTitle"];
+    var metaDesc = Localizer["Cooperation_MetaDescription"];
+    var ogTitle = Localizer["Cooperation_OgTitle"];
     var cooperationBasePath = RouteService.GetLocalizedUrl("Cooperation");
-    var currentPagePath = isV3
-        ? $"{cooperationBasePath}/v3"
-        : isV2
-            ? $"{cooperationBasePath}/v2"
-            : cooperationBasePath;
+    var currentPagePath = cooperationBasePath;
 }
 
 @if (isNotFound)
@@ -59,35 +51,9 @@ else
         </div>
         <CoopFormModal @bind-IsOpen="_isFormModalOpen" />
     }
-    else if (isV2)
-    {
-        <div class="cooperation-container-v2">
-            <CascadingValue Value="@OpenFormModalRequested">
-                <CoopHeroSectionRouteV2 />
-                <CoopFeaturesSection />
-                <CoopCalculatorSection />
-                <CoopServicesSection />
-                <CoopTestimonialsSection />
-                <CoopComparisonSection />
-                <CoopProcessSection />
-                <CoopTeamSection />
-                <CoopFaqSection />
-                <CoopCtaSection />
-            </CascadingValue>
-        </div>
-        <CoopFormModal @bind-IsOpen="_isFormModalOpen" />
-    }
     else
     {
-        <div class="cooperation-container">
-            <HeaderSection
-                ImagePath="/assets/images/header-bg-coop.jpeg"
-                Title="@Localizer["CooperationText1"]"
-                Height="230px"/>
-            <AboutUs/>
-            <Advantages/>
-            <Form/>
-        </div>
+        <RentoomBookingWeb.Components.Pages.NotFoundPage />
     }
 }
 

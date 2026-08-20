@@ -30,10 +30,15 @@
         }
     </div>
 
-    <CoopSectionCta />
+    @if (ShowCTAButton)
+    {
+        <CoopSectionCta Type="ButtonType.Tertiary" />
+    }
 </section>
 
 @code {
+    [Parameter] public bool ShowCTAButton { get; set; } = false;
+
     private int? _openIndex = 1;
 
     private void Toggle(int idx) => _openIndex = _openIndex == idx ? null : idx;

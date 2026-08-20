@@ -70,5 +70,12 @@
         </table>
     </div>
 
-    <CoopSectionCta />
+    @if (ShowCTAButton)
+    {
+        <CoopSectionCta Type="ButtonType.Tertiary" />
+    }
 </section>
+
+@code {
+    [Parameter] public bool ShowCTAButton { get; set; } = false;
+}

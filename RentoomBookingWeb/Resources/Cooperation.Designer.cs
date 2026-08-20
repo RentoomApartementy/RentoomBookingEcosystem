@@ -19,7 +19,7 @@ namespace RentoomBookingWeb {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Cooperation {
@@ -61,11 +61,2549 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Photo.
+        /// </summary>
+        internal static string AboutUsImageAlt {
+            get {
+                return ResourceManager.GetString("AboutUsImageAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string AdvantagesOfCooperation {
             get {
                 return ResourceManager.GetString("AdvantagesOfCooperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact.
+        /// </summary>
+        internal static string ContactImageAlt {
+            get {
+                return ResourceManager.GetString("ContactImageAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_AvgRate {
+            get {
+                return ResourceManager.GetString("Coop_Calc_AvgRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Commission {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Commission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_CtaNote {
+            get {
+                return ResourceManager.GetString("Coop_Calc_CtaNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_CtaPrimary {
+            get {
+                return ResourceManager.GetString("Coop_Calc_CtaPrimary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_GrossRevenue {
+            get {
+                return ResourceManager.GetString("Coop_Calc_GrossRevenue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_HideDetailed {
+            get {
+                return ResourceManager.GetString("Coop_Calc_HideDetailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Admin {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Admin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_AnnualOp {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_AnnualOp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Cta {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Cta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Disclaimer {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Disclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Financing {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Financing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Income {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Income", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Insurance {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Insurance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_MonthlyCash {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_MonthlyCash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_MonthlyOp {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_MonthlyOp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Result_Title {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Result_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Title {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Value {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Inv_Yield {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Inv_Yield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Bielawy {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Bielawy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_BydgoskieI {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_BydgoskieI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_BydgoskieII {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_BydgoskieII", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Centrum {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Centrum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Chelminskie {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Chelminskie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Czerniewice {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Czerniewice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_JakubskieMokre {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_JakubskieMokre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Kaszczorek {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Kaszczorek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_More {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_More", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Podgorz {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Podgorz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Rubinkowo {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Rubinkowo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Rudak {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Rudak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Skarpa {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Skarpa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_StareMiasto {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_StareMiasto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Stawki {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Stawki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Loc_Wrzosy {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Loc_Wrzosy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Location_Label {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Location_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_AfterCosts {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_AfterCosts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_Beds {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_Beds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_BeforeTax {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_BeforeTax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_Income {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_Income", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_Linen {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_Linen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_LinenCost {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_LinenCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_OtherCosts {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_OtherCosts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_OtherLabel {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_OtherLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_OwnerShare {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_OwnerShare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_PrepCost {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_PrepCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_Result_Title {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_Result_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_Revenue {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_Revenue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Mon_Title {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Mon_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Netto {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Netto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Occupancy {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Occupancy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_OpCosts {
+            get {
+                return ResourceManager.GetString("Coop_Calc_OpCosts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_AfterCleaning {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_AfterCleaning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Area {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Area", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_AreaOver70 {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_AreaOver70", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_AreaTo55 {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_AreaTo55", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_AreaTo70 {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_AreaTo70", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_CleaningGross {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_CleaningGross", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_ExtraBeds {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_ExtraBeds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Gross {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Gross", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Guests {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Guests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Net {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Net", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Nights {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Nights", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Owner {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Owner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Rentoom {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Rentoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Result_Title {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Result_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_SplitBase {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_SplitBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_Title {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Res_TotalGross {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Res_TotalGross", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Result_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Result_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Result_Label {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Result_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Rooms_Label {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Rooms_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_ShowDetailed {
+            get {
+                return ResourceManager.GetString("Coop_Calc_ShowDetailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Simple_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Simple_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Standard_Label {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Standard_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Std_Basic {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Std_Basic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Std_Good {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Std_Good", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Std_Premium {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Std_Premium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Subtitle {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Tab_Investment {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Tab_Investment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Tab_Monthly {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Tab_Monthly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Tab_Reservation {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Tab_Reservation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Title {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Calc_Zl {
+            get {
+                return ResourceManager.GetString("Coop_Calc_Zl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Col_LongTerm {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Col_LongTerm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Col_Rentoom {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Col_Rentoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Col_Self {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Col_Self", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Accounting {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Accounting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Accounting_Long {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Accounting_Long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Cleaning {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Cleaning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Inspection {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Inspection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Inspection_Long {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Inspection_Long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Inspection_Rentoom {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Inspection_Rentoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Inspection_Self {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Inspection_Self", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Photos {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Photos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Pricing {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Pricing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Revenue {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Revenue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Revenue_Long {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Revenue_Long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Revenue_Rentoom {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Revenue_Rentoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Revenue_Self {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Revenue_Self", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Support {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Support", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Time {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Time_Long {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Time_Long", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Time_Rentoom {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Time_Rentoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Row_Time_Self {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Row_Time_Self", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Compare_Title {
+            get {
+                return ResourceManager.GetString("Coop_Compare_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Cta_Button {
+            get {
+                return ResourceManager.GetString("Coop_Cta_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Cta_Subtitle {
+            get {
+                return ResourceManager.GetString("Coop_Cta_Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Cta_Title {
+            get {
+                return ResourceManager.GetString("Coop_Cta_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Faq_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq_Title {
+            get {
+                return ResourceManager.GetString("Coop_Faq_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq1_A {
+            get {
+                return ResourceManager.GetString("Coop_Faq1_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq1_Q {
+            get {
+                return ResourceManager.GetString("Coop_Faq1_Q", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq2_A {
+            get {
+                return ResourceManager.GetString("Coop_Faq2_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq2_Q {
+            get {
+                return ResourceManager.GetString("Coop_Faq2_Q", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq3_A {
+            get {
+                return ResourceManager.GetString("Coop_Faq3_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq3_Q {
+            get {
+                return ResourceManager.GetString("Coop_Faq3_Q", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq4_A {
+            get {
+                return ResourceManager.GetString("Coop_Faq4_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq4_Q {
+            get {
+                return ResourceManager.GetString("Coop_Faq4_Q", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq5_A {
+            get {
+                return ResourceManager.GetString("Coop_Faq5_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq5_Q {
+            get {
+                return ResourceManager.GetString("Coop_Faq5_Q", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq6_A {
+            get {
+                return ResourceManager.GetString("Coop_Faq6_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq6_Q {
+            get {
+                return ResourceManager.GetString("Coop_Faq6_Q", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq7_A {
+            get {
+                return ResourceManager.GetString("Coop_Faq7_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Faq7_Q {
+            get {
+                return ResourceManager.GetString("Coop_Faq7_Q", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Feature1_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Feature1_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Feature1_Title {
+            get {
+                return ResourceManager.GetString("Coop_Feature1_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Feature2_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Feature2_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Feature2_Title {
+            get {
+                return ResourceManager.GetString("Coop_Feature2_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Feature3_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Feature3_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Feature3_Title {
+            get {
+                return ResourceManager.GetString("Coop_Feature3_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Feature4_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Feature4_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Feature4_Title {
+            get {
+                return ResourceManager.GetString("Coop_Feature4_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Features_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Features_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Features_Title {
+            get {
+                return ResourceManager.GetString("Coop_Features_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_CalcLink {
+            get {
+                return ResourceManager.GetString("Coop_Hero_CalcLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Cta {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Cta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Stat1_Label {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Stat1_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Stat1_Value {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Stat1_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Stat2_Label {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Stat2_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Stat2_Value {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Stat2_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Stat3_Label {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Stat3_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Stat3_Value {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Stat3_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Stat4_Label {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Stat4_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Stat4_Value {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Stat4_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Subtitle {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Hero_Title {
+            get {
+                return ResourceManager.GetString("Coop_Hero_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Process_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process_Title {
+            get {
+                return ResourceManager.GetString("Coop_Process_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process1_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Process1_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process1_Title {
+            get {
+                return ResourceManager.GetString("Coop_Process1_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process2_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Process2_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process2_Title {
+            get {
+                return ResourceManager.GetString("Coop_Process2_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process3_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Process3_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process3_Title {
+            get {
+                return ResourceManager.GetString("Coop_Process3_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process4_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Process4_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process4_Title {
+            get {
+                return ResourceManager.GetString("Coop_Process4_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process5_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Process5_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process5_Title {
+            get {
+                return ResourceManager.GetString("Coop_Process5_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process6_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Process6_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Process6_Title {
+            get {
+                return ResourceManager.GetString("Coop_Process6_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Section_Cta {
+            get {
+                return ResourceManager.GetString("Coop_Section_Cta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service1_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Service1_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service1_Title {
+            get {
+                return ResourceManager.GetString("Coop_Service1_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service2_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Service2_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service2_Title {
+            get {
+                return ResourceManager.GetString("Coop_Service2_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service3_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Service3_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service3_Title {
+            get {
+                return ResourceManager.GetString("Coop_Service3_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service4_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Service4_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service4_Title {
+            get {
+                return ResourceManager.GetString("Coop_Service4_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service5_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Service5_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service5_Title {
+            get {
+                return ResourceManager.GetString("Coop_Service5_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service6_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Service6_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Service6_Title {
+            get {
+                return ResourceManager.GetString("Coop_Service6_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Services_BeforeAfterCaption {
+            get {
+                return ResourceManager.GetString("Coop_Services_BeforeAfterCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Services_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Services_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Services_Title {
+            get {
+                return ResourceManager.GetString("Coop_Services_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Team_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Team_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Team_Title {
+            get {
+                return ResourceManager.GetString("Coop_Team_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dba, by każdy apartament był gotowy na czas — od porządku po zapas pościeli..
+        /// </summary>
+        internal static string Coop_Team1_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Team1_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Małgorzata Gardzielewska.
+        /// </summary>
+        internal static string Coop_Team1_Name {
+            get {
+                return ResourceManager.GetString("Coop_Team1_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Koordynator ds. utrzymania czystości i logistyki.
+        /// </summary>
+        internal static string Coop_Team1_Role {
+            get {
+                return ResourceManager.GetString("Coop_Team1_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Łączy sprawne działanie apartamentów z tym, co najważniejsze: pełnym kalendarzem..
+        /// </summary>
+        internal static string Coop_Team2_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Team2_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monika Kwiatkowska.
+        /// </summary>
+        internal static string Coop_Team2_Name {
+            get {
+                return ResourceManager.GetString("Coop_Team2_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kierownik ds. utrzymania i sprzedaży.
+        /// </summary>
+        internal static string Coop_Team2_Role {
+            get {
+                return ResourceManager.GetString("Coop_Team2_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Buduje widoczność Rentoom i zamienia dobry pobyt w kolejną rezerwację..
+        /// </summary>
+        internal static string Coop_Team3_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Team3_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weronika Feliniak.
+        /// </summary>
+        internal static string Coop_Team3_Name {
+            get {
+                return ResourceManager.GetString("Coop_Team3_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specjalistka ds. marketingu.
+        /// </summary>
+        internal static string Coop_Team3_Role {
+            get {
+                return ResourceManager.GetString("Coop_Team3_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Naprawia, usprawnia i pilnuje, by wszystko działało bez niespodzianek..
+        /// </summary>
+        internal static string Coop_Team4_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Team4_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Andrzej Pietkiewicz.
+        /// </summary>
+        internal static string Coop_Team4_Name {
+            get {
+                return ResourceManager.GetString("Coop_Team4_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specjalista ds. technicznego utrzymania apartamentów.
+        /// </summary>
+        internal static string Coop_Team4_Role {
+            get {
+                return ResourceManager.GetString("Coop_Team4_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tworzy wnętrza, które dobrze wyglądają, dobrze działają i przyciągają gości..
+        /// </summary>
+        internal static string Coop_Team5_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Team5_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Małgorzata Jędrusik.
+        /// </summary>
+        internal static string Coop_Team5_Name {
+            get {
+                return ResourceManager.GetString("Coop_Team5_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Projektantka wnętrz.
+        /// </summary>
+        internal static string Coop_Team5_Role {
+            get {
+                return ResourceManager.GetString("Coop_Team5_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spina pracę zespołu i dba, by Rentoom działał sprawnie każdego dnia..
+        /// </summary>
+        internal static string Coop_Team6_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Team6_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Krystian Kujawa.
+        /// </summary>
+        internal static string Coop_Team6_Name {
+            get {
+                return ResourceManager.GetString("Coop_Team6_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dyrektor operacyjny.
+        /// </summary>
+        internal static string Coop_Team6_Role {
+            get {
+                return ResourceManager.GetString("Coop_Team6_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nadaje kierunek firmie i zamienia ambitne plany w konkretne działania..
+        /// </summary>
+        internal static string Coop_Team7_Desc {
+            get {
+                return ResourceManager.GetString("Coop_Team7_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bartosz Jędrusik.
+        /// </summary>
+        internal static string Coop_Team7_Name {
+            get {
+                return ResourceManager.GetString("Coop_Team7_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prezes.
+        /// </summary>
+        internal static string Coop_Team7_Role {
+            get {
+                return ResourceManager.GetString("Coop_Team7_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonial1_Author {
+            get {
+                return ResourceManager.GetString("Coop_Testimonial1_Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonial1_Context {
+            get {
+                return ResourceManager.GetString("Coop_Testimonial1_Context", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonial1_Quote {
+            get {
+                return ResourceManager.GetString("Coop_Testimonial1_Quote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonial2_Author {
+            get {
+                return ResourceManager.GetString("Coop_Testimonial2_Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonial2_Context {
+            get {
+                return ResourceManager.GetString("Coop_Testimonial2_Context", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonial2_Quote {
+            get {
+                return ResourceManager.GetString("Coop_Testimonial2_Quote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonial3_Author {
+            get {
+                return ResourceManager.GetString("Coop_Testimonial3_Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonial3_Context {
+            get {
+                return ResourceManager.GetString("Coop_Testimonial3_Context", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonial3_Quote {
+            get {
+                return ResourceManager.GetString("Coop_Testimonial3_Quote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonials_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_Testimonials_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Coop_Testimonials_Title {
+            get {
+                return ResourceManager.GetString("Coop_Testimonials_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Competitor A.
+        /// </summary>
+        internal static string Coop_V3_Costs_Competitor_A {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Competitor_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Competitor B.
+        /// </summary>
+        internal static string Coop_V3_Costs_Competitor_B {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Competitor_B", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Why can 20% be more than 30%?.
+        /// </summary>
+        internal static string Coop_V3_Costs_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compare total cooperation costs, not just the operator&apos;s headline commission..
+        /// </summary>
+        internal static string Coop_V3_Costs_Intro {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Intro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Example for PLN 10,000 in monthly reservation revenue..
+        /// </summary>
+        internal static string Coop_V3_Costs_Note {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Note", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operator commission.
+        /// </summary>
+        internal static string Coop_V3_Costs_Operator {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Owner profit.
+        /// </summary>
+        internal static string Coop_V3_Costs_Owner_Profit {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Owner_Profit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Portal commissions.
+        /// </summary>
+        internal static string Coop_V3_Costs_Portals {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Portals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cost item.
+        /// </summary>
+        internal static string Coop_V3_Costs_Row_Name {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Row_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What matters is how much the owner actually keeps.
+        /// </summary>
+        internal static string Coop_V3_Costs_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total costs.
+        /// </summary>
+        internal static string Coop_V3_Costs_Total {
+            get {
+                return ResourceManager.GetString("Coop_V3_Costs_Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our standard model is 30% all-in. Portal commissions are covered by Rentoom, so the settlement remains clear and predictable..
+        /// </summary>
+        internal static string Coop_V3_Faq1_A {
+            get {
+                return ResourceManager.GetString("Coop_V3_Faq1_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Professional photography, home staging and publication on Booking, Airbnb, Google and direct channels..
+        /// </summary>
+        internal static string Coop_V3_Feature_Photos_Desc {
+            get {
+                return ResourceManager.GetString("Coop_V3_Feature_Photos_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Photos and offer publication.
+        /// </summary>
+        internal static string Coop_V3_Feature_Photos_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Feature_Photos_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dynamic pricing and calendar management across the leading booking channels..
+        /// </summary>
+        internal static string Coop_V3_Feature_Reservations_Desc {
+            get {
+                return ResourceManager.GetString("Coop_V3_Feature_Reservations_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reservations and pricing.
+        /// </summary>
+        internal static string Coop_V3_Feature_Reservations_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Feature_Reservations_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear monthly reports and documents ready for accounting..
+        /// </summary>
+        internal static string Coop_V3_Feature_Settlements_Desc {
+            get {
+                return ResourceManager.GetString("Coop_V3_Feature_Settlements_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settlements.
+        /// </summary>
+        internal static string Coop_V3_Feature_Settlements_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Feature_Settlements_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fast repairs, regular inspections and full apartment readiness..
+        /// </summary>
+        internal static string Coop_V3_Feature_Technical_Desc {
+            get {
+                return ResourceManager.GetString("Coop_V3_Feature_Technical_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maintenance.
+        /// </summary>
+        internal static string Coop_V3_Feature_Technical_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Feature_Technical_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What we do.
+        /// </summary>
+        internal static string Coop_V3_Features_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_V3_Features_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete care for your apartment.
+        /// </summary>
+        internal static string Coop_V3_Features_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Features_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Book a free audit.
+        /// </summary>
+        internal static string Coop_V3_Floating_Cta {
+            get {
+                return ResourceManager.GetString("Coop_V3_Floating_Cta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Free apartment audit.
+        /// </summary>
+        internal static string Coop_V3_Floating_Cta_Aria {
+            get {
+                return ResourceManager.GetString("Coop_V3_Floating_Cta_Aria", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Book a free apartment audit.
+        /// </summary>
+        internal static string Coop_V3_Hero_Cta {
+            get {
+                return ResourceManager.GetString("Coop_V3_Hero_Cta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We take care of reservations, dynamic pricing, guest communication, cleaning, maintenance and settlements. You receive a report and a transfer..
+        /// </summary>
+        internal static string Coop_V3_Hero_Subtitle {
+            get {
+                return ResourceManager.GetString("Coop_V3_Hero_Subtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your apartment. Our care. Your profit..
+        /// </summary>
+        internal static string Coop_V3_Hero_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Hero_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local advantage.
+        /// </summary>
+        internal static string Coop_V3_Local_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_V3_Local_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our local team knows the buildings, neighbourhoods and rhythms of the city. We are close when your apartment or guests need us..
+        /// </summary>
+        internal static string Coop_V3_Local_Intro {
+            get {
+                return ResourceManager.GetString("Coop_V3_Local_Intro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to corporate accommodation.
+        /// </summary>
+        internal static string Coop_V3_Local_Intro_Business {
+            get {
+                return ResourceManager.GetString("Coop_V3_Local_Intro_Business", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to special discounts.
+        /// </summary>
+        internal static string Coop_V3_Local_Intro_Discounts {
+            get {
+                return ResourceManager.GetString("Coop_V3_Local_Intro_Discounts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to , providing comfortable and flexible solutions for business clients..
+        /// </summary>
+        internal static string Coop_V3_Local_Intro_End {
+            get {
+                return ResourceManager.GetString("Coop_V3_Local_Intro_End", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to and attractive offers during their stay. We also organise.
+        /// </summary>
+        internal static string Coop_V3_Local_Intro_Middle {
+            get {
+                return ResourceManager.GetString("Coop_V3_Local_Intro_Middle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We cooperate with Toruń brands in the food, entertainment and service sectors, so our guests can benefit from.
+        /// </summary>
+        internal static string Coop_V3_Local_Intro_Start {
+            get {
+                return ResourceManager.GetString("Coop_V3_Local_Intro_Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We know Toruń inside out..
+        /// </summary>
+        internal static string Coop_V3_Local_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Local_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dedicated owner care.
+        /// </summary>
+        internal static string Coop_V3_Owner_Care {
+            get {
+                return ResourceManager.GetString("Coop_V3_Owner_Care", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Owner service.
+        /// </summary>
+        internal static string Coop_V3_Owner_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_V3_Owner_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You make the decisions. We provide the data, settlements and ongoing support..
+        /// </summary>
+        internal static string Coop_V3_Owner_Intro {
+            get {
+                return ResourceManager.GetString("Coop_V3_Owner_Intro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legal and administrative support.
+        /// </summary>
+        internal static string Coop_V3_Owner_Legal {
+            get {
+                return ResourceManager.GetString("Coop_V3_Owner_Legal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Online owner panel.
+        /// </summary>
+        internal static string Coop_V3_Owner_Panel {
+            get {
+                return ResourceManager.GetString("Coop_V3_Owner_Panel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settlements and financial reports.
+        /// </summary>
+        internal static string Coop_V3_Owner_Reports {
+            get {
+                return ResourceManager.GetString("Coop_V3_Owner_Reports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full control without daily involvement.
+        /// </summary>
+        internal static string Coop_V3_Owner_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Owner_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Free apartment audit.
+        /// </summary>
+        internal static string Coop_V3_Process_Audit {
+            get {
+                return ResourceManager.GetString("Coop_V3_Process_Audit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revenue forecast.
+        /// </summary>
+        internal static string Coop_V3_Process_Forecast {
+            get {
+                return ResourceManager.GetString("Coop_V3_Process_Forecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apartment preparation.
+        /// </summary>
+        internal static string Coop_V3_Process_Preparation {
+            get {
+                return ResourceManager.GetString("Coop_V3_Process_Preparation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offer publication.
+        /// </summary>
+        internal static string Coop_V3_Process_Publication {
+            get {
+                return ResourceManager.GetString("Coop_V3_Process_Publication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We assess the potential.
+        /// </summary>
+        internal static string Coop_V3_Process_Stage1 {
+            get {
+                return ResourceManager.GetString("Coop_V3_Process_Stage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We prepare the launch.
+        /// </summary>
+        internal static string Coop_V3_Process_Stage2 {
+            get {
+                return ResourceManager.GetString("Coop_V3_Process_Stage2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We launch sales.
+        /// </summary>
+        internal static string Coop_V3_Process_Stage3 {
+            get {
+                return ResourceManager.GetString("Coop_V3_Process_Stage3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3 stages, 6 specific actions.
+        /// </summary>
+        internal static string Coop_V3_Process_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Process_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rentoom in numbers.
+        /// </summary>
+        internal static string Coop_V3_Proof_Aria {
+            get {
+                return ResourceManager.GetString("Coop_V3_Proof_Aria", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100+ investors.
+        /// </summary>
+        internal static string Coop_V3_Stat_Investors {
+            get {
+                return ResourceManager.GetString("Coop_V3_Stat_Investors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to have trusted us.
+        /// </summary>
+        internal static string Coop_V3_Stat_Investors_Label {
+            get {
+                return ResourceManager.GetString("Coop_V3_Stat_Investors_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On-time service for every stay and a consistent apartment standard..
+        /// </summary>
+        internal static string Coop_V3_Tech_Cleaning_Desc {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_Cleaning_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linen and cleaning management system.
+        /// </summary>
+        internal static string Coop_V3_Tech_Cleaning_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_Cleaning_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our own systems.
+        /// </summary>
+        internal static string Coop_V3_Tech_Eyebrow {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_Eyebrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Rentoom apartment supported by the operations team.
+        /// </summary>
+        internal static string Coop_V3_Tech_Image_Alt {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_Image_Alt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our own solutions organise every stage of a stay — from preparing the apartment and check-in to resolving issues quickly..
+        /// </summary>
+        internal static string Coop_V3_Tech_Intro {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_Intro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remote check-in, guest details, stay rules, directions and apartment access in one place..
+        /// </summary>
+        internal static string Coop_V3_Tech_StayWell_Desc {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_StayWell_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to StayWell check-in application.
+        /// </summary>
+        internal static string Coop_V3_Tech_StayWell_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_StayWell_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guests, service staff and coordinators report issues so we can react immediately..
+        /// </summary>
+        internal static string Coop_V3_Tech_Tickets_Desc {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_Tickets_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Issue reporting system.
+        /// </summary>
+        internal static string Coop_V3_Tech_Tickets_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_Tickets_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Technology that works for your apartment.
+        /// </summary>
+        internal static string Coop_V3_Tech_Title {
+            get {
+                return ResourceManager.GetString("Coop_V3_Tech_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cooperation.
+        /// </summary>
+        internal static string CooperationDealTitlePrefix {
+            get {
+                return ResourceManager.GetString("CooperationDealTitlePrefix", resourceCulture);
             }
         }
         
