@@ -160,4 +160,857 @@
   <data name="Cooperation_PageTitle" xml:space="preserve">
     <value>Spolupráce - Rentoom | Správa pronájmu Toruń</value>
   </data>
+  <data name="Coop_Hero_Eyebrow" xml:space="preserve">
+    <value>Rentoom · Spolupráce pro vlastníky</value>
+  </data>
+  <data name="Coop_Hero_Title" xml:space="preserve">
+    <value>Vydělávejte peníze na svém bytě, aniž byste museli řešit rezervace, hosty a úklid.</value>
+  </data>
+  <data name="Coop_Hero_Subtitle" xml:space="preserve">
+    <value>Přebíráme všechno: od fotografií a reklam, přes dynamické ceny a služby pro hosty, až po praní ložního prádla a fakturaci. Dostanete zprávu a přeložení.</value>
+  </data>
+  <data name="Coop_Hero_Cta" xml:space="preserve">
+    <value>Zjistěte, kolik váš byt vydělá</value>
+  </data>
+  <data name="Coop_Hero_CalcLink" xml:space="preserve">
+    <value>Přejděte na kalkulačku</value>
+  </data>
+  <data name="Coop_Hero_Stat1_Value" xml:space="preserve">
+    <value>180+</value>
+  </data>
+  <data name="Coop_Hero_Stat1_Label" xml:space="preserve">
+    <value>Servisované apartmány</value>
+  </data>
+  <data name="Coop_Hero_Stat2_Value" xml:space="preserve">
+    <value>24 000+</value>
+  </data>
+  <data name="Coop_Hero_Stat2_Label" xml:space="preserve">
+    <value>Dokončené rezervace</value>
+  </data>
+  <data name="Coop_Hero_Stat3_Value" xml:space="preserve">
+    <value>4,86 / 5</value>
+  </data>
+  <data name="Coop_Hero_Stat3_Label" xml:space="preserve">
+    <value>Průměrné hodnocení hostů</value>
+  </data>
+  <data name="Coop_Hero_Stat4_Value" xml:space="preserve">
+    <value>8 let</value>
+  </data>
+  <data name="Coop_Hero_Stat4_Label" xml:space="preserve">
+    <value>Na trhu krátkodobých pronájmů</value>
+  </data>
+  <data name="Coop_Features_Eyebrow" xml:space="preserve">
+    <value>Naše výhoda</value>
+  </data>
+  <data name="Coop_Features_Title" xml:space="preserve">
+    <value>Hotelový standard v bytě, na který nemusíte dávat pozor.</value>
+  </data>
+  <data name="Coop_Feature1_Title" xml:space="preserve">
+    <value>Samokontrola StayWell</value>
+  </data>
+  <data name="Coop_Feature1_Desc" xml:space="preserve">
+    <value>Host může kdykoli vstoupit s kódem. Žádné čekání na klíče, žádné noční hovory — a vyšší hodnocení pro pohodlí.</value>
+  </data>
+  <data name="Coop_Feature2_Title" xml:space="preserve">
+    <value>Standard, o kterém se nejedná</value>
+  </data>
+  <data name="Coop_Feature2_Desc" xml:space="preserve">
+    <value>Vysokorychlostní Wi-Fi, hotelové povlečení, ručníky, uvítací sada, detektor kouře a chytrý zámek v každém bytě. Vždycky.</value>
+  </data>
+  <data name="Coop_Feature3_Title" xml:space="preserve">
+    <value>Ceny vypočítávané denně</value>
+  </data>
+  <data name="Coop_Feature3_Desc" xml:space="preserve">
+    <value>Dynamické ceny reagují na události, sezónu a konkurenci v okruhu několika ulic. Nenecháváme peníze na stole.</value>
+  </data>
+  <data name="Coop_Feature4_Title" xml:space="preserve">
+    <value>Žádná práce z tvé strany</value>
+  </data>
+  <data name="Coop_Feature4_Desc" xml:space="preserve">
+    <value>Panel vlastníků, měsíční fakturace a jedna kontaktní osoba. Ty se podíváš na přestup, my se podíváme na zbytek.</value>
+  </data>
+  <data name="Coop_Calc_Eyebrow" xml:space="preserve">
+    <value>Kalkulačka příjmů</value>
+  </data>
+  <data name="Coop_Calc_Title" xml:space="preserve">
+    <value>Vidíte skutečný rozsah, ne marketingový slib.</value>
+  </data>
+  <data name="Coop_Calc_Subtitle" xml:space="preserve">
+    <value>Ukazujeme předpověď příjmů, předpokládanou obsazenost, provozní náklady a odhadované výplaty vlastníkovi, jak se objevují v našich skutečných vyrovnáních.</value>
+  </data>
+  <data name="Coop_Calc_Simple_Eyebrow" xml:space="preserve">
+    <value>Tvůj byt</value>
+  </data>
+  <data name="Coop_Calc_Location_Label" xml:space="preserve">
+    <value>Poloha</value>
+  </data>
+  <data name="Coop_Calc_Rooms_Label" xml:space="preserve">
+    <value>Počet místností</value>
+  </data>
+  <data name="Coop_Calc_Standard_Label" xml:space="preserve">
+    <value>Finish Standard</value>
+  </data>
+  <data name="Coop_Calc_Loc_StareMiasto" xml:space="preserve">
+    <value>Staré město</value>
+  </data>
+  <data name="Coop_Calc_Loc_Centrum" xml:space="preserve">
+    <value>Střed</value>
+  </data>
+  <data name="Coop_Calc_Loc_Rubinkowo" xml:space="preserve">
+    <value>Rubinkowo</value>
+  </data>
+  <data name="Coop_Calc_Loc_Wrzosy" xml:space="preserve">
+    <value>Heather</value>
+  </data>
+  <data name="Coop_Calc_Loc_Stawki" xml:space="preserve">
+    <value>Sazby</value>
+  </data>
+  <data name="Coop_Calc_Loc_BydgoskieI" xml:space="preserve">
+    <value>Bydhoszcz I</value>
+  </data>
+  <data name="Coop_Calc_Loc_BydgoskieII" xml:space="preserve">
+    <value>Bydhoszcz II</value>
+  </data>
+  <data name="Coop_Calc_Loc_More" xml:space="preserve">
+    <value>Čtěte více</value>
+  </data>
+  <data name="Coop_Calc_Loc_Chelminskie" xml:space="preserve">
+    <value>Chełmské vojvodství</value>
+  </data>
+  <data name="Coop_Calc_Loc_JakubskieMokre" xml:space="preserve">
+    <value>Jakubskie-Mokre</value>
+  </data>
+  <data name="Coop_Calc_Loc_Bielawy" xml:space="preserve">
+    <value>Bielawy</value>
+  </data>
+  <data name="Coop_Calc_Loc_Skarpa" xml:space="preserve">
+    <value>Svah</value>
+  </data>
+  <data name="Coop_Calc_Loc_Kaszczorek" xml:space="preserve">
+    <value>Kaszczorek</value>
+  </data>
+  <data name="Coop_Calc_Loc_Podgorz" xml:space="preserve">
+    <value>Podgórze</value>
+  </data>
+  <data name="Coop_Calc_Loc_Rudak" xml:space="preserve">
+    <value>Rudak</value>
+  </data>
+  <data name="Coop_Calc_Loc_Czerniewice" xml:space="preserve">
+    <value>Czerniewice</value>
+  </data>
+  <data name="Coop_Calc_Std_Basic" xml:space="preserve">
+    <value>Základní</value>
+  </data>
+  <data name="Coop_Calc_Std_Good" xml:space="preserve">
+    <value>Dobře</value>
+  </data>
+  <data name="Coop_Calc_Std_Premium" xml:space="preserve">
+    <value>Premium (po metamorfóze)</value>
+  </data>
+  <data name="Coop_Calc_Result_Eyebrow" xml:space="preserve">
+    <value>Měsíční odhad - Areál</value>
+  </data>
+  <data name="Coop_Calc_Result_Label" xml:space="preserve">
+    <value>Vaše výplata (po odečtení nákladů a provizí)</value>
+  </data>
+  <data name="Coop_Calc_AvgRate" xml:space="preserve">
+    <value>Průměrná cena za noc</value>
+  </data>
+  <data name="Coop_Calc_Occupancy" xml:space="preserve">
+    <value>Očekávaná obsazenost</value>
+  </data>
+  <data name="Coop_Calc_GrossRevenue" xml:space="preserve">
+    <value>Hrubé příjmy</value>
+  </data>
+  <data name="Coop_Calc_OpCosts" xml:space="preserve">
+    <value>Provozní náklady (úklid, praní, chemikálie)</value>
+  </data>
+  <data name="Coop_Calc_Commission" xml:space="preserve">
+    <value>Provize z Rentoomu (30 % z příjmů)</value>
+  </data>
+  <data name="Coop_Calc_CtaPrimary" xml:space="preserve">
+    <value>Chci přesnou předpověď pro svůj byt</value>
+  </data>
+  <data name="Coop_Calc_CtaNote" xml:space="preserve">
+    <value>Ilustrativní odhad založený na datech z našich bytů. Po auditu bytu připravujeme přesnou prognózu — zdarma a bez závazků.</value>
+  </data>
+  <data name="Coop_Calc_ShowDetailed" xml:space="preserve">
+    <value>Podívejte se na podrobnou kalkulačku</value>
+  </data>
+  <data name="Coop_Calc_HideDetailed" xml:space="preserve">
+    <value>Skrýt detailní kalkulačku</value>
+  </data>
+  <data name="Coop_Calc_Tab_Reservation" xml:space="preserve">
+    <value>Rezervace</value>
+  </data>
+  <data name="Coop_Calc_Tab_Monthly" xml:space="preserve">
+    <value>Měsíc</value>
+  </data>
+  <data name="Coop_Calc_Tab_Investment" xml:space="preserve">
+    <value>Investice</value>
+  </data>
+  <data name="Coop_Calc_Res_Title" xml:space="preserve">
+    <value>Zkontrolujte jednu rezervaci</value>
+  </data>
+  <data name="Coop_Calc_Res_Desc" xml:space="preserve">
+    <value>Zadejte hodnotu viditelnou v systému po slevě, včetně čištění.</value>
+  </data>
+  <data name="Coop_Calc_Res_Gross" xml:space="preserve">
+    <value>Plná hrubá rezervační hodnota</value>
+  </data>
+  <data name="Coop_Calc_Res_Guests" xml:space="preserve">
+    <value>Počet osob</value>
+  </data>
+  <data name="Coop_Calc_Res_Nights" xml:space="preserve">
+    <value>Počet dní</value>
+  </data>
+  <data name="Coop_Calc_Res_Area" xml:space="preserve">
+    <value>Velikost bytu</value>
+  </data>
+  <data name="Coop_Calc_Res_AreaTo55" xml:space="preserve">
+    <value>až 55 m²</value>
+  </data>
+  <data name="Coop_Calc_Res_AreaTo70" xml:space="preserve">
+    <value>55–70 m²</value>
+  </data>
+  <data name="Coop_Calc_Res_AreaOver70" xml:space="preserve">
+    <value>více než 70 m²</value>
+  </data>
+  <data name="Coop_Calc_Res_Result_Title" xml:space="preserve">
+    <value>Postupné vypořádání</value>
+  </data>
+  <data name="Coop_Calc_Res_TotalGross" xml:space="preserve">
+    <value>Plná hrubá rezervace</value>
+  </data>
+  <data name="Coop_Calc_Res_CleaningGross" xml:space="preserve">
+    <value>Hrubé čištění</value>
+  </data>
+  <data name="Coop_Calc_Res_AfterCleaning" xml:space="preserve">
+    <value>Po odečtení čištění</value>
+  </data>
+  <data name="Coop_Calc_Res_Net" xml:space="preserve">
+    <value>Po přestavě na síť</value>
+  </data>
+  <data name="Coop_Calc_Res_ExtraBeds" xml:space="preserve">
+    <value>Příprava dalších míst</value>
+  </data>
+  <data name="Coop_Calc_Res_SplitBase" xml:space="preserve">
+    <value>Základ rozdělení</value>
+  </data>
+  <data name="Coop_Calc_Res_Owner" xml:space="preserve">
+    <value>Majitel · 70%</value>
+  </data>
+  <data name="Coop_Calc_Res_Rentoom" xml:space="preserve">
+    <value>Rentoom · 30%</value>
+  </data>
+  <data name="Coop_Calc_Mon_Title" xml:space="preserve">
+    <value>Odhadněte své měsíční skóre</value>
+  </data>
+  <data name="Coop_Calc_Mon_Desc" xml:space="preserve">
+    <value>Po odečtení čištění zadejte celkový čistý příjem.</value>
+  </data>
+  <data name="Coop_Calc_Mon_Income" xml:space="preserve">
+    <value>Měsíční čistý příjem po čištění</value>
+  </data>
+  <data name="Coop_Calc_Mon_Beds" xml:space="preserve">
+    <value>Další místa připravená během měsíce</value>
+  </data>
+  <data name="Coop_Calc_Mon_OtherCosts" xml:space="preserve">
+    <value>Další náklady vlastníka</value>
+  </data>
+  <data name="Coop_Calc_Mon_Linen" xml:space="preserve">
+    <value>Zahrňte ložní prádlo (81,30 PLN čistě/měsíc)</value>
+  </data>
+  <data name="Coop_Calc_Mon_Result_Title" xml:space="preserve">
+    <value>Odhadovaná částka vlastníka</value>
+  </data>
+  <data name="Coop_Calc_Mon_Revenue" xml:space="preserve">
+    <value>Čistý příjem po čištění</value>
+  </data>
+  <data name="Coop_Calc_Mon_PrepCost" xml:space="preserve">
+    <value>Příprava dalších míst</value>
+  </data>
+  <data name="Coop_Calc_Mon_OwnerShare" xml:space="preserve">
+    <value>Nájem pronajímatele · 70%</value>
+  </data>
+  <data name="Coop_Calc_Mon_LinenCost" xml:space="preserve">
+    <value>Čisté měsíční podestýlky</value>
+  </data>
+  <data name="Coop_Calc_Mon_OtherLabel" xml:space="preserve">
+    <value>Další uvedené náklady</value>
+  </data>
+  <data name="Coop_Calc_Mon_AfterCosts" xml:space="preserve">
+    <value>Za výše uvedené náklady</value>
+  </data>
+  <data name="Coop_Calc_Mon_BeforeTax" xml:space="preserve">
+    <value>Měsíčně, před daní pronajímatele</value>
+  </data>
+  <data name="Coop_Calc_Inv_Title" xml:space="preserve">
+    <value>Zkontrolujte roční ziskovost</value>
+  </data>
+  <data name="Coop_Calc_Inv_Income" xml:space="preserve">
+    <value>Měsíční hodnocení majitelů u Rentoomu</value>
+  </data>
+  <data name="Coop_Calc_Inv_Admin" xml:space="preserve">
+    <value>Administrativní nájem a energie</value>
+  </data>
+  <data name="Coop_Calc_Inv_Insurance" xml:space="preserve">
+    <value>Pojištění – průměr za měsíc</value>
+  </data>
+  <data name="Coop_Calc_Inv_Financing" xml:space="preserve">
+    <value>Splátka nebo náklady na financování</value>
+  </data>
+  <data name="Coop_Calc_Inv_Value" xml:space="preserve">
+    <value>Celková investiční hodnota</value>
+  </data>
+  <data name="Coop_Calc_Inv_Result_Title" xml:space="preserve">
+    <value>Vaše investiční situace</value>
+  </data>
+  <data name="Coop_Calc_Inv_MonthlyOp" xml:space="preserve">
+    <value>Měsíční provozní výsledky</value>
+  </data>
+  <data name="Coop_Calc_Inv_MonthlyCash" xml:space="preserve">
+    <value>Měsíční tok po financování</value>
+  </data>
+  <data name="Coop_Calc_Inv_AnnualOp" xml:space="preserve">
+    <value>Roční provozní výsledky</value>
+  </data>
+  <data name="Coop_Calc_Inv_Yield" xml:space="preserve">
+    <value>Roční provozní ziskovost</value>
+  </data>
+  <data name="Coop_Calc_Inv_Cta" xml:space="preserve">
+    <value>Požádejte o bezplatnou kontrolu bytu</value>
+  </data>
+  <data name="Coop_Calc_Inv_Disclaimer" xml:space="preserve">
+    <value>Výpočet nezohledňuje daň z příjmu fyzických osob, změny hodnoty nemovitosti ani náklady, které uživatel nezohlednil.</value>
+  </data>
+  <data name="Coop_Calc_Netto" xml:space="preserve">
+    <value>net</value>
+  </data>
+  <data name="Coop_Calc_Zl" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="Coop_Services_Eyebrow" xml:space="preserve">
+    <value>Do čeho se Rentoom pouští</value>
+  </data>
+  <data name="Coop_Services_Title" xml:space="preserve">
+    <value>Váš seznam úkolů: nula položek.</value>
+  </data>
+  <data name="Coop_Service1_Title" xml:space="preserve">
+    <value>Fotografie a domácí aranžmá</value>
+  </data>
+  <data name="Coop_Service1_Desc" xml:space="preserve">
+    <value>Focení, styling, drobné úpravy a interiérová výzdoba.</value>
+  </data>
+  <data name="Coop_Service2_Title" xml:space="preserve">
+    <value>Zveřejnění oznámení</value>
+  </data>
+  <data name="Coop_Service2_Desc" xml:space="preserve">
+    <value>Rezervace, Airbnb, Google a přímý kanál – popisy, překlady, kalendáře.</value>
+  </data>
+  <data name="Coop_Service3_Title" xml:space="preserve">
+    <value>Dynamické oceňování</value>
+  </data>
+  <data name="Coop_Service3_Desc" xml:space="preserve">
+    <value>Denní aktualizace o sazbách a délce pobytu, aby vyhověly poptávce ve vaší oblasti.</value>
+  </data>
+  <data name="Coop_Service4_Title" xml:space="preserve">
+    <value>Kontakt s hosty</value>
+  </data>
+  <data name="Coop_Service4_Desc" xml:space="preserve">
+    <value>Přijímáme hovory a na zprávy odpovídáme během asi tuctu minut, 7 dní v týdnu, v polštině a angličtině.</value>
+  </data>
+  <data name="Coop_Service5_Title" xml:space="preserve">
+    <value>Úklid a praní</value>
+  </data>
+  <data name="Coop_Service5_Desc" xml:space="preserve">
+    <value>Vlastní tým a praní – čerstvé povlečení a sada ručníků při každém pobytu.</value>
+  </data>
+  <data name="Coop_Service6_Title" xml:space="preserve">
+    <value>Chyby a fakturace</value>
+  </data>
+  <data name="Coop_Service6_Desc" xml:space="preserve">
+    <value>Opravy, energie, měsíční zpráva a dokumenty připravené k účetnictví.</value>
+  </data>
+  <data name="Coop_Services_BeforeAfterCaption" xml:space="preserve">
+    <value>Před / Po – Horizon Apartment Makeover. 3 týdny práce, +31 % průměrné denní sazby.</value>
+  </data>
+  <data name="Coop_Testimonials_Eyebrow" xml:space="preserve">
+    <value>Recenze majitele</value>
+  </data>
+  <data name="Coop_Testimonials_Title" xml:space="preserve">
+    <value>Říkají to, co uslyšíte při auditu.</value>
+  </data>
+  <data name="Coop_Testimonial1_Quote" xml:space="preserve">
+    <value>Dva roky jsem se staral o rezervace a měnil povlečení sám. Po přechodu na Rentoom se tržby zvýšily asi o 22 % a od hosta jsem nedostal ani jeden hovor.</value>
+  </data>
+  <data name="Coop_Testimonial1_Author" xml:space="preserve">
+    <value>Paweł M.</value>
+  </data>
+  <data name="Coop_Testimonial1_Context" xml:space="preserve">
+    <value>2 byty, Krakov Kazimierz</value>
+  </data>
+  <data name="Coop_Testimonial2_Quote" xml:space="preserve">
+    <value>Babiččin byt vypadal jako muzeum. Proměna trvala 3 týdny a dnes je to náš nejlépe hodnocený byt v budově.</value>
+  </data>
+  <data name="Coop_Testimonial2_Author" xml:space="preserve">
+    <value>Agnieszka R.</value>
+  </data>
+  <data name="Coop_Testimonial2_Context" xml:space="preserve">
+    <value>Studio, Staré město Krakova</value>
+  </data>
+  <data name="Coop_Testimonial3_Quote" xml:space="preserve">
+    <value>Nejvíc si cením vyrovnání — jedno PDF měsíčně, vše je správně, účetní nemá žádné otázky.</value>
+  </data>
+  <data name="Coop_Testimonial3_Author" xml:space="preserve">
+    <value>Tomasz K.</value>
+  </data>
+  <data name="Coop_Testimonial3_Context" xml:space="preserve">
+    <value>3 byty, Vratislav</value>
+  </data>
+  <data name="Coop_Compare_Eyebrow" xml:space="preserve">
+    <value>Porovnání modelů</value>
+  </data>
+  <data name="Coop_Compare_Title" xml:space="preserve">
+    <value>Sám, dlouhodobě nebo s Rentoomem?</value>
+  </data>
+  <data name="Coop_Compare_Col_Self" xml:space="preserve">
+    <value>Samopronájem</value>
+  </data>
+  <data name="Coop_Compare_Col_LongTerm" xml:space="preserve">
+    <value>Dlouhodobý pronájem</value>
+  </data>
+  <data name="Coop_Compare_Col_Rentoom" xml:space="preserve">
+    <value>Rentoom Management</value>
+  </data>
+  <data name="Coop_Compare_Row_Time" xml:space="preserve">
+    <value>Tvůj čas za měsíc</value>
+  </data>
+  <data name="Coop_Compare_Row_Time_Self" xml:space="preserve">
+    <value>20:00 – 40:00</value>
+  </data>
+  <data name="Coop_Compare_Row_Time_Long" xml:space="preserve">
+    <value>1-2 hodiny</value>
+  </data>
+  <data name="Coop_Compare_Row_Time_Rentoom" xml:space="preserve">
+    <value>0 h</value>
+  </data>
+  <data name="Coop_Compare_Row_Revenue" xml:space="preserve">
+    <value>Měsíční příjmy</value>
+  </data>
+  <data name="Coop_Compare_Row_Revenue_Self" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Coop_Compare_Row_Revenue_Long" xml:space="preserve">
+    <value>Nejnižší, ale stálý</value>
+  </data>
+  <data name="Coop_Compare_Row_Revenue_Rentoom" xml:space="preserve">
+    <value>Supreme</value>
+  </data>
+  <data name="Coop_Compare_Row_Support" xml:space="preserve">
+    <value>Podpora hostů 24/7</value>
+  </data>
+  <data name="Coop_Compare_Row_Cleaning" xml:space="preserve">
+    <value>Úklid a praní</value>
+  </data>
+  <data name="Coop_Compare_Row_Pricing" xml:space="preserve">
+    <value>Dynamické oceňování</value>
+  </data>
+  <data name="Coop_Compare_Row_Photos" xml:space="preserve">
+    <value>Fotografie, design, inzeráty</value>
+  </data>
+  <data name="Coop_Compare_Row_Inspection" xml:space="preserve">
+    <value>Kontrola stavu bytu</value>
+  </data>
+  <data name="Coop_Compare_Row_Inspection_Self" xml:space="preserve">
+    <value>Tvůj</value>
+  </data>
+  <data name="Coop_Compare_Row_Inspection_Long" xml:space="preserve">
+    <value>Limitovaná</value>
+  </data>
+  <data name="Coop_Compare_Row_Inspection_Rentoom" xml:space="preserve">
+    <value>Po každém pobytu</value>
+  </data>
+  <data name="Coop_Compare_Row_Accounting" xml:space="preserve">
+    <value>Fakturace a dokumenty</value>
+  </data>
+  <data name="Coop_Compare_Row_Accounting_Long" xml:space="preserve">
+    <value>Částečně</value>
+  </data>
+  <data name="Coop_Process_Eyebrow" xml:space="preserve">
+    <value>Jak začínáme spolupracovat</value>
+  </data>
+  <data name="Coop_Process_Title" xml:space="preserve">
+    <value>Od telefonu po první rezervaci – obvykle 3-4 týdny.</value>
+  </data>
+  <data name="Coop_Process1_Title" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="Coop_Process1_Desc" xml:space="preserve">
+    <value>Necháš číslo, zavoláme za 24 hodin a zeptáme se na byt.</value>
+  </data>
+  <data name="Coop_Process2_Title" xml:space="preserve">
+    <value>Audit bytu</value>
+  </data>
+  <data name="Coop_Process2_Desc" xml:space="preserve">
+    <value>Kontrolujeme prostory, kontrolujeme předpisy komunity a potenciál lokality.</value>
+  </data>
+  <data name="Coop_Process3_Title" xml:space="preserve">
+    <value>Předpověď</value>
+  </data>
+  <data name="Coop_Process3_Desc" xml:space="preserve">
+    <value>Dostanete rozmezí příjmů, obsazenosti a výplat a seznam doporučení.</value>
+  </data>
+  <data name="Coop_Process4_Title" xml:space="preserve">
+    <value>Příprava</value>
+  </data>
+  <data name="Coop_Process4_Desc" xml:space="preserve">
+    <value>Úpravy, domácí úpravy, focení, chytrý zámek a Wi-Fi.</value>
+  </data>
+  <data name="Coop_Process5_Title" xml:space="preserve">
+    <value>Dohoda</value>
+  </data>
+  <data name="Coop_Process5_Desc" xml:space="preserve">
+    <value>Transparentní smlouva, provize, měsíční výpovědní lhůta.</value>
+  </data>
+  <data name="Coop_Process6_Title" xml:space="preserve">
+    <value>Zahájení prodeje</value>
+  </data>
+  <data name="Coop_Process6_Desc" xml:space="preserve">
+    <value>Zveřejňujeme oznámení, stanovujeme ceny — první rezervace obvykle probíhají do 72 hodin.</value>
+  </data>
+  <data name="Coop_Team_Eyebrow" xml:space="preserve">
+    <value>Tým</value>
+  </data>
+  <data name="Coop_Team_Title" xml:space="preserve">
+    <value>Lidi, kteří se o váš byt opravdu postarají.</value>
+  </data>
+  <data name="Coop_Team1_Name" xml:space="preserve">
+    <value>Małgorzata Gardzielewska</value>
+  </data>
+  <data name="Coop_Team1_Role" xml:space="preserve">
+    <value>Koordinátor čistoty a logistiky</value>
+  </data>
+  <data name="Coop_Team1_Desc" xml:space="preserve">
+    <value>Dává pozor, aby byl každý byt připravený včas, od úklidu až po ložní prádlo.</value>
+  </data>
+  <data name="Coop_Team2_Name" xml:space="preserve">
+    <value>Monika Kwiatkowska</value>
+  </data>
+  <data name="Coop_Team2_Role" xml:space="preserve">
+    <value>Manažer údržby a prodeje</value>
+  </data>
+  <data name="Coop_Team2_Desc" xml:space="preserve">
+    <value>Spojuje efektivní provoz bytů s tím nejdůležitějším: plným kalendářem.</value>
+  </data>
+  <data name="Coop_Team3_Name" xml:space="preserve">
+    <value>Weronika Feliniak</value>
+  </data>
+  <data name="Coop_Team3_Role" xml:space="preserve">
+    <value>Marketingový specialista</value>
+  </data>
+  <data name="Coop_Team3_Desc" xml:space="preserve">
+    <value>Zvyšuje to viditelnost Rentoomu a proměňuje dobrý pobyt v další rezervaci.</value>
+  </data>
+  <data name="Coop_Team4_Name" xml:space="preserve">
+    <value>Andrzej Pietkiewicz</value>
+  </data>
+  <data name="Coop_Team4_Role" xml:space="preserve">
+    <value>Specialista na technickou údržbu bytů</value>
+  </data>
+  <data name="Coop_Team4_Desc" xml:space="preserve">
+    <value>Opravuje, zjednodušuje a zajišťuje, že vše funguje bez překvapení.</value>
+  </data>
+  <data name="Coop_Team5_Name" xml:space="preserve">
+    <value>Małgorzata Jędrusik</value>
+  </data>
+  <data name="Coop_Team5_Role" xml:space="preserve">
+    <value>Interiérový designér</value>
+  </data>
+  <data name="Coop_Team5_Desc" xml:space="preserve">
+    <value>Vytváří interiéry, které dobře vypadají, dobře fungují a přitahují hosty.</value>
+  </data>
+  <data name="Coop_Team6_Name" xml:space="preserve">
+    <value>Krystian Kujawa</value>
+  </data>
+  <data name="Coop_Team6_Role" xml:space="preserve">
+    <value>Provozní ředitel</value>
+  </data>
+  <data name="Coop_Team6_Desc" xml:space="preserve">
+    <value>Propojuje práci týmu a dbá na to, aby Rentoom každý den pracoval efektivně.</value>
+  </data>
+  <data name="Coop_Team7_Name" xml:space="preserve">
+    <value>Bartosz Jędrusik</value>
+  </data>
+  <data name="Coop_Team7_Role" xml:space="preserve">
+    <value>Prezident</value>
+  </data>
+  <data name="Coop_Team7_Desc" xml:space="preserve">
+    <value>Dává firmě směr a proměňuje ambiciózní plány v konkrétní činy.</value>
+  </data>
+  <data name="Coop_Faq_Eyebrow" xml:space="preserve">
+    <value>FAQ</value>
+  </data>
+  <data name="Coop_Faq_Title" xml:space="preserve">
+    <value>Otázky, které slyšíme nejčastěji</value>
+  </data>
+  <data name="Coop_Faq1_Q" xml:space="preserve">
+    <value>Kolik je provize Rentoomu?</value>
+  </data>
+  <data name="Coop_Faq1_A" xml:space="preserve">
+    <value>Standardní model je 80/20 — 80 % čistého zisku jde majiteli, 20 % je provize Rentoom. Provize z portálů (Booking, Airbnb) hradíme z naší strany.</value>
+  </data>
+  <data name="Coop_Faq2_Q" xml:space="preserve">
+    <value>Jak dlouho podepisujeme smlouvu?</value>
+  </data>
+  <data name="Coop_Faq2_A" xml:space="preserve">
+    <value>Smlouva je neurčitá s měsíční výpovědní lhůtou. Nezavazujeme se na roky — raději bychome, abyste zůstali, protože se vám to vyplatí.</value>
+  </data>
+  <data name="Coop_Faq3_Q" xml:space="preserve">
+    <value>Musím si byt zrekonstruovat?</value>
+  </data>
+  <data name="Coop_Faq3_A" xml:space="preserve">
+    <value>Ne vždy. Během auditu kontrolujeme technický stav a předkládáme seznam doporučení. Někdy stačí úprava domu a drobné úpravy, jindy nabízíme proměnu — ale rozhodnutí je vždy na vás.</value>
+  </data>
+  <data name="Coop_Faq4_Q" xml:space="preserve">
+    <value>Kdo platí za úklid a praní?</value>
+  </data>
+  <data name="Coop_Faq4_A" xml:space="preserve">
+    <value>Náklady na úklid jsou zahrnuty v ceně rezervace a hradí je host. Praní (ložní prádlo, ručníky) je pevná provozní cena zahrnutá v vyrovnání.</value>
+  </data>
+  <data name="Coop_Faq5_Q" xml:space="preserve">
+    <value>Co když host něco zničí?</value>
+  </data>
+  <data name="Coop_Faq5_A" xml:space="preserve">
+    <value>Každý pobyt je zdokumentován. Žádáme o odškodnění z programu kauce nebo ochrany portálů. Také doporučujeme ohledně vhodného pojištění nemovitosti.</value>
+  </data>
+  <data name="Coop_Faq6_Q" xml:space="preserve">
+    <value>Mohu byt využívat soukromě?</value>
+  </data>
+  <data name="Coop_Faq6_A" xml:space="preserve">
+    <value>Ano. Stačí si schůzku zablokovat v kalendáři s dostatečným předstihem. Tvůj byt, tvá pravidla.</value>
+  </data>
+  <data name="Coop_Faq7_Q" xml:space="preserve">
+    <value>Jak vypadá vyrovnání?</value>
+  </data>
+  <data name="Coop_Faq7_A" xml:space="preserve">
+    <value>Každý měsíc dostanete podrobnou zprávu se seznamem rezervací, nákladů a výplat. Jeden PDF, čitelný pro vás i vašeho účetního.</value>
+  </data>
+  <data name="Coop_Cta_Title" xml:space="preserve">
+    <value>Domluvte si bezplatnou kontrolu bytu</value>
+  </data>
+  <data name="Coop_Cta_Subtitle" xml:space="preserve">
+    <value>Přijdeme, prohlédneme si prostory a připravíme předpověď příjmů vidličkou. Žádné poplatky a žádné závazky.</value>
+  </data>
+  <data name="Coop_Cta_Button" xml:space="preserve">
+    <value>Chci předpověď pro svůj byt</value>
+  </data>
+  <data name="Coop_Section_Cta" xml:space="preserve">
+    <value>Domluvte si bezplatnou kontrolu bytu</value>
+  </data>
+  <data name="Coop_V3_Hero_Title" xml:space="preserve">
+    <value>Tvůj byt. Naše péče. Tvůj zisk.</value>
+  </data>
+  <data name="Coop_V3_Hero_SeoTitle" xml:space="preserve">
+    <value>Komplexní správa pronájmu bytů v Toruni</value>
+  </data>
+  <data name="Coop_V3_Hero_Subtitle" xml:space="preserve">
+    <value>Postaráme se o váš byt. Sledujeme cenový trh, zajišťujeme kontakt s hosty, poskytujeme profesionální technické a úklidové služby.
+Dostanete jasnou zprávu a přeložení.</value>
+  </data>
+  <data name="Coop_V3_Hero_Cta" xml:space="preserve">
+    <value>Domluvte si bezplatnou kontrolu bytu</value>
+  </data>
+  <data name="Coop_V3_Proof_Aria" xml:space="preserve">
+    <value>Rentoomy v počtu</value>
+  </data>
+  <data name="Coop_V3_Stat_Investors" xml:space="preserve">
+    <value>100+ investorů</value>
+  </data>
+  <data name="Coop_V3_Stat_Investors_Label" xml:space="preserve">
+    <value>Důvěřoval nám</value>
+  </data>
+  <data name="Coop_V3_Features_Eyebrow" xml:space="preserve">
+    <value>Co děláme</value>
+  </data>
+  <data name="Coop_V3_Features_Title" xml:space="preserve">
+    <value>Komplexní péče o váš byt</value>
+  </data>
+  <data name="Coop_V3_Feature_Reservations_Title" xml:space="preserve">
+    <value>Rezervace a ceny</value>
+  </data>
+  <data name="Coop_V3_Feature_Reservations_Desc" xml:space="preserve">
+    <value>Dynamicky spravujte své ceny a kalendář napříč Booking.com, Airbnb a dalšími.</value>
+  </data>
+  <data name="Coop_V3_Feature_Technical_Title" xml:space="preserve">
+    <value>Technika</value>
+  </data>
+  <data name="Coop_V3_Feature_Technical_Desc" xml:space="preserve">
+    <value>Rychlé opravy a servis, pravidelné kontroly a plná připravenost zařízení.</value>
+  </data>
+  <data name="Coop_V3_Feature_Settlements_Title" xml:space="preserve">
+    <value>Vyobrazování</value>
+  </data>
+  <data name="Coop_V3_Feature_Settlements_Desc" xml:space="preserve">
+    <value>Jasné měsíční zprávy a dokumenty připravené k účetnictví.</value>
+  </data>
+  <data name="Coop_V3_Feature_Photos_Title" xml:space="preserve">
+    <value>Fotografie a publikace nabídek</value>
+  </data>
+  <data name="Coop_V3_Feature_Photos_Desc" xml:space="preserve">
+    <value>Profesionální fotografie, domácí příprava, publikace a aktualizace nabídek na nejdůležitějších rezervačních portálech.</value>
+  </data>
+  <data name="Coop_V3_Costs_Eyebrow" xml:space="preserve">
+    <value>Proč je 20 % více než 30 %?</value>
+  </data>
+  <data name="Coop_V3_Costs_Title" xml:space="preserve">
+    <value>Důležité je, kolik skutečně zůstane majiteli</value>
+  </data>
+  <data name="Coop_V3_Costs_Intro" xml:space="preserve">
+    <value>Porovnejte celkové náklady na spolupráci, nejen provizi operátora, která je viditelná v nabídce.</value>
+  </data>
+  <data name="Coop_V3_Costs_Row_Name" xml:space="preserve">
+    <value>Nákladní položka</value>
+  </data>
+  <data name="Coop_V3_Costs_Competitor_A" xml:space="preserve">
+    <value>Soutěž A</value>
+  </data>
+  <data name="Coop_V3_Costs_Competitor_B" xml:space="preserve">
+    <value>Soutěž B</value>
+  </data>
+  <data name="Coop_V3_Costs_Owner_Profit" xml:space="preserve">
+    <value>Zisk vlastníka</value>
+  </data>
+  <data name="Coop_V3_Costs_Portals" xml:space="preserve">
+    <value>Zakázky na portál</value>
+  </data>
+  <data name="Coop_V3_Costs_Operator" xml:space="preserve">
+    <value>Provozovatelská komise</value>
+  </data>
+  <data name="Coop_V3_Costs_Total" xml:space="preserve">
+    <value>Celkové náklady</value>
+  </data>
+  <data name="Coop_V3_Costs_Note" xml:space="preserve">
+    <value>Příklad měsíčního příjmu z rezervace ve výši 10 000 PLN.</value>
+  </data>
+  <data name="Coop_V3_Tech_Eyebrow" xml:space="preserve">
+    <value>Vlastní systémy</value>
+  </data>
+  <data name="Coop_V3_Tech_Title" xml:space="preserve">
+    <value>Technologie, která funguje pro váš byt</value>
+  </data>
+  <data name="Coop_V3_Tech_Intro" xml:space="preserve">
+    <value>Naše interní řešení organizují každý krok vašeho pobytu – od přípravy bytu přes ubytování až po rychlé odstranění vad.</value>
+  </data>
+  <data name="Coop_V3_Tech_Cleaning_Title" xml:space="preserve">
+    <value>Systém řízení podestýlky a čištění</value>
+  </data>
+  <data name="Coop_V3_Tech_Cleaning_Desc" xml:space="preserve">
+    <value>Včasná obsluha každého pobytu a stálá kvalita bytu.</value>
+  </data>
+  <data name="Coop_V3_Tech_StayWell_Title" xml:space="preserve">
+    <value>Aplikace StayWell pro check-iny</value>
+  </data>
+  <data name="Coop_V3_Tech_StayWell_Desc" xml:space="preserve">
+    <value>Vzdálené přihlášení, podrobnosti o hostech, pravidla domu, pokyny a otevření bytu na jednom místě.</value>
+  </data>
+  <data name="Coop_V3_Tech_Tickets_Title" xml:space="preserve">
+    <value>Systém jízdenek</value>
+  </data>
+  <data name="Coop_V3_Tech_Tickets_Desc" xml:space="preserve">
+    <value>Hosté, služba a koordinátoři hlásí závady, takže můžeme okamžitě reagovat.</value>
+  </data>
+  <data name="Coop_V3_Tech_Image_Alt" xml:space="preserve">
+    <value>Byt pronajímat pod péčí operačního týmu</value>
+  </data>
+  <data name="Coop_V3_Local_Eyebrow" xml:space="preserve">
+    <value>Místní výhoda</value>
+  </data>
+  <data name="Coop_V3_Local_Title" xml:space="preserve">
+    <value>Toruň známe zevnitř.</value>
+  </data>
+  <data name="Coop_V3_Local_Intro" xml:space="preserve">
+    <value>Náš místní tým zná budovy, čtvrti a rytmus města. Jsme blízko, když nás váš byt nebo jeho hosté potřebují.</value>
+  </data>
+  <data name="Coop_V3_Process_Title" xml:space="preserve">
+    <value>3 fáze, 6 konkrétních akcí</value>
+  </data>
+  <data name="Coop_V3_Process_Stage1" xml:space="preserve">
+    <value>Zkoumání potenciálu</value>
+  </data>
+  <data name="Coop_V3_Process_Stage2" xml:space="preserve">
+    <value>Příprava startu</value>
+  </data>
+  <data name="Coop_V3_Process_Stage3" xml:space="preserve">
+    <value>Spouštíme prodeje</value>
+  </data>
+  <data name="Coop_V3_Process_Audit" xml:space="preserve">
+    <value>Bezplatná kontrola bytu</value>
+  </data>
+  <data name="Coop_V3_Process_Forecast" xml:space="preserve">
+    <value>Prognóza příjmů</value>
+  </data>
+  <data name="Coop_V3_Process_Preparation" xml:space="preserve">
+    <value>Příprava bytu</value>
+  </data>
+  <data name="Coop_V3_Process_Publication" xml:space="preserve">
+    <value>Zveřejnění nabídek</value>
+  </data>
+  <data name="Coop_V3_Owner_Eyebrow" xml:space="preserve">
+    <value>Služby pro majitele</value>
+  </data>
+  <data name="Coop_V3_Owner_Title" xml:space="preserve">
+    <value>Plná kontrola bez každodenního závazku</value>
+  </data>
+  <data name="Coop_V3_Owner_Intro" xml:space="preserve">
+    <value>Ty děláš rozhodnutí. Poskytujeme data, fakturaci a průběžnou podporu.</value>
+  </data>
+  <data name="Coop_V3_Owner_Panel" xml:space="preserve">
+    <value>Online panel vlastníků</value>
+  </data>
+  <data name="Coop_V3_Owner_Panel_Desc" xml:space="preserve">
+    <value>Máte transparentní přístup k rezervačnímu kalendáři.</value>
+  </data>
+  <data name="Coop_V3_Owner_Reports" xml:space="preserve">
+    <value>Vypořádání a finanční zprávy</value>
+  </data>
+  <data name="Coop_V3_Owner_Reports_Desc" xml:space="preserve">
+    <value>Přesně víte, kolik vaše nemovitost vydělává.</value>
+  </data>
+  <data name="Coop_V3_Owner_Legal" xml:space="preserve">
+    <value>Právní a administrativní podpora</value>
+  </data>
+  <data name="Coop_V3_Owner_Legal_Desc" xml:space="preserve">
+    <value>Staráme se o dodržování předpisů a přebíráme formality.</value>
+  </data>
+  <data name="Coop_V3_Owner_Care" xml:space="preserve">
+    <value>Pečlivá péče majitele</value>
+  </data>
+  <data name="Coop_V3_Owner_Care_Desc" xml:space="preserve">
+    <value>Reagujeme rychle a podporujeme vás v jakékoli situaci.</value>
+  </data>
+  <data name="Coop_V3_Faq1_A" xml:space="preserve">
+    <value>Standardní model je 30 %. Zakázky portálů jsou na straně Rentooma, takže osídlení zůstává jasné a předvídatelné.</value>
+  </data>
+  <data name="Coop_V3_Floating_Cta" xml:space="preserve">
+    <value>Naplánujte si bezplatný audit</value>
+  </data>
+  <data name="Coop_V3_Floating_Cta_Aria" xml:space="preserve">
+    <value>Bezplatná kontrola bytu</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Start" xml:space="preserve">
+    <value>Spolupracujeme s toruňskými značkami z oblasti cateringu, zábavy a služeb, díky čemuž mohou naši hosté využít</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Discounts" xml:space="preserve">
+    <value>Speciální slevy</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Middle" xml:space="preserve">
+    <value>a atraktivní nabídky během vašeho pobytu. Kromě toho organizujeme</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Business" xml:space="preserve">
+    <value>Ubytování pro společnosti</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_End" xml:space="preserve">
+    <value>, která poskytuje pohodlná a flexibilní řešení pro obchodní zákazníky.</value>
+  </data>
 </root>

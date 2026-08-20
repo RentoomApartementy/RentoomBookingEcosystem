@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>RentoomBooking.ResxTranslator</RootNamespace>
     <AssemblyName>RentoomBooking.ResxTranslator</AssemblyName>
+    <UserSecretsId>c1bb44e3-20f6-4098-a021-430d6dc4d17c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

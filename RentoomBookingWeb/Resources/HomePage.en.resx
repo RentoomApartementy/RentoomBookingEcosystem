@@ -62,10 +62,10 @@ Each apartment is a space designed to provide genuine rest and privacy after an 
         <value>Read reviews from people who have stayed in our apartments in Toruń.</value>
     </data>
   <data name="ReviewExpand" xml:space="preserve">
-    <value>Read more</value>
+    <value>Expand</value>
   </data>
   <data name="ReviewCollapse" xml:space="preserve">
-    <value>Show less</value>
+    <value>Collapse</value>
   </data>
   <data name="formtext" xml:space="preserve">
         <value>Leave your contact information, and we will get in touch with you!</value>

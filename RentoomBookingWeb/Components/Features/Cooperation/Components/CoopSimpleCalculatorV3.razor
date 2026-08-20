@@ -13,7 +13,7 @@
                     var key = loc.Key;
                     <button class="coop-v3-pill @(_selectedLocation == key ? "active" : "")"
                             @onclick="() => SelectLocation(key)">
-                        @L[$"Coop_Calc_Loc_{key}"]
+                        @GetLocationLabel(key)
                     </button>
                 }
                 <button class="coop-v3-pill coop-v3-pill-more @(_showMoreLocations ? "active" : "")"
@@ -30,7 +30,7 @@
                         var key = loc.Key;
                         <button class="coop-v3-pill @(_selectedLocation == key ? "active" : "")"
                                 @onclick="() => SelectLocation(key)">
-                            @L[$"Coop_Calc_Loc_{key}"]
+                            @GetLocationLabel(key)
                         </button>
                     }
                 </div>
@@ -109,6 +109,30 @@
 
     private record LocationData(string Key, decimal BaseRate, int OccLow, int OccHigh, decimal MultiplierLow, decimal MultiplierHigh);
     private record StandardData(string Key, decimal Multiplier);
+
+    private static readonly IReadOnlyDictionary<string, string> _properLocationNames =
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["Rubinkowo"] = "Rubinkowo",
+            ["Wrzosy"] = "Wrzosy",
+            ["Stawki"] = "Stawki",
+            ["BydgoskieI"] = "Bydgoskie I",
+            ["BydgoskieII"] = "Bydgoskie II",
+            ["Chelminskie"] = "Chełmińskie",
+            ["JakubskieMokre"] = "Jakubskie-Mokre",
+            ["Bielawy"] = "Bielawy",
+            ["Skarpa"] = "Skarpa",
+            ["Kaszczorek"] = "Kaszczorek",
+            ["Podgorz"] = "Podgórz",
+            ["Rudak"] = "Rudak",
+            ["Czerniewice"] = "Czerniewice"
+        };
+
+    private string GetLocationLabel(string key) => key switch
+    {
+        "StareMiasto" or "Centrum" => L[$"Coop_Calc_Loc_{key}"].Value,
+        _ => _properLocationNames[key]
+    };
 
     private static readonly LocationData[] _mainLocations =
     {
