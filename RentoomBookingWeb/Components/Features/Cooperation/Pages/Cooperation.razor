@@ -1,7 +1,11 @@
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
+@using RentoomBooking.SharedClasses.Services.Descriptions
+@using System.Text.Encodings.Web
+@using System.Text.Json
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
+@inject IStringLocalizer<RentoomBookingWeb.HomePage> HomeLocalizer;
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 
 @{
@@ -35,6 +39,10 @@ else
         <meta property="og:type" content="website" />
         <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{currentPagePath}")" />
         <BreadcrumbJsonLd CurrentPageName="@Localizer["Cooperation_BreadcrumbName"]" CurrentPagePath="@currentPagePath" />
+        <script type="application/ld+json">
+            @((MarkupString)CooperationOrganizationJsonLd)
+        </script>
+        <FaqPageJsonLd Faqs="@CooperationFaqs" />
         <SeoHreflangs />
         @if (isV3)
         {
@@ -61,6 +69,60 @@ else
     [Parameter] public string? Version { get; set; }
 
     private bool _isFormModalOpen;
+
+    private string CooperationOrganizationJsonLd => JsonSerializer.Serialize(new Dictionary<string, object>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "Organization",
+        ["@id"] = "https://rentoom.pl/#organization",
+        ["name"] = "Rentoom",
+        ["legalName"] = "Rentoom Apartamenty sp. z o.o.",
+        ["alternateName"] = "Rentoom Apartamenty",
+        ["url"] = "https://rentoom.pl/",
+        ["logo"] = new Dictionary<string, object>
+        {
+            ["@type"] = "ImageObject",
+            ["url"] = "https://rentoom.pl/assets/images/logo-nowe-Rentoom-final-158x112.png"
+        },
+        ["description"] = HomeLocalizer["Home_OrganizationDescription"].Value,
+        ["email"] = "info@rentoom.pl",
+        ["telephone"] = "+48 881 388 001",
+        ["taxID"] = "8792727407",
+        ["address"] = new Dictionary<string, object>
+        {
+            ["@type"] = "PostalAddress",
+            ["streetAddress"] = "ul. Stanisława Szymańskiego 1B",
+            ["postalCode"] = "87-100",
+            ["addressLocality"] = "Toruń",
+            ["addressCountry"] = "PL"
+        },
+        ["contactPoint"] = new Dictionary<string, object>
+        {
+            ["@type"] = "ContactPoint",
+            ["contactType"] = "customer service",
+            ["telephone"] = "+48 881 388 001",
+            ["email"] = "info@rentoom.pl",
+            ["availableLanguage"] = new[] { "pl", "en" }
+        },
+        ["sameAs"] = new[]
+        {
+            "https://www.facebook.com/RentoomApartamenty/",
+            "https://www.instagram.com/rentoomapartamenty/"
+        }
+    }, new JsonSerializerOptions
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    });
+
+    private IReadOnlyList<FaqItemDto> CooperationFaqs => Enumerable.Range(1, 7)
+        .Select(index => new FaqItemDto
+        {
+            Question = Localizer[$"Coop_Faq{index}_Q"].Value,
+            Answer = (index == 1
+                ? Localizer["Coop_V3_Faq1_A"]
+                : Localizer[$"Coop_Faq{index}_A"]).Value
+        })
+        .ToArray();
 
     private EventCallback OpenFormModalRequested =>
         EventCallback.Factory.Create(this, () => _isFormModalOpen = true);

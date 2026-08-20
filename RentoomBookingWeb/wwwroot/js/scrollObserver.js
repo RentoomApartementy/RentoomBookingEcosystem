@@ -1,3 +1,33 @@
+const visibilityObservers = new Map();
+
+export function registerVisibilityObserver(elementId, dotnetHelper) {
+    const target = document.getElementById(elementId);
+    if (!target) {
+        return;
+    }
+
+    unregisterVisibilityObserver(elementId);
+
+    const observer = new IntersectionObserver(([entry]) => {
+        dotnetHelper.invokeMethodAsync('UpdateHeroCtaVisibility', entry.isIntersecting)
+            .catch(() => {
+                observer.disconnect();
+                visibilityObservers.delete(elementId);
+            });
+    }, { threshold: 0 });
+
+    visibilityObservers.set(elementId, observer);
+    observer.observe(target);
+}
+
+export function unregisterVisibilityObserver(elementId) {
+    const observer = visibilityObservers.get(elementId);
+    if (observer) {
+        observer.disconnect();
+        visibilityObservers.delete(elementId);
+    }
+}
+
 export function registerScrollObserver(elementId, dotnetHelper, options) {
     const target = document.getElementById(elementId);
     
