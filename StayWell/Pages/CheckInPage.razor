@@ -40,7 +40,8 @@
     <section class="checkin-section">
         <h3 class="checkin-section__title">@Localizer["BuildingCodesTitle"]</h3>
         <AccessCodesList ParkingSpotNumber="@ParkingSpotNumber"
-                         ParkingMapUrl="@ParkingMapUrl" />
+                         ParkingMapUrl="@ParkingMapUrl"
+                         ApartmentNumber="@ApartmentNumber" />
     </section>
 
     <section class="checkin-section">
@@ -112,6 +113,9 @@
 
     private string? ParkingSpotNumber =>
         LocksState.GetLocalizedParkingSpotNumber(GlobalizationService.CurrentCulture.TwoLetterISOLanguageName);
+
+    private string? ApartmentNumber =>
+        ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode;
 
     private string? ParkingMapUrl
     {

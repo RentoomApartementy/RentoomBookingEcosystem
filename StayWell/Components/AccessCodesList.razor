@@ -22,6 +22,19 @@
     }
     else
     {
+        @if (HasCode(ApartmentNumber))
+        {
+            <div class="access-code-card">
+                <div class="access-code-card__icon-wrapper">
+                    <img src="/icons/door-open.svg" class="access-code-card__icon" alt="" aria-hidden="true" />
+                </div>
+                <div class="access-code-card__content">
+                    <div class="access-code-card__label">@Localizer["ApartmentNumber"]</div>
+                    <div class="access-code-card__value">@ApartmentNumber</div>
+                </div>
+            </div>
+        }
+
         @if (HasCode(ParkingSpotNumber) || HasMapLink(ParkingMapUrl))
         {
             @if (HasMapLink(ParkingMapUrl))
@@ -114,6 +127,9 @@
 
     [Parameter]
     public string? ParkingMapUrl { get; set; }
+
+    [Parameter]
+    public string? ApartmentNumber { get; set; }
 
     protected override void OnInitialized() =>
         LocksState.OnChange += OnLocksStateChanged;
