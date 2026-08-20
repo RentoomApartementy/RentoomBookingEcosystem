@@ -123,4 +123,10 @@
   <data name="PartnersSubtitle" xml:space="preserve">
     <value>Spolupracujeme s overenými miestnymi značkami, aby bol váš pobyt v Toruni jedinečný</value>
   </data>
+  <data name="ReviewExpand" xml:space="preserve">
+    <value>Rozšíriť</value>
+  </data>
+  <data name="ReviewCollapse" xml:space="preserve">
+    <value>Kolaps</value>
+  </data>
 </root>

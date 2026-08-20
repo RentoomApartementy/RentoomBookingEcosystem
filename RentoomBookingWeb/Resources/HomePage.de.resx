@@ -123,4 +123,10 @@
   <data name="PartnersSubtitle" xml:space="preserve">
     <value>Wir arbeiten mit bewährten lokalen Marken zusammen, um Ihren Aufenthalt in Toruń einzigartig zu machen</value>
   </data>
+  <data name="ReviewExpand" xml:space="preserve">
+    <value>Erweitern</value>
+  </data>
+  <data name="ReviewCollapse" xml:space="preserve">
+    <value>Zusammenbruch</value>
+  </data>
 </root>

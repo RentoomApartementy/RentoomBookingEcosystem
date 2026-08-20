@@ -123,4 +123,10 @@
   <data name="PartnersSubtitle" xml:space="preserve">
     <value>Sodelujemo z preverjenimi lokalnimi blagovnimi znamkami, da bo vaše bivanje v Torunu edinstveno</value>
   </data>
+  <data name="ReviewExpand" xml:space="preserve">
+    <value>Razširitev</value>
+  </data>
+  <data name="ReviewCollapse" xml:space="preserve">
+    <value>Propad</value>
+  </data>
 </root>

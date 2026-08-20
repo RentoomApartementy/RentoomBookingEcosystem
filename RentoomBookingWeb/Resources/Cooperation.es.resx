@@ -160,4 +160,857 @@
   <data name="Cooperation_PageTitle" xml:space="preserve">
     <value>Cooperación - Rentoom | Gestión de alquileres Toruń</value>
   </data>
+  <data name="Coop_Hero_Eyebrow" xml:space="preserve">
+    <value>Rentoom · Cooperación para propietarios</value>
+  </data>
+  <data name="Coop_Hero_Title" xml:space="preserve">
+    <value>Gana dinero con tu piso sin tener que lidiar con reservas, invitados y limpieza.</value>
+  </data>
+  <data name="Coop_Hero_Subtitle" xml:space="preserve">
+    <value>Nos encargamos de todo: desde fotos y anuncios, pasando por precios dinámicos y atención al cliente, hasta el lavado y facturación de la ropa de cama. Recibes un informe y un traslado.</value>
+  </data>
+  <data name="Coop_Hero_Cta" xml:space="preserve">
+    <value>Comprueba cuánto ganará tu piso</value>
+  </data>
+  <data name="Coop_Hero_CalcLink" xml:space="preserve">
+    <value>Ve a la calculadora</value>
+  </data>
+  <data name="Coop_Hero_Stat1_Value" xml:space="preserve">
+    <value>180+</value>
+  </data>
+  <data name="Coop_Hero_Stat1_Label" xml:space="preserve">
+    <value>Apartamentos con servicios</value>
+  </data>
+  <data name="Coop_Hero_Stat2_Value" xml:space="preserve">
+    <value>24 000+</value>
+  </data>
+  <data name="Coop_Hero_Stat2_Label" xml:space="preserve">
+    <value>Reservas completadas</value>
+  </data>
+  <data name="Coop_Hero_Stat3_Value" xml:space="preserve">
+    <value>4,86 / 5</value>
+  </data>
+  <data name="Coop_Hero_Stat3_Label" xml:space="preserve">
+    <value>Valoración media de los invitados</value>
+  </data>
+  <data name="Coop_Hero_Stat4_Value" xml:space="preserve">
+    <value>8 años</value>
+  </data>
+  <data name="Coop_Hero_Stat4_Label" xml:space="preserve">
+    <value>En el mercado de alquileres a corto plazo</value>
+  </data>
+  <data name="Coop_Features_Eyebrow" xml:space="preserve">
+    <value>Nuestra ventaja</value>
+  </data>
+  <data name="Coop_Features_Title" xml:space="preserve">
+    <value>Estándar de hotel en un piso que no tienes que vigilar.</value>
+  </data>
+  <data name="Coop_Feature1_Title" xml:space="preserve">
+    <value>Autocontrol de StayWell</value>
+  </data>
+  <data name="Coop_Feature1_Desc" xml:space="preserve">
+    <value>El invitado entra con el código en cualquier momento. Sin esperar las llaves, sin llamadas nocturnas — y con mejores valoraciones por comodidad.</value>
+  </data>
+  <data name="Coop_Feature2_Title" xml:space="preserve">
+    <value>Un estándar que no negociamos</value>
+  </data>
+  <data name="Coop_Feature2_Desc" xml:space="preserve">
+    <value>Wi-Fi de alta velocidad, ropa de cabecera de hotel, toallas, un kit de bienvenida, un detector de humo y una cerradura inteligente en cada apartamento. Siempre.</value>
+  </data>
+  <data name="Coop_Feature3_Title" xml:space="preserve">
+    <value>Precios calculados diariamente</value>
+  </data>
+  <data name="Coop_Feature3_Desc" xml:space="preserve">
+    <value>La tarificación dinámica reacciona a los eventos, la temporada y la competencia dentro de un radio de varias calles. No dejamos dinero sobre la mesa.</value>
+  </data>
+  <data name="Coop_Feature4_Title" xml:space="preserve">
+    <value>Cero trabajo de tu parte</value>
+  </data>
+  <data name="Coop_Feature4_Desc" xml:space="preserve">
+    <value>Panel de propietarios, facturación mensual y una persona de contacto. Tú miras el traslado, nosotros miramos el resto.</value>
+  </data>
+  <data name="Coop_Calc_Eyebrow" xml:space="preserve">
+    <value>Calculadora de ingresos</value>
+  </data>
+  <data name="Coop_Calc_Title" xml:space="preserve">
+    <value>Mira el rango real, no la promesa de marketing.</value>
+  </data>
+  <data name="Coop_Calc_Subtitle" xml:space="preserve">
+    <value>Mostramos la previsión de ingresos, la ocupación proyectada, los costes operativos y el pago estimado al propietario tal y como aparecen en nuestros acuerdos reales.</value>
+  </data>
+  <data name="Coop_Calc_Simple_Eyebrow" xml:space="preserve">
+    <value>Tu piso</value>
+  </data>
+  <data name="Coop_Calc_Location_Label" xml:space="preserve">
+    <value>Ubicación</value>
+  </data>
+  <data name="Coop_Calc_Rooms_Label" xml:space="preserve">
+    <value>Número de habitaciones</value>
+  </data>
+  <data name="Coop_Calc_Standard_Label" xml:space="preserve">
+    <value>Estándar de acabado</value>
+  </data>
+  <data name="Coop_Calc_Loc_StareMiasto" xml:space="preserve">
+    <value>Casco Antiguo</value>
+  </data>
+  <data name="Coop_Calc_Loc_Centrum" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="Coop_Calc_Loc_Rubinkowo" xml:space="preserve">
+    <value>Rubinkowo</value>
+  </data>
+  <data name="Coop_Calc_Loc_Wrzosy" xml:space="preserve">
+    <value>Heather</value>
+  </data>
+  <data name="Coop_Calc_Loc_Stawki" xml:space="preserve">
+    <value>Tarifas</value>
+  </data>
+  <data name="Coop_Calc_Loc_BydgoskieI" xml:space="preserve">
+    <value>Bydgoszcz I</value>
+  </data>
+  <data name="Coop_Calc_Loc_BydgoskieII" xml:space="preserve">
+    <value>Bydgoszcz II</value>
+  </data>
+  <data name="Coop_Calc_Loc_More" xml:space="preserve">
+    <value>Leer más</value>
+  </data>
+  <data name="Coop_Calc_Loc_Chelminskie" xml:space="preserve">
+    <value>Voivodato de Chełmno</value>
+  </data>
+  <data name="Coop_Calc_Loc_JakubskieMokre" xml:space="preserve">
+    <value>Jakubskie-Mokre</value>
+  </data>
+  <data name="Coop_Calc_Loc_Bielawy" xml:space="preserve">
+    <value>Bielawy</value>
+  </data>
+  <data name="Coop_Calc_Loc_Skarpa" xml:space="preserve">
+    <value>Pendiente</value>
+  </data>
+  <data name="Coop_Calc_Loc_Kaszczorek" xml:space="preserve">
+    <value>Kaszczorek</value>
+  </data>
+  <data name="Coop_Calc_Loc_Podgorz" xml:space="preserve">
+    <value>Podgórze</value>
+  </data>
+  <data name="Coop_Calc_Loc_Rudak" xml:space="preserve">
+    <value>Rudak</value>
+  </data>
+  <data name="Coop_Calc_Loc_Czerniewice" xml:space="preserve">
+    <value>Czerniewice</value>
+  </data>
+  <data name="Coop_Calc_Std_Basic" xml:space="preserve">
+    <value>Básico</value>
+  </data>
+  <data name="Coop_Calc_Std_Good" xml:space="preserve">
+    <value>Bien</value>
+  </data>
+  <data name="Coop_Calc_Std_Premium" xml:space="preserve">
+    <value>Premium (después de la metamorfosis)</value>
+  </data>
+  <data name="Coop_Calc_Result_Eyebrow" xml:space="preserve">
+    <value>Estimación mensual - Rango</value>
+  </data>
+  <data name="Coop_Calc_Result_Label" xml:space="preserve">
+    <value>Tu pago (después de costes y comisiones)</value>
+  </data>
+  <data name="Coop_Calc_AvgRate" xml:space="preserve">
+    <value>Precio medio por noche</value>
+  </data>
+  <data name="Coop_Calc_Occupancy" xml:space="preserve">
+    <value>Ocupación esperada</value>
+  </data>
+  <data name="Coop_Calc_GrossRevenue" xml:space="preserve">
+    <value>Ingresos brutos</value>
+  </data>
+  <data name="Coop_Calc_OpCosts" xml:space="preserve">
+    <value>Costes operativos (limpieza, lavandería, productos químicos)</value>
+  </data>
+  <data name="Coop_Calc_Commission" xml:space="preserve">
+    <value>Comisión Rentoom (30% de los ingresos)</value>
+  </data>
+  <data name="Coop_Calc_CtaPrimary" xml:space="preserve">
+    <value>Quiero un pronóstico preciso para mi piso</value>
+  </data>
+  <data name="Coop_Calc_CtaNote" xml:space="preserve">
+    <value>Estimación ilustrativa basada en los datos de nuestros apartamentos. Preparamos una previsión precisa tras la auditoría del apartamento, gratuita y sin obligaciones.</value>
+  </data>
+  <data name="Coop_Calc_ShowDetailed" xml:space="preserve">
+    <value>Consulta la calculadora detallada</value>
+  </data>
+  <data name="Coop_Calc_HideDetailed" xml:space="preserve">
+    <value>Ocultar calculadora detallada</value>
+  </data>
+  <data name="Coop_Calc_Tab_Reservation" xml:space="preserve">
+    <value>Reserva</value>
+  </data>
+  <data name="Coop_Calc_Tab_Monthly" xml:space="preserve">
+    <value>Mes</value>
+  </data>
+  <data name="Coop_Calc_Tab_Investment" xml:space="preserve">
+    <value>Inversión</value>
+  </data>
+  <data name="Coop_Calc_Res_Title" xml:space="preserve">
+    <value>Revisa una sola reserva</value>
+  </data>
+  <data name="Coop_Calc_Res_Desc" xml:space="preserve">
+    <value>Introduce el valor visible en el sistema tras los descuentos, incluyendo la limpieza.</value>
+  </data>
+  <data name="Coop_Calc_Res_Gross" xml:space="preserve">
+    <value>Valor bruto total de la reserva</value>
+  </data>
+  <data name="Coop_Calc_Res_Guests" xml:space="preserve">
+    <value>Número de personas</value>
+  </data>
+  <data name="Coop_Calc_Res_Nights" xml:space="preserve">
+    <value>Número de días</value>
+  </data>
+  <data name="Coop_Calc_Res_Area" xml:space="preserve">
+    <value>Tamaño del piso</value>
+  </data>
+  <data name="Coop_Calc_Res_AreaTo55" xml:space="preserve">
+    <value>hasta 55 m²</value>
+  </data>
+  <data name="Coop_Calc_Res_AreaTo70" xml:space="preserve">
+    <value>55-70 m²</value>
+  </data>
+  <data name="Coop_Calc_Res_AreaOver70" xml:space="preserve">
+    <value>más de 70 m²</value>
+  </data>
+  <data name="Coop_Calc_Res_Result_Title" xml:space="preserve">
+    <value>Acuerdo paso a paso</value>
+  </data>
+  <data name="Coop_Calc_Res_TotalGross" xml:space="preserve">
+    <value>Reserva total de Gross</value>
+  </data>
+  <data name="Coop_Calc_Res_CleaningGross" xml:space="preserve">
+    <value>Limpieza bruta</value>
+  </data>
+  <data name="Coop_Calc_Res_AfterCleaning" xml:space="preserve">
+    <value>Tras restar limpieza</value>
+  </data>
+  <data name="Coop_Calc_Res_Net" xml:space="preserve">
+    <value>Tras la conversión a portería</value>
+  </data>
+  <data name="Coop_Calc_Res_ExtraBeds" xml:space="preserve">
+    <value>Preparación de lugares adicionales</value>
+  </data>
+  <data name="Coop_Calc_Res_SplitBase" xml:space="preserve">
+    <value>Base de la división</value>
+  </data>
+  <data name="Coop_Calc_Res_Owner" xml:space="preserve">
+    <value>Propietario · 70%</value>
+  </data>
+  <data name="Coop_Calc_Res_Rentoom" xml:space="preserve">
+    <value>Rentoom · 30%</value>
+  </data>
+  <data name="Coop_Calc_Mon_Title" xml:space="preserve">
+    <value>Estima tu puntuación mensual</value>
+  </data>
+  <data name="Coop_Calc_Mon_Desc" xml:space="preserve">
+    <value>Introduce el ingreso neto total tras restar la limpieza.</value>
+  </data>
+  <data name="Coop_Calc_Mon_Income" xml:space="preserve">
+    <value>Ingreso neto mensual tras la limpieza</value>
+  </data>
+  <data name="Coop_Calc_Mon_Beds" xml:space="preserve">
+    <value>Plazas adicionales preparadas durante el mes</value>
+  </data>
+  <data name="Coop_Calc_Mon_OtherCosts" xml:space="preserve">
+    <value>Otros costes para el propietario</value>
+  </data>
+  <data name="Coop_Calc_Mon_Linen" xml:space="preserve">
+    <value>Incluye ropa de cama (PLN 81,30 neto/mes)</value>
+  </data>
+  <data name="Coop_Calc_Mon_Result_Title" xml:space="preserve">
+    <value>Cantidad estimada del propietario</value>
+  </data>
+  <data name="Coop_Calc_Mon_Revenue" xml:space="preserve">
+    <value>Ingresos netos tras la limpieza</value>
+  </data>
+  <data name="Coop_Calc_Mon_PrepCost" xml:space="preserve">
+    <value>Preparación de lugares adicionales</value>
+  </data>
+  <data name="Coop_Calc_Mon_OwnerShare" xml:space="preserve">
+    <value>Alquiler del casero · 70%</value>
+  </data>
+  <data name="Coop_Calc_Mon_LinenCost" xml:space="preserve">
+    <value>Estratificación neta mensual</value>
+  </data>
+  <data name="Coop_Calc_Mon_OtherLabel" xml:space="preserve">
+    <value>Otros costes indicados</value>
+  </data>
+  <data name="Coop_Calc_Mon_AfterCosts" xml:space="preserve">
+    <value>A los costes indicados anteriormente</value>
+  </data>
+  <data name="Coop_Calc_Mon_BeforeTax" xml:space="preserve">
+    <value>mensual, antes del impuesto del propietario</value>
+  </data>
+  <data name="Coop_Calc_Inv_Title" xml:space="preserve">
+    <value>Comprueba la rentabilidad anual</value>
+  </data>
+  <data name="Coop_Calc_Inv_Income" xml:space="preserve">
+    <value>Puntuación mensual del propietario con Rentoom</value>
+  </data>
+  <data name="Coop_Calc_Inv_Admin" xml:space="preserve">
+    <value>Alquiler administrativo y servicios públicos</value>
+  </data>
+  <data name="Coop_Calc_Inv_Insurance" xml:space="preserve">
+    <value>Seguro - Promedio mensual</value>
+  </data>
+  <data name="Coop_Calc_Inv_Financing" xml:space="preserve">
+    <value>Cuotas o coste de financiación</value>
+  </data>
+  <data name="Coop_Calc_Inv_Value" xml:space="preserve">
+    <value>Valor total de la inversión</value>
+  </data>
+  <data name="Coop_Calc_Inv_Result_Title" xml:space="preserve">
+    <value>Tu escenario de inversión</value>
+  </data>
+  <data name="Coop_Calc_Inv_MonthlyOp" xml:space="preserve">
+    <value>Resultado operativo mensual</value>
+  </data>
+  <data name="Coop_Calc_Inv_MonthlyCash" xml:space="preserve">
+    <value>Flujo mensual tras la financiación</value>
+  </data>
+  <data name="Coop_Calc_Inv_AnnualOp" xml:space="preserve">
+    <value>Resultado operativo anual</value>
+  </data>
+  <data name="Coop_Calc_Inv_Yield" xml:space="preserve">
+    <value>Rentabilidad operativa anual</value>
+  </data>
+  <data name="Coop_Calc_Inv_Cta" xml:space="preserve">
+    <value>Solicita una auditoría gratuita del apartamento</value>
+  </data>
+  <data name="Coop_Calc_Inv_Disclaimer" xml:space="preserve">
+    <value>El cálculo no tiene en cuenta el impuesto sobre la renta de las personas físicas, los cambios en el valor de la propiedad ni los costes que el usuario no tiene en cuenta.</value>
+  </data>
+  <data name="Coop_Calc_Netto" xml:space="preserve">
+    <value>neto</value>
+  </data>
+  <data name="Coop_Calc_Zl" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="Coop_Services_Eyebrow" xml:space="preserve">
+    <value>Lo que Rentoom afronta</value>
+  </data>
+  <data name="Coop_Services_Title" xml:space="preserve">
+    <value>Tu lista de tareas: cero elementos.</value>
+  </data>
+  <data name="Coop_Service1_Title" xml:space="preserve">
+    <value>Fotos y puesta en escena en casa</value>
+  </data>
+  <data name="Coop_Service1_Desc" xml:space="preserve">
+    <value>Sesión de fotos, estilismo, pequeños retoques y decoración interior.</value>
+  </data>
+  <data name="Coop_Service2_Title" xml:space="preserve">
+    <value>Publicación de anuncios</value>
+  </data>
+  <data name="Coop_Service2_Desc" xml:space="preserve">
+    <value>Reservas, Airbnb, Google y canal directo – descripciones, traducciones, calendarios.</value>
+  </data>
+  <data name="Coop_Service3_Title" xml:space="preserve">
+    <value>Fijación de precios dinámicos</value>
+  </data>
+  <data name="Coop_Service3_Desc" xml:space="preserve">
+    <value>Actualizaciones diarias sobre tarifas y duración de la estancia para satisfacer la demanda en tu zona.</value>
+  </data>
+  <data name="Coop_Service4_Title" xml:space="preserve">
+    <value>Contacto con los invitados</value>
+  </data>
+  <data name="Coop_Service4_Desc" xml:space="preserve">
+    <value>Contestamos llamadas y contestamos mensajes en una docena de minutos, los 7 días de la semana, en polaco e inglés.</value>
+  </data>
+  <data name="Coop_Service5_Title" xml:space="preserve">
+    <value>Limpieza y lavandería</value>
+  </data>
+  <data name="Coop_Service5_Desc" xml:space="preserve">
+    <value>Equipo propio y lavandería: ropa limpia y un juego de toallas en cada estancia.</value>
+  </data>
+  <data name="Coop_Service6_Title" xml:space="preserve">
+    <value>Fallas y facturación</value>
+  </data>
+  <data name="Coop_Service6_Desc" xml:space="preserve">
+    <value>Reparaciones, servicios, informe mensual y documentos listos para la contabilidad.</value>
+  </data>
+  <data name="Coop_Services_BeforeAfterCaption" xml:space="preserve">
+    <value>Antes / Después - Reforma del apartamento Horizon. 3 semanas de trabajo, +31% de la tarifa media diaria.</value>
+  </data>
+  <data name="Coop_Testimonials_Eyebrow" xml:space="preserve">
+    <value>Opiniones de propietarios</value>
+  </data>
+  <data name="Coop_Testimonials_Title" xml:space="preserve">
+    <value>Dicen lo que escucharás en la auditoría.</value>
+  </data>
+  <data name="Coop_Testimonial1_Quote" xml:space="preserve">
+    <value>Durante dos años, me encargué de reservas y de cambiar la ropa de cama yo misma. Después de cambiar a Rentoom, los ingresos aumentaron alrededor de un 22% y no recibí ni una sola llamada de ningún huésped.</value>
+  </data>
+  <data name="Coop_Testimonial1_Author" xml:space="preserve">
+    <value>Paweł M.</value>
+  </data>
+  <data name="Coop_Testimonial1_Context" xml:space="preserve">
+    <value>2 apartamentos, Cracovia Kazimierz</value>
+  </data>
+  <data name="Coop_Testimonial2_Quote" xml:space="preserve">
+    <value>El apartamento de la abuela parecía un museo. La metamorfosis duró 3 semanas y hoy es nuestro apartamento mejor valorado del edificio.</value>
+  </data>
+  <data name="Coop_Testimonial2_Author" xml:space="preserve">
+    <value>Agnieszka R.</value>
+  </data>
+  <data name="Coop_Testimonial2_Context" xml:space="preserve">
+    <value>estudio, casco antiguo de Cracovia</value>
+  </data>
+  <data name="Coop_Testimonial3_Quote" xml:space="preserve">
+    <value>Lo que más valoro son los acuerdos — un PDF por mes, todo está correcto, el contable no tiene preguntas.</value>
+  </data>
+  <data name="Coop_Testimonial3_Author" xml:space="preserve">
+    <value>Tomasz K.</value>
+  </data>
+  <data name="Coop_Testimonial3_Context" xml:space="preserve">
+    <value>3 apartamentos, Wroclaw</value>
+  </data>
+  <data name="Coop_Compare_Eyebrow" xml:space="preserve">
+    <value>Comparación de modelos</value>
+  </data>
+  <data name="Coop_Compare_Title" xml:space="preserve">
+    <value>¿Por tu cuenta, a largo plazo o con Rentoom?</value>
+  </data>
+  <data name="Coop_Compare_Col_Self" xml:space="preserve">
+    <value>Autoalquiler</value>
+  </data>
+  <data name="Coop_Compare_Col_LongTerm" xml:space="preserve">
+    <value>Arrendamiento a largo plazo</value>
+  </data>
+  <data name="Coop_Compare_Col_Rentoom" xml:space="preserve">
+    <value>Gestión Rentoom</value>
+  </data>
+  <data name="Coop_Compare_Row_Time" xml:space="preserve">
+    <value>Tu tiempo en un mes</value>
+  </data>
+  <data name="Coop_Compare_Row_Time_Self" xml:space="preserve">
+    <value>20:00 – 40:00</value>
+  </data>
+  <data name="Coop_Compare_Row_Time_Long" xml:space="preserve">
+    <value>1-2 h</value>
+  </data>
+  <data name="Coop_Compare_Row_Time_Rentoom" xml:space="preserve">
+    <value>0 h</value>
+  </data>
+  <data name="Coop_Compare_Row_Revenue" xml:space="preserve">
+    <value>Ingresos mensuales</value>
+  </data>
+  <data name="Coop_Compare_Row_Revenue_Self" xml:space="preserve">
+    <value>Medio</value>
+  </data>
+  <data name="Coop_Compare_Row_Revenue_Long" xml:space="preserve">
+    <value>La más baja pero constante</value>
+  </data>
+  <data name="Coop_Compare_Row_Revenue_Rentoom" xml:space="preserve">
+    <value>Supremo</value>
+  </data>
+  <data name="Coop_Compare_Row_Support" xml:space="preserve">
+    <value>Soporte invitado 24/7</value>
+  </data>
+  <data name="Coop_Compare_Row_Cleaning" xml:space="preserve">
+    <value>Limpieza y lavandería</value>
+  </data>
+  <data name="Coop_Compare_Row_Pricing" xml:space="preserve">
+    <value>Fijación de precios dinámicos</value>
+  </data>
+  <data name="Coop_Compare_Row_Photos" xml:space="preserve">
+    <value>Fotos, diseño, anuncios clasificados</value>
+  </data>
+  <data name="Coop_Compare_Row_Inspection" xml:space="preserve">
+    <value>Comprobando el estado del apartamento</value>
+  </data>
+  <data name="Coop_Compare_Row_Inspection_Self" xml:space="preserve">
+    <value>Tu</value>
+  </data>
+  <data name="Coop_Compare_Row_Inspection_Long" xml:space="preserve">
+    <value>Limitada</value>
+  </data>
+  <data name="Coop_Compare_Row_Inspection_Rentoom" xml:space="preserve">
+    <value>Después de cada estancia</value>
+  </data>
+  <data name="Coop_Compare_Row_Accounting" xml:space="preserve">
+    <value>Facturación y documentos</value>
+  </data>
+  <data name="Coop_Compare_Row_Accounting_Long" xml:space="preserve">
+    <value>Parcialmente</value>
+  </data>
+  <data name="Coop_Process_Eyebrow" xml:space="preserve">
+    <value>Cómo empezamos a trabajar juntos</value>
+  </data>
+  <data name="Coop_Process_Title" xml:space="preserve">
+    <value>Desde el teléfono hasta la primera reserva, normalmente 3-4 semanas.</value>
+  </data>
+  <data name="Coop_Process1_Title" xml:space="preserve">
+    <value>Contacto</value>
+  </data>
+  <data name="Coop_Process1_Desc" xml:space="preserve">
+    <value>Dejas el número, llamamos en 24 horas y preguntamos por el piso.</value>
+  </data>
+  <data name="Coop_Process2_Title" xml:space="preserve">
+    <value>Auditoría de apartamentos</value>
+  </data>
+  <data name="Coop_Process2_Desc" xml:space="preserve">
+    <value>Inspeccionamos las instalaciones, comprobamos la normativa de la comunidad y el potencial de la ubicación.</value>
+  </data>
+  <data name="Coop_Process3_Title" xml:space="preserve">
+    <value>Previsión</value>
+  </data>
+  <data name="Coop_Process3_Desc" xml:space="preserve">
+    <value>Obtienes ingresos, ocupación y rangos de pago, además de una lista de recomendaciones.</value>
+  </data>
+  <data name="Coop_Process4_Title" xml:space="preserve">
+    <value>Preparación</value>
+  </data>
+  <data name="Coop_Process4_Desc" xml:space="preserve">
+    <value>Adaptación, homestaging, sesión de fotos, cerradura inteligente y Wi-Fi.</value>
+  </data>
+  <data name="Coop_Process5_Title" xml:space="preserve">
+    <value>Acuerdo</value>
+  </data>
+  <data name="Coop_Process5_Desc" xml:space="preserve">
+    <value>Contrato transparente, comisión de ingresos, preaviso de un mes.</value>
+  </data>
+  <data name="Coop_Process6_Title" xml:space="preserve">
+    <value>Lanzamiento de ventas</value>
+  </data>
+  <data name="Coop_Process6_Desc" xml:space="preserve">
+    <value>Publicamos anuncios, fijamos precios — las primeras reservas suelen hacerse en un plazo de 72 horas.</value>
+  </data>
+  <data name="Coop_Team_Eyebrow" xml:space="preserve">
+    <value>Equipo</value>
+  </data>
+  <data name="Coop_Team_Title" xml:space="preserve">
+    <value>Personas que realmente cuidarán de tu piso.</value>
+  </data>
+  <data name="Coop_Team1_Name" xml:space="preserve">
+    <value>Małgorzata Gardzielewska</value>
+  </data>
+  <data name="Coop_Team1_Role" xml:space="preserve">
+    <value>Coordinador de Limpieza y Logística</value>
+  </data>
+  <data name="Coop_Team1_Desc" xml:space="preserve">
+    <value>Se asegura de que todos los apartamentos estén listos a tiempo, desde ordenar hasta la ropa de cama.</value>
+  </data>
+  <data name="Coop_Team2_Name" xml:space="preserve">
+    <value>Monika Kwiatkowska</value>
+  </data>
+  <data name="Coop_Team2_Role" xml:space="preserve">
+    <value>Gerente de Mantenimiento y Ventas</value>
+  </data>
+  <data name="Coop_Team2_Desc" xml:space="preserve">
+    <value>Combina la eficiente gestión de los apartamentos con lo más importante: un calendario completo.</value>
+  </data>
+  <data name="Coop_Team3_Name" xml:space="preserve">
+    <value>Weronika Feliniak</value>
+  </data>
+  <data name="Coop_Team3_Role" xml:space="preserve">
+    <value>Especialista en Marketing</value>
+  </data>
+  <data name="Coop_Team3_Desc" xml:space="preserve">
+    <value>Esto aumenta la visibilidad de Rentoom y convierte una buena estancia en otra reserva.</value>
+  </data>
+  <data name="Coop_Team4_Name" xml:space="preserve">
+    <value>Andrzej Pietkiewicz</value>
+  </data>
+  <data name="Coop_Team4_Role" xml:space="preserve">
+    <value>Especialista en mantenimiento técnico de apartamentos</value>
+  </data>
+  <data name="Coop_Team4_Desc" xml:space="preserve">
+    <value>Repara, agiliza y se asegura de que todo funcione sin sorpresas.</value>
+  </data>
+  <data name="Coop_Team5_Name" xml:space="preserve">
+    <value>Małgorzata Jędrusik</value>
+  </data>
+  <data name="Coop_Team5_Role" xml:space="preserve">
+    <value>Diseñador de interiores</value>
+  </data>
+  <data name="Coop_Team5_Desc" xml:space="preserve">
+    <value>Crea interiores que lucen bien, funcionan bien y atraen a los invitados.</value>
+  </data>
+  <data name="Coop_Team6_Name" xml:space="preserve">
+    <value>Krystian Kujawa</value>
+  </data>
+  <data name="Coop_Team6_Role" xml:space="preserve">
+    <value>Director de Operaciones</value>
+  </data>
+  <data name="Coop_Team6_Desc" xml:space="preserve">
+    <value>Une el trabajo del equipo y se asegura de que Rentoom trabaje de forma eficiente cada día.</value>
+  </data>
+  <data name="Coop_Team7_Name" xml:space="preserve">
+    <value>Bartosz Jędrusik</value>
+  </data>
+  <data name="Coop_Team7_Role" xml:space="preserve">
+    <value>Presidente</value>
+  </data>
+  <data name="Coop_Team7_Desc" xml:space="preserve">
+    <value>Da dirección a la empresa y convierte planes ambiciosos en acciones concretas.</value>
+  </data>
+  <data name="Coop_Faq_Eyebrow" xml:space="preserve">
+    <value>Preguntas frecuentes</value>
+  </data>
+  <data name="Coop_Faq_Title" xml:space="preserve">
+    <value>Preguntas que escuchamos con más frecuencia</value>
+  </data>
+  <data name="Coop_Faq1_Q" xml:space="preserve">
+    <value>¿Cuánto es la comisión de Rentoom?</value>
+  </data>
+  <data name="Coop_Faq1_A" xml:space="preserve">
+    <value>El modelo estándar es 80/20 — el 80% del ingreso neto va al propietario y el 20% es la comisión de Rentoom. Cubrimos las comisiones de los portales (Reservas, Airbnb) por nuestra parte.</value>
+  </data>
+  <data name="Coop_Faq2_Q" xml:space="preserve">
+    <value>¿Cuánto tiempo tenemos que firmar el contrato?</value>
+  </data>
+  <data name="Coop_Faq2_A" xml:space="preserve">
+    <value>El contrato es indefinido con un preaviso de un mes. No nos comprometemos durante años — preferimos que te quedes porque te da sus frutos.</value>
+  </data>
+  <data name="Coop_Faq3_Q" xml:space="preserve">
+    <value>¿Necesito reformar mi piso?</value>
+  </data>
+  <data name="Coop_Faq3_A" xml:space="preserve">
+    <value>No siempre. Durante la auditoría, revisamos el estado técnico y proporcionamos una lista de recomendaciones. A veces el home staging y pequeños ajustes son suficientes, y otras veces ofrecemos un cambio de imagen — pero la decisión siempre es tuya.</value>
+  </data>
+  <data name="Coop_Faq4_Q" xml:space="preserve">
+    <value>¿Quién paga la limpieza y la colada?</value>
+  </data>
+  <data name="Coop_Faq4_A" xml:space="preserve">
+    <value>El coste de la limpieza está incluido en el precio de la reserva y lo cubre el huésped. La colada (ropa de cama, toallas) es un coste operativo fijo incluido en el acuerdo.</value>
+  </data>
+  <data name="Coop_Faq5_Q" xml:space="preserve">
+    <value>¿Y si el invitado destruye algo?</value>
+  </data>
+  <data name="Coop_Faq5_A" xml:space="preserve">
+    <value>Cada estancia está documentada. Estamos solicitando una compensación a través del programa de fianzas o de protección por portal. También asesoramos sobre seguros de propiedad adecuados.</value>
+  </data>
+  <data name="Coop_Faq6_Q" xml:space="preserve">
+    <value>¿Puedo usar el piso de forma privada?</value>
+  </data>
+  <data name="Coop_Faq6_A" xml:space="preserve">
+    <value>Sí. Solo tienes que bloquear la cita en el calendario con mucha antelación. Tu piso, tus reglas.</value>
+  </data>
+  <data name="Coop_Faq7_Q" xml:space="preserve">
+    <value>¿Cómo es el asentamiento?</value>
+  </data>
+  <data name="Coop_Faq7_A" xml:space="preserve">
+    <value>Cada mes, obtienes un informe detallado con una lista de reservas, costes y pagos. Un PDF, legible para ti y tu contable.</value>
+  </data>
+  <data name="Coop_Cta_Title" xml:space="preserve">
+    <value>Organiza una auditoría gratuita de apartamentos</value>
+  </data>
+  <data name="Coop_Cta_Subtitle" xml:space="preserve">
+    <value>Vendremos, veremos las instalaciones y prepararemos una previsión de ingresos con un tenedor. Sin comisiones ni compromiso.</value>
+  </data>
+  <data name="Coop_Cta_Button" xml:space="preserve">
+    <value>Quiero una previsión para mi piso</value>
+  </data>
+  <data name="Coop_Section_Cta" xml:space="preserve">
+    <value>Organiza una auditoría gratuita de apartamentos</value>
+  </data>
+  <data name="Coop_V3_Hero_Title" xml:space="preserve">
+    <value>Tu piso. Nuestro cuidado. Tu beneficio.</value>
+  </data>
+  <data name="Coop_V3_Hero_SeoTitle" xml:space="preserve">
+    <value>Gestión integral de alquileres de apartamentos en Toruń</value>
+  </data>
+  <data name="Coop_V3_Hero_Subtitle" xml:space="preserve">
+    <value>Nos ocupamos de tu apartamento. Monitorizamos el mercado de precios, nos encargamos del contacto con los huéspedes y ofrecemos un servicio técnico y de limpieza profesional.
+Recibes un informe claro y una transferencia.</value>
+  </data>
+  <data name="Coop_V3_Hero_Cta" xml:space="preserve">
+    <value>Organiza una auditoría gratuita de apartamentos</value>
+  </data>
+  <data name="Coop_V3_Proof_Aria" xml:space="preserve">
+    <value>Rentoomy en números</value>
+  </data>
+  <data name="Coop_V3_Stat_Investors" xml:space="preserve">
+    <value>100+ inversores</value>
+  </data>
+  <data name="Coop_V3_Stat_Investors_Label" xml:space="preserve">
+    <value>Confió en nosotros</value>
+  </data>
+  <data name="Coop_V3_Features_Eyebrow" xml:space="preserve">
+    <value>Lo que hacemos</value>
+  </data>
+  <data name="Coop_V3_Features_Title" xml:space="preserve">
+    <value>Cuidado integral de tu apartamento</value>
+  </data>
+  <data name="Coop_V3_Feature_Reservations_Title" xml:space="preserve">
+    <value>Reservas y precios</value>
+  </data>
+  <data name="Coop_V3_Feature_Reservations_Desc" xml:space="preserve">
+    <value>Gestiona dinámicamente tus precios y calendario en Booking.com, Airbnb y más.</value>
+  </data>
+  <data name="Coop_V3_Feature_Technical_Title" xml:space="preserve">
+    <value>Técnica</value>
+  </data>
+  <data name="Coop_V3_Feature_Technical_Desc" xml:space="preserve">
+    <value>Reparaciones y mantenimiento rápidos, inspecciones regulares y la plena preparación de la instalación.</value>
+  </data>
+  <data name="Coop_V3_Feature_Settlements_Title" xml:space="preserve">
+    <value>Facturación</value>
+  </data>
+  <data name="Coop_V3_Feature_Settlements_Desc" xml:space="preserve">
+    <value>Informes mensuales claros y documentos listos para la contabilidad.</value>
+  </data>
+  <data name="Coop_V3_Feature_Photos_Title" xml:space="preserve">
+    <value>Fotos y publicación de ofertas</value>
+  </data>
+  <data name="Coop_V3_Feature_Photos_Desc" xml:space="preserve">
+    <value>Fotos profesionales, homestaging, publicación y actualización de ofertas en los portales de reservas más importantes.</value>
+  </data>
+  <data name="Coop_V3_Costs_Eyebrow" xml:space="preserve">
+    <value>¿Por qué el 20% es más que el 30%?</value>
+  </data>
+  <data name="Coop_V3_Costs_Title" xml:space="preserve">
+    <value>Lo que importa es cuánto queda realmente para el propietario</value>
+  </data>
+  <data name="Coop_V3_Costs_Intro" xml:space="preserve">
+    <value>Compara los costes totales de la cooperación, no solo la comisión del operador visible en la oferta.</value>
+  </data>
+  <data name="Coop_V3_Costs_Row_Name" xml:space="preserve">
+    <value>Concepto de coste</value>
+  </data>
+  <data name="Coop_V3_Costs_Competitor_A" xml:space="preserve">
+    <value>Competición A</value>
+  </data>
+  <data name="Coop_V3_Costs_Competitor_B" xml:space="preserve">
+    <value>Competición B</value>
+  </data>
+  <data name="Coop_V3_Costs_Owner_Profit" xml:space="preserve">
+    <value>Beneficio del propietario</value>
+  </data>
+  <data name="Coop_V3_Costs_Portals" xml:space="preserve">
+    <value>Encargos de portales</value>
+  </data>
+  <data name="Coop_V3_Costs_Operator" xml:space="preserve">
+    <value>Comisión de operador</value>
+  </data>
+  <data name="Coop_V3_Costs_Total" xml:space="preserve">
+    <value>Costes totales</value>
+  </data>
+  <data name="Coop_V3_Costs_Note" xml:space="preserve">
+    <value>Un ejemplo de 10.000 PLN de ingresos mensuales de una reserva.</value>
+  </data>
+  <data name="Coop_V3_Tech_Eyebrow" xml:space="preserve">
+    <value>Sistemas propios</value>
+  </data>
+  <data name="Coop_V3_Tech_Title" xml:space="preserve">
+    <value>Tecnología que funcione para tu piso</value>
+  </data>
+  <data name="Coop_V3_Tech_Intro" xml:space="preserve">
+    <value>Nuestras soluciones internas organizan cada etapa de tu estancia: desde preparar tu apartamento hasta el check-in y corregir rápidamente los defectos.</value>
+  </data>
+  <data name="Coop_V3_Tech_Cleaning_Title" xml:space="preserve">
+    <value>Sistema de gestión de ropa de cama y limpieza</value>
+  </data>
+  <data name="Coop_V3_Tech_Cleaning_Desc" xml:space="preserve">
+    <value>Servicio puntual de cada estancia y un estándar constante del piso.</value>
+  </data>
+  <data name="Coop_V3_Tech_StayWell_Title" xml:space="preserve">
+    <value>App StayWell para check-ins</value>
+  </data>
+  <data name="Coop_V3_Tech_StayWell_Desc" xml:space="preserve">
+    <value>Registro remoto, detalles de los huéspedes, normas de la casa, direcciones y apertura de piso en un solo lugar.</value>
+  </data>
+  <data name="Coop_V3_Tech_Tickets_Title" xml:space="preserve">
+    <value>Sistema de billetes</value>
+  </data>
+  <data name="Coop_V3_Tech_Tickets_Desc" xml:space="preserve">
+    <value>Huéspedes, servicio y coordinadores informan de fallos, para que podamos reaccionar de inmediato.</value>
+  </data>
+  <data name="Coop_V3_Tech_Image_Alt" xml:space="preserve">
+    <value>Apartamento Rentoom bajo el cuidado del equipo operativo</value>
+  </data>
+  <data name="Coop_V3_Local_Eyebrow" xml:space="preserve">
+    <value>Ventaja local</value>
+  </data>
+  <data name="Coop_V3_Local_Title" xml:space="preserve">
+    <value>Conocemos a Toruń desde dentro.</value>
+  </data>
+  <data name="Coop_V3_Local_Intro" xml:space="preserve">
+    <value>Nuestro equipo local conoce los edificios, barrios y el ritmo de la ciudad. Estamos cerca cuando tu apartamento o sus huéspedes nos necesitan.</value>
+  </data>
+  <data name="Coop_V3_Process_Title" xml:space="preserve">
+    <value>3 etapas, 6 acciones concretas</value>
+  </data>
+  <data name="Coop_V3_Process_Stage1" xml:space="preserve">
+    <value>Explorando el potencial</value>
+  </data>
+  <data name="Coop_V3_Process_Stage2" xml:space="preserve">
+    <value>Preparando la salida</value>
+  </data>
+  <data name="Coop_V3_Process_Stage3" xml:space="preserve">
+    <value>Lanzamos ventas</value>
+  </data>
+  <data name="Coop_V3_Process_Audit" xml:space="preserve">
+    <value>Auditoría gratuita de apartamentos</value>
+  </data>
+  <data name="Coop_V3_Process_Forecast" xml:space="preserve">
+    <value>Previsión de ingresos</value>
+  </data>
+  <data name="Coop_V3_Process_Preparation" xml:space="preserve">
+    <value>Preparando el apartamento</value>
+  </data>
+  <data name="Coop_V3_Process_Publication" xml:space="preserve">
+    <value>Publicación de ofertas</value>
+  </data>
+  <data name="Coop_V3_Owner_Eyebrow" xml:space="preserve">
+    <value>Servicio de propietarios</value>
+  </data>
+  <data name="Coop_V3_Owner_Title" xml:space="preserve">
+    <value>Control total sin compromiso diario</value>
+  </data>
+  <data name="Coop_V3_Owner_Intro" xml:space="preserve">
+    <value>Tú tomas las decisiones. Ofrecemos datos, facturación y soporte continuo.</value>
+  </data>
+  <data name="Coop_V3_Owner_Panel" xml:space="preserve">
+    <value>Panel de propietarios en línea</value>
+  </data>
+  <data name="Coop_V3_Owner_Panel_Desc" xml:space="preserve">
+    <value>Tienes acceso transparente al calendario de reservas.</value>
+  </data>
+  <data name="Coop_V3_Owner_Reports" xml:space="preserve">
+    <value>Liquidaciones e informes financieros</value>
+  </data>
+  <data name="Coop_V3_Owner_Reports_Desc" xml:space="preserve">
+    <value>Sabes exactamente cuánto gana tu propiedad.</value>
+  </data>
+  <data name="Coop_V3_Owner_Legal" xml:space="preserve">
+    <value>Apoyo legal y administrativo</value>
+  </data>
+  <data name="Coop_V3_Owner_Legal_Desc" xml:space="preserve">
+    <value>Nos encargamos del cumplimiento de la normativa y de los trámites.</value>
+  </data>
+  <data name="Coop_V3_Owner_Care" xml:space="preserve">
+    <value>Cuidado dedicado al propietario</value>
+  </data>
+  <data name="Coop_V3_Owner_Care_Desc" xml:space="preserve">
+    <value>Reaccionamos rápidamente y te apoyamos en cualquier situación.</value>
+  </data>
+  <data name="Coop_V3_Faq1_A" xml:space="preserve">
+    <value>El modelo estándar es del 30%. Las comisiones de los portales están del lado de Rentoom, por lo que el asentamiento sigue siendo claro y predecible.</value>
+  </data>
+  <data name="Coop_V3_Floating_Cta" xml:space="preserve">
+    <value>Programa una auditoría gratuita</value>
+  </data>
+  <data name="Coop_V3_Floating_Cta_Aria" xml:space="preserve">
+    <value>Auditoría gratuita de apartamentos</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Start" xml:space="preserve">
+    <value>Colaboramos con las marcas de Toruń de los sectores de la restauración, el entretenimiento y los servicios, gracias a lo cual nuestros clientes pueden beneficiarse de la</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Discounts" xml:space="preserve">
+    <value>Descuentos especiales</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Middle" xml:space="preserve">
+    <value>y ofertas atractivas durante tu estancia. Además, organizamos</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_Business" xml:space="preserve">
+    <value>Alojamiento para empresas</value>
+  </data>
+  <data name="Coop_V3_Local_Intro_End" xml:space="preserve">
+    <value>, proporcionando soluciones cómodas y flexibles para clientes empresariales.</value>
+  </data>
 </root>

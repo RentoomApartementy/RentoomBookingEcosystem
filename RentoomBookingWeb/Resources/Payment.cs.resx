@@ -577,4 +577,10 @@
   <data name="StepperCompletedAriaLabel" xml:space="preserve">
     <value>Dokončena fáze</value>
   </data>
+  <data name="MobileBarNextLabel" xml:space="preserve">
+    <value>Další</value>
+  </data>
+  <data name="PriceDetailsToggleAriaLabel" xml:space="preserve">
+    <value>Zobrazit nebo skrýt podrobnosti o cenách</value>
+  </data>
 </root>
