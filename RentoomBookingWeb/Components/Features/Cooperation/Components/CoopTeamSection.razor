@@ -19,11 +19,18 @@
             </div>
         }
     </div>
-
-    <CoopSectionCta />
+    @if (ShowCTAButton)
+    {
+        <CoopSectionCta />
+    }
 </section>
 
 @code {
+
+   
+        [Parameter] public bool ShowCTAButton { get; set; } = false;
+   
+
     private static readonly string[] TeamImagePaths =
     [
         "/assets/images/team/MalgorzataGardzielewska.png",
