@@ -32,14 +32,15 @@
     margin-bottom: 1.2rem;
 }
 
-.coop-v3-hero h1 {
+.coop-v3-hero-slogan {
+    display: block;
     color: #111;
     font-size: clamp(2.5rem, 4.2vw, 4.25rem);
     line-height: .98;
     letter-spacing: -.045em;
     font-weight: 850;
     max-width: 660px;
-    margin: 0;
+    text-wrap: balance;
 }
 
 .coop-v3-hero-copy p {
@@ -47,7 +48,7 @@
     font-size: 1.08rem;
     line-height: 1.65;
     max-width: 590px;
-    margin: 1.7rem 0 0;
+    margin: 1.35rem 0 0;
 }
 
 .coop-v3-hero-actions {
@@ -183,7 +184,7 @@
         padding: 0;
     }
 
-    .coop-v3-hero h1 {
+    .coop-v3-hero-slogan {
         font-size: clamp(2.2rem, 10.5vw, 3rem);
     }
 

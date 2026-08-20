@@ -1,4 +1,5 @@
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
+@using RentoomBooking.SharedClasses.Services.Descriptions
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
@@ -35,6 +36,7 @@ else
         <meta property="og:type" content="website" />
         <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{currentPagePath}")" />
         <BreadcrumbJsonLd CurrentPageName="@Localizer["Cooperation_BreadcrumbName"]" CurrentPagePath="@currentPagePath" />
+        <FaqPageJsonLd Faqs="@CooperationFaqs" />
         <SeoHreflangs />
         @if (isV3)
         {
@@ -61,6 +63,16 @@ else
     [Parameter] public string? Version { get; set; }
 
     private bool _isFormModalOpen;
+
+    private IReadOnlyList<FaqItemDto> CooperationFaqs => Enumerable.Range(1, 7)
+        .Select(index => new FaqItemDto
+        {
+            Question = Localizer[$"Coop_Faq{index}_Q"].Value,
+            Answer = (index == 1
+                ? Localizer["Coop_V3_Faq1_A"]
+                : Localizer[$"Coop_Faq{index}_A"]).Value
+        })
+        .ToArray();
 
     private EventCallback OpenFormModalRequested =>
         EventCallback.Factory.Create(this, () => _isFormModalOpen = true);

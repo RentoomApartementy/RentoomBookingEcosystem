@@ -860,6 +860,9 @@
   <data name="Coop_V3_Hero_Title" xml:space="preserve">
     <value>Twój apartament. Nasza opieka. Twój zysk.</value>
   </data>
+  <data name="Coop_V3_Hero_SeoTitle" xml:space="preserve">
+    <value>Kompleksowe zarządzanie wynajmem apartamentów w Toruniu</value>
+  </data>
   <data name="Coop_V3_Hero_Subtitle" xml:space="preserve">
     <value>My Przejmujemy opiekę nad twoim mieszkaniem. Monitorujemy rynek cen, dbamy o kontakt z gośćmi, zapewniamy profesjonalny serwis techniczny i sprzątający.
 Ty otrzymujesz przejrzysty raport i przelew.</value>
@@ -1099,10 +1102,10 @@ Ty otrzymujesz przejrzysty raport i przelew.</value>
     <value>zarządzanie najmem toruń, obsługa apartamentów, bezobsługowa inwestycja, rentoom współpraca, optymalizacja zysku z najmu, wynajem krótkoterminowy toruń</value>
   </data>
   <data name="Cooperation_MetaDescription" xml:space="preserve">
-    <value>Zmień swój apartament w bezobsługową inwestycję z Rentoom. Oferujemy kompleksowe zarządzanie najmem w Toruniu, optymalizację dochodu i obsługę gości 24/7. Postaw na jakość i doświadczenie.</value>
+    <value>Kompleksowe zarządzanie apartamentami i najmem krótkoterminowym w Toruniu. Umów bezpłatny audyt i zwiększ zysk z nieruchomości z Rentoom.</value>
   </data>
   <data name="Cooperation_OgTitle" xml:space="preserve">
-    <value>Współpraca - Rentoom | Profesjonalne Zarządzanie Najmem</value>
+    <value>Zarządzanie apartamentami Toruń | Rentoom</value>
   </data>
   <data name="Cooperation_BreadcrumbName" xml:space="preserve">
     <value>Współpraca</value>
@@ -1111,6 +1114,6 @@ Ty otrzymujesz przejrzysty raport i przelew.</value>
     <value>Jesteśmy liderem rynku w Toruniu. Oferujemy pełną obsługę, innowacyjne technologie i maksymalizację Twoich zysków. Śpij spokojnie, my pracujemy na Ciebie.</value>
   </data>
   <data name="Cooperation_PageTitle" xml:space="preserve">
-    <value>Współpraca - Rentoom | Zarządzanie Najmem Toruń</value>
+    <value>Zarządzanie apartamentami Toruń | Rentoom</value>
   </data>
 </root>
