@@ -6,7 +6,10 @@
         <span>@L["Coop_V3_Owner_Eyebrow"]</span>
         <h2 id="coop-v3-owner-title">@L["Coop_V3_Owner_Title"]</h2>
         <p>@L["Coop_V3_Owner_Intro"]</p>
-        <CoopSectionCta />
+        @if (ShowCTAButton)
+        {
+            <CoopSectionCta Type="ButtonType.Tertiary" />
+        }
     </div>
 
     <div class="coop-v3-owner-benefits">
@@ -40,3 +43,7 @@
         </article>
     </div>
 </section>
+
+@code {
+    [Parameter] public bool ShowCTAButton { get; set; } = false;
+}
