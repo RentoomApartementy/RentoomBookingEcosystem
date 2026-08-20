@@ -297,4 +297,40 @@ Du musst nur die Tür hinter dir schließen.</value>
   <data name="PageTitle" xml:space="preserve">
     <value>Offene Wohnung</value>
   </data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>Welches Schloss hast du vor dir?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Vergleiche es mit dem, was du an der Tür siehst.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Schwenkverriegelung</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Tastatur auf einem runden Knauf. Nach dem Code dreht man den Knopf.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Paneelverriegelung</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>Ein verlängertes Panel mit Tastatur, darunter ein Griff.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>Was möchtest du machen?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Mach die Tür auf</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>Ich gehe hinein</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Schließ die Tür</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>Ich gehe raus und schließe mich hinter mir</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
 </root>

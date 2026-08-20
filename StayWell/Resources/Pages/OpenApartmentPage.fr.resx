@@ -297,4 +297,40 @@ Tout ce que tu as à faire, c’est fermer la porte derrière toi.</value>
   <data name="PageTitle" xml:space="preserve">
     <value>Appartement ouvert</value>
   </data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>Quel château as-tu devant toi ?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Comparez cela à ce que vous voyez sur la porte.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Verrouillage pivotant</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Clavier sur un bouton rond. Après le code, vous tournez le bouton.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Verrouillage à panneaux</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>Un panneau allongé avec un clavier, une poignée en dessous.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>Qu’est-ce que tu veux faire ?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Ouvre la porte</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>Je rentre</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Ferme la porte</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>Je sors et je me rapproche derrière moi</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Retour</value>
+  </data>
 </root>

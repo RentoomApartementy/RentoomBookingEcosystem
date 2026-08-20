@@ -33,4 +33,7 @@
   <data name="OpenMap" xml:space="preserve">
     <value>Mapa aberto</value>
   </data>
+  <data name="ApartmentNumber" xml:space="preserve">
+    <value>Número da unidade</value>
+  </data>
 </root>
