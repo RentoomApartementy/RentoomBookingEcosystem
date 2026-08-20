@@ -4,6 +4,18 @@
     bottom: 24px;
     z-index: 1100;
     transform: translateX(-50%);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity .2s ease, transform .2s ease, visibility 0s linear 0s;
+}
+
+.coop-v3-audit-cta.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, 12px);
+    transition: opacity .2s ease, transform .2s ease, visibility 0s linear .2s;
 }
 
 .coop-v3-audit-cta ::deep button {
@@ -54,6 +66,10 @@
         border-top: 1px solid rgba(31, 90, 65, .14);
         box-shadow: 0 -8px 28px rgba(28, 45, 37, .13);
         backdrop-filter: blur(12px);
+    }
+
+    .coop-v3-audit-cta.is-hidden {
+        transform: translateY(12px);
     }
 
     .coop-v3-audit-cta ::deep button {
