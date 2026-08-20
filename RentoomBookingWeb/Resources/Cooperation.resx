@@ -639,58 +639,67 @@
     <value />
   </data>
   <data name="Coop_Team1_Name" xml:space="preserve">
-    <value />
+    <value>Małgorzata Gardzielewska</value>
   </data>
   <data name="Coop_Team1_Role" xml:space="preserve">
-    <value />
+    <value>Koordynator ds. utrzymania czystości i logistyki</value>
   </data>
   <data name="Coop_Team1_Desc" xml:space="preserve">
-    <value />
+    <value>Dba, by każdy apartament był gotowy na czas — od porządku po zapas pościeli.</value>
   </data>
   <data name="Coop_Team2_Name" xml:space="preserve">
-    <value />
+    <value>Monika Kwiatkowska</value>
   </data>
   <data name="Coop_Team2_Role" xml:space="preserve">
-    <value />
+    <value>Kierownik ds. utrzymania i sprzedaży</value>
   </data>
   <data name="Coop_Team2_Desc" xml:space="preserve">
-    <value />
+    <value>Łączy sprawne działanie apartamentów z tym, co najważniejsze: pełnym kalendarzem.</value>
   </data>
   <data name="Coop_Team3_Name" xml:space="preserve">
-    <value />
+    <value>Weronika Feliniak</value>
   </data>
   <data name="Coop_Team3_Role" xml:space="preserve">
-    <value />
+    <value>Specjalistka ds. marketingu</value>
   </data>
   <data name="Coop_Team3_Desc" xml:space="preserve">
-    <value />
+    <value>Buduje widoczność Rentoom i zamienia dobry pobyt w kolejną rezerwację.</value>
   </data>
   <data name="Coop_Team4_Name" xml:space="preserve">
-    <value />
+    <value>Andrzej Pietkiewicz</value>
   </data>
   <data name="Coop_Team4_Role" xml:space="preserve">
-    <value />
+    <value>Specjalista ds. technicznego utrzymania apartamentów</value>
   </data>
   <data name="Coop_Team4_Desc" xml:space="preserve">
-    <value />
+    <value>Naprawia, usprawnia i pilnuje, by wszystko działało bez niespodzianek.</value>
   </data>
   <data name="Coop_Team5_Name" xml:space="preserve">
-    <value />
+    <value>Małgorzata Jędrusik</value>
   </data>
   <data name="Coop_Team5_Role" xml:space="preserve">
-    <value />
+    <value>Projektantka wnętrz</value>
   </data>
   <data name="Coop_Team5_Desc" xml:space="preserve">
-    <value />
+    <value>Tworzy wnętrza, które dobrze wyglądają, dobrze działają i przyciągają gości.</value>
   </data>
   <data name="Coop_Team6_Name" xml:space="preserve">
-    <value />
+    <value>Krystian Kujawa</value>
   </data>
   <data name="Coop_Team6_Role" xml:space="preserve">
-    <value />
+    <value>Dyrektor operacyjny</value>
   </data>
   <data name="Coop_Team6_Desc" xml:space="preserve">
-    <value />
+    <value>Spina pracę zespołu i dba, by Rentoom działał sprawnie każdego dnia.</value>
+  </data>
+  <data name="Coop_Team7_Name" xml:space="preserve">
+    <value>Bartosz Jędrusik</value>
+  </data>
+  <data name="Coop_Team7_Role" xml:space="preserve">
+    <value>Prezes</value>
+  </data>
+  <data name="Coop_Team7_Desc" xml:space="preserve">
+    <value>Nadaje kierunek firmie i zamienia ambitne plany w konkretne działania.</value>
   </data>
   <data name="Coop_Faq_Eyebrow" xml:space="preserve">
     <value />
