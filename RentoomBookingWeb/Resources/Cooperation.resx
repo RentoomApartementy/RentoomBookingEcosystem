@@ -761,15 +761,6 @@
   <data name="Coop_Section_Cta" xml:space="preserve">
     <value />
   </data>
-  <data name="Coop_V2_PageTitle" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Coop_V2_MetaDescription" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Coop_V2_OgTitle" xml:space="preserve">
-    <value />
-  </data>
   <!-- V3 Landing Page -->
   <data name="Coop_V3_Hero_Title" xml:space="preserve"><value>Your apartment. Our care. Your profit.</value></data>
   <data name="Coop_V3_Hero_Subtitle" xml:space="preserve"><value>We take care of reservations, dynamic pricing, guest communication, cleaning, maintenance and settlements. You receive a report and a transfer.</value></data>

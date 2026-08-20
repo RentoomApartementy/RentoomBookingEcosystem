@@ -2032,33 +2032,6 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string Coop_V2_MetaDescription {
-            get {
-                return ResourceManager.GetString("Coop_V2_MetaDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string Coop_V2_OgTitle {
-            get {
-                return ResourceManager.GetString("Coop_V2_OgTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string Coop_V2_PageTitle {
-            get {
-                return ResourceManager.GetString("Coop_V2_PageTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Competitor A.
         /// </summary>
         internal static string Coop_V3_Costs_Competitor_A {
