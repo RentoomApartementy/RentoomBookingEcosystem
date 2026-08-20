@@ -93,7 +93,7 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    padding: 14px 14px calc(20px + env(safe-area-inset-bottom));
+    padding: 10px 10px calc(20px + env(safe-area-inset-bottom));
 }
 
 @keyframes lockGuideFadeIn {

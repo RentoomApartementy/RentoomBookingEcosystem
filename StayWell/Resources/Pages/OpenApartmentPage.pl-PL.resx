@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -298,4 +298,40 @@ Wystarczy zamknąć za sobą drzwi.</value>
     
     
   <value>Otwórz apartament</value></data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>Który zamek masz przed sobą?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Porównaj z tym, co widzisz na drzwiach.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Zamek obrotowy</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Klawiatura na okrągłej gałce. Po kodzie przekręcasz gałkę.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Zamek panelowy</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>Podłużny panel z klawiaturą, klamka pod spodem.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>Co chcesz zrobić?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Otworzyć drzwi</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>Wchodzę do środka</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Zamknąć drzwi</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>Wychodzę i zamykam za sobą</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Wstecz</value>
+  </data>
 </root>

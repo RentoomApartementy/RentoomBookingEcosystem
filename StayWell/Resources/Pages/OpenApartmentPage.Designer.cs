@@ -373,11 +373,119 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu A tall panel with a keypad, handle underneath.
+        /// </summary>
+        internal static string LockTypePanelDesc {
+            get {
+                return ResourceManager.GetString("LockTypePanelDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Panel lock.
+        /// </summary>
+        internal static string LockTypePanelName {
+            get {
+                return ResourceManager.GetString("LockTypePanelName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu spinning lock.
         /// </summary>
         internal static string LockTypeSpinning {
             get {
                 return ResourceManager.GetString("LockTypeSpinning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Keypad on a round knob. After the code you turn the knob.
+        /// </summary>
+        internal static string LockTypeSpinningDesc {
+            get {
+                return ResourceManager.GetString("LockTypeSpinningDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Spinning lock.
+        /// </summary>
+        internal static string LockTypeSpinningName {
+            get {
+                return ResourceManager.GetString("LockTypeSpinningName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Lock the door.
+        /// </summary>
+        internal static string LockWizardActionClose {
+            get {
+                return ResourceManager.GetString("LockWizardActionClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu I'm leaving and locking up.
+        /// </summary>
+        internal static string LockWizardActionCloseHint {
+            get {
+                return ResourceManager.GetString("LockWizardActionCloseHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Open the door.
+        /// </summary>
+        internal static string LockWizardActionOpen {
+            get {
+                return ResourceManager.GetString("LockWizardActionOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu I'm coming in.
+        /// </summary>
+        internal static string LockWizardActionOpenHint {
+            get {
+                return ResourceManager.GetString("LockWizardActionOpenHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu What do you want to do?.
+        /// </summary>
+        internal static string LockWizardActionQuestion {
+            get {
+                return ResourceManager.GetString("LockWizardActionQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Back.
+        /// </summary>
+        internal static string LockWizardBack {
+            get {
+                return ResourceManager.GetString("LockWizardBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Match it against what you see on the door.
+        /// </summary>
+        internal static string LockWizardLockHint {
+            get {
+                return ResourceManager.GetString("LockWizardLockHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Which lock is in front of you?.
+        /// </summary>
+        internal static string LockWizardLockQuestion {
+            get {
+                return ResourceManager.GetString("LockWizardLockQuestion", resourceCulture);
             }
         }
         
