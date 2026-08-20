@@ -46,6 +46,6 @@
     <value>Report a fault</value>
   </data>
   <data name="ReportDescription" xml:space="preserve">
-    <value>A fault, question or request to the service.</value>
+    <value>A fault or damage in the apartment.</value>
   </data>
 </root>
