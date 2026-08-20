@@ -1023,17 +1023,29 @@ Ty otrzymujesz przejrzysty raport i przelew.</value>
   <data name="Coop_V3_Owner_Panel" xml:space="preserve">
     <value>Panel właściciela online</value>
   </data>
+  <data name="Coop_V3_Owner_Panel_Desc" xml:space="preserve">
+    <value>Masz transparentny dostęp do kalendarza rezerwacji.</value>
+  </data>
   <data name="Coop_V3_Owner_Reports" xml:space="preserve">
     <value>Rozliczenia i raporty finansowe</value>
+  </data>
+  <data name="Coop_V3_Owner_Reports_Desc" xml:space="preserve">
+    <value>Dokładnie wiesz, ile zarabia Twoja nieruchomość.</value>
   </data>
   <data name="Coop_V3_Owner_Legal" xml:space="preserve">
     <value>Wsparcie prawne i administracyjne</value>
   </data>
+  <data name="Coop_V3_Owner_Legal_Desc" xml:space="preserve">
+    <value>Dbamy o zgodność z przepisami i przejmujemy formalności.</value>
+  </data>
   <data name="Coop_V3_Owner_Care" xml:space="preserve">
     <value>Dedykowana opieka właściciela</value>
   </data>
+  <data name="Coop_V3_Owner_Care_Desc" xml:space="preserve">
+    <value>Szybko reagujemy i wspieramy Cię w każdej sytuacji.</value>
+  </data>
   <data name="Coop_V3_Faq1_A" xml:space="preserve">
-    <value>Standardowy model to 30% all-in. Prowizje portali są po stronie Rentoom, dzięki czemu rozliczenie pozostaje czytelne i przewidywalne.</value>
+    <value>Standardowy model to 30%. Prowizje portali są po stronie Rentoom, dzięki czemu rozliczenie pozostaje czytelne i przewidywalne.</value>
   </data>
   <data name="Coop_V3_Floating_Cta" xml:space="preserve">
     <value>Umów bezpłatny audyt</value>
