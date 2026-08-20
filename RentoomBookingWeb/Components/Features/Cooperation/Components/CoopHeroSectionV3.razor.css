@@ -59,9 +59,25 @@
     margin-top: 2rem;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1201px) {
     .coop-v3-hero-actions {
         flex-wrap: nowrap;
+    }
+}
+
+@media (max-width: 1200px) {
+    .coop-v3-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        flex-wrap: nowrap;
+    }
+
+    .coop-v3-hero-actions ::deep .custom-button,
+    .coop-v3-hero-calc {
+        width: 100%;
+        min-height: 48px;
+        height: auto;
+        box-sizing: border-box;
     }
 }
 
