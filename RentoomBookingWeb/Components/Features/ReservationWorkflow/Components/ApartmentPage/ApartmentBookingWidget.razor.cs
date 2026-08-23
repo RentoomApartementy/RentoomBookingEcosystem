@@ -72,7 +72,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         private string? _dateNotice;
 
         private IJSObjectReference? _scrollModule;
-        private bool _scrolledToSelection;
+        private bool _scrolledToAnchor;
 
         private ElementReference _monthsRef;
         private DotNetObjectReference<ApartmentBookingWidget>? _objRef;
@@ -159,11 +159,11 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                 await _calendarScrollModule.InvokeVoidAsync("init", _objRef, _monthsRef);
             }
 
-            if (firstRender && _selStart is not null && !_scrolledToSelection)
+            if (firstRender && !_scrolledToAnchor && ScrollAnchorSelector() is string anchorSelector)
             {
-                _scrolledToSelection = true;
+                _scrolledToAnchor = true;
                 _scrollModule ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
-                await _scrollModule.InvokeVoidAsync("scrollStartDayNearTop", ".abw-day-start", ".abw-months");
+                await _scrollModule.InvokeVoidAsync("scrollDayNearTop", anchorSelector, ".abw-months");
             }
         }
 
@@ -353,6 +353,25 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                 StateHasChanged();
             }
         }
+
+        /// <summary>Day the calendar scrolls to on open, or null to leave it at the top. With a range
+        /// from the URL it's the selected check-in; otherwise the Monday a week before today, so the
+        /// current week sits right under the sticky month title with one week of context above it —
+        /// late in the month the elapsed days would otherwise fill the whole scroll viewport.</summary>
+        private string? ScrollAnchorSelector()
+        {
+            if (_selStart is not null)
+            {
+                return ".abw-day-start";
+            }
+
+            var anchor = MondayOf(_today).AddDays(-7);
+            return anchor > FirstOfMonth(_today)
+                ? $".abw-day[data-date='{Iso(anchor)}']"
+                : null;
+        }
+
+        private static DateOnly MondayOf(DateOnly date) => date.AddDays(-(((int)date.DayOfWeek + 6) % 7));
 
         /// <summary>Monday-first leading blank count for a month's first day.</summary>
         private static int LeadingBlanks(DateOnly monthStart)

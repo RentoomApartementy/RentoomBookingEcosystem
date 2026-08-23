@@ -87,7 +87,7 @@ export function scrollToTop(behavior = 'auto') {
     document.body.scrollTop = 0;
 }
 
-export function scrollStartDayNearTop(daySelector, containerSelector) {
+export function scrollDayNearTop(daySelector, containerSelector) {
     const day = document.querySelector(daySelector);
     const container = document.querySelector(containerSelector);
     if (!day || !container) {
@@ -148,5 +148,5 @@ function performScrollAboveBar(panel, barId) {
 window.registerScrollObserver = registerScrollObserver;
 window.scrollToElement = scrollToElement;
 window.scrollToTop = scrollToTop;
-window.scrollStartDayNearTop = scrollStartDayNearTop;
+window.scrollDayNearTop = scrollDayNearTop;
 window.scrollElementAboveBar = scrollElementAboveBar;
