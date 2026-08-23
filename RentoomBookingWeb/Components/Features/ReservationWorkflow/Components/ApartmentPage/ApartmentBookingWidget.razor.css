@@ -278,7 +278,7 @@
 
 /* Selection */
 .abw-day-inrange {
-    background: #f4eee7;
+    background: rgba(148, 95, 40, 0.1);
     border-radius: 0;
 }
 
@@ -290,12 +290,12 @@
 }
 
 .abw-awaiting-end .abw-day-preview {
-    background: #f4eee7;
+    background: rgba(148, 95, 40, 0.1);
     border-radius: 0;
 }
 
 .abw-awaiting-end .abw-day-preview-end {
-    background: #f4eee7;
+    background: rgba(148, 95, 40, 0.1);
     border-color: #945f28;
 }
 
