@@ -59,7 +59,9 @@
             }
         </div>
 
-        <div class="abw-months @(_loading ? "is-refreshing" : "")" @ref="_monthsRef">
+        <div class="abw-months @(_loading ? "is-refreshing" : "") @(IsAwaitingEnd ? "abw-awaiting-end" : "")"
+             data-sel-start="@SelectedStartIso"
+             @ref="_monthsRef">
             @foreach (var monthStart in MonthStarts())
             {
                 <div class="abw-month">
@@ -92,6 +94,7 @@
                             <span class="abw-day-cell">
                                 <button type="button"
                                         class="@classes"
+                                        data-date="@Iso(date)"
                                         disabled="@(!selectableNow)"
                                         @onclick="@(() => OnDayClicked(date))">
                                     <span class="abw-day-num">@d</span>

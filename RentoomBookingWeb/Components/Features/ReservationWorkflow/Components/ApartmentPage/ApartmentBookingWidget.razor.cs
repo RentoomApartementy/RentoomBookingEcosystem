@@ -399,6 +399,12 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             return awaitingEnd ? CanBeEnd(date) : CanBeStart(date);
         }
 
+        private bool IsAwaitingEnd => _selStart is not null && _selEnd is null;
+
+        private string? SelectedStartIso => _selStart is DateOnly s ? Iso(s) : null;
+
+        private static string Iso(DateOnly date) => date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
         private bool IsSelectedStart(DateOnly date) => _selStart == date;
         private bool IsSelectedEnd(DateOnly date) => _selEnd == date;
 

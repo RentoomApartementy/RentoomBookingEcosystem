@@ -93,7 +93,8 @@
     position: sticky;
     top: 0;
     background: #fff;
-    padding-bottom: .35rem;
+    padding: 0 12px .35rem;
+    margin: 0 -12px;
     z-index: 1;
 }
 
@@ -108,6 +109,9 @@
 .abw-months {
     max-height: 280px;
     overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 12px;
+    margin: 0 -12px;
     -webkit-overflow-scrolling: touch;
     transition: opacity .15s;
 }
@@ -128,7 +132,7 @@
     position: sticky;
     top: 0;
     background: #fff;
-    z-index: 1;
+    z-index: 2;
     padding: .2rem 0 .3rem;
 }
 
@@ -150,15 +154,15 @@
 
 .abw-day-clear {
     position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 16px;
-    height: 16px;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     border: 1.5px solid #fff;
     background: #945f28;
     color: #fff;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1;
     display: flex;
     align-items: center;
@@ -166,7 +170,14 @@
     cursor: pointer;
     padding: 0;
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
-    z-index: 2;
+    z-index: 1;
+}
+
+.abw-day-clear::after {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
 }
 
 .abw-day-clear:hover {
@@ -275,6 +286,16 @@
 .abw-day-end {
     background: #945f28;
     color: #fff;
+    border-color: #945f28;
+}
+
+.abw-awaiting-end .abw-day-preview {
+    background: #f4eee7;
+    border-radius: 0;
+}
+
+.abw-awaiting-end .abw-day-preview-end {
+    background: #f4eee7;
     border-color: #945f28;
 }
 
