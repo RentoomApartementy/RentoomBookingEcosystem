@@ -23,9 +23,10 @@
 
 <article id="@($"{Item?.Name}-{Item?.Id}")" class="apartment-card" 
          @ref="_elementRef"
+         @onclick="HandleCardClickAsync"
          style="@($"{ (DisableForGoToReservation ? "cursor: default; " : "") }{ (!string.IsNullOrEmpty(Width) ? $"width: {Width}; min-width: {Width}; max-width: {Width};" : "") }")"
          itemscope itemtype="https://schema.org/Apartment">
-    <header @onclick:stopPropagation="true">
+    <header>
         @if (_currentObjectMedium == null)
         {
             <div class="loading-image">
@@ -854,6 +855,17 @@
         var children = !string.IsNullOrWhiteSpace(Children) ? Children : "0";
 
         return $"{localizedBase}/{Item.Id}/{slug}/{term.StartDate}/{term.EndDate}/{adults}/{children}".Replace("//", "/");
+    }
+
+    // Cały kafelek prowadzi do apartamentu; strzałki slidera, przycisk i etykiety terminów
+    // zatrzymują propagację, więc zachowują własne akcje.
+    private async Task HandleCardClickAsync(MouseEventArgs e)
+    {
+        if (string.IsNullOrEmpty(_detailsUrl)) return;
+        if (e.CtrlKey || e.MetaKey || e.ShiftKey || e.AltKey) return;
+
+        await TrackApartmentClickAsync("card");
+        Navigation.NavigateTo(_detailsUrl);
     }
 
     private async Task TrackApartmentClickAsync(string target)
