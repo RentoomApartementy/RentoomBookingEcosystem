@@ -299,15 +299,17 @@
 
 /* Availability not loaded yet — skeleton, distinct from "booked" */
 .abw-day-loading {
-    color: #b0a294;
+    color: #b3b3b3;
     cursor: default;
     /* backwards: without it the delayed columns stay transparent until their turn. */
     animation: skeleton-pulse 1.5s infinite ease-in-out backwards;
 }
 
+/* Czysta neutralna szarosc - bez zlewal sie z zaznaczonym zakresem, a odcienie z domieszka
+   niebieskiego lub zieleni wychodzily brudne. */
 @keyframes skeleton-pulse {
-    0%, 100% { background-color: rgba(235, 226, 215, .4); }
-    50%      { background-color: rgba(209, 191, 172, .6); }
+    0%, 100% { background-color: rgba(249, 249, 249, .9); }
+    50%      { background-color: rgba(236, 236, 236, .95); }
 }
 
 /* One wave across the grid instead of every day blinking on its own. Leading blanks occupy real

@@ -82,9 +82,11 @@
                                 var selectableNow = dataLoaded && IsSelectableNow(date);
                                 var isSelectedEnd = IsSelectedEnd(date);
                                 var isSelectedEdge = IsSelectedStart(date) || isSelectedEnd;
-                                var halfDay = dataLoaded && !pastDisabled && !isSelectedEdge && IsSingleNightGap(date);
-                                var fullyBooked = dataLoaded && !pastDisabled && !halfDay && !selectableNow && !IsAvailable(date);
-                                var loadingDay = !dataLoaded && !pastDisabled && !isSelectedEdge;
+                                var isInRange = IsInRange(date);
+                                var halfDay = dataLoaded && !pastDisabled && !isSelectedEdge && !isInRange && IsSingleNightGap(date);
+                                var fullyBooked = dataLoaded && !pastDisabled && !halfDay && !isInRange && !selectableNow && !IsAvailable(date);
+                                // Dni wewnątrz potwierdzonego zakresu są już zagwarantowane — skeleton nie może ich naruszać.
+                                var loadingDay = !dataLoaded && !pastDisabled && !isSelectedEdge && !isInRange;
                                 var classes = "abw-day"
                                     + (selectableNow ? " abw-day-available" : "")
                                     + (halfDay ? " abw-day-booked-bottom" : "")
@@ -93,7 +95,7 @@
                                     + (loadingDay ? " abw-day-loading" : "")
                                     + (IsSelectedStart(date) ? " abw-day-start" : "")
                                     + (isSelectedEnd ? " abw-day-end" : "")
-                                    + (IsInRange(date) ? " abw-day-inrange" : "");
+                                    + (isInRange ? " abw-day-inrange" : "");
                                 <span class="abw-day-cell">
                                     <button type="button"
                                             class="@classes"
