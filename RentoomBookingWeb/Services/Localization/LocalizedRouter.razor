@@ -305,12 +305,7 @@ else if (!_isResolving)
             return false;
         }
 
-        return remainingSegments[0].ToLowerInvariant() switch
-        {
-            "v2" => FeatureFlags.FeatureAllowed("cooperation-landing-v2"),
-            "v3" => FeatureFlags.FeatureAllowed("cooperation-landing-v3"),
-            _ => false
-        };
+        return remainingSegments[0].Equals("v3", StringComparison.OrdinalIgnoreCase);
     }
 
     private void TryNavigateTo(string targetUri)

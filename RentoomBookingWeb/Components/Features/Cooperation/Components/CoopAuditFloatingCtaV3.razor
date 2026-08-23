@@ -1,13 +1,68 @@
 @using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Components.Enums
+@using Microsoft.JSInterop
+@implements IAsyncDisposable
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+@inject IJSRuntime JS
 
-<div class="coop-v3-audit-cta" role="complementary" aria-label="@L["Coop_V3_Floating_Cta_Aria"]">
-    <button type="button" @onclick="OpenFormModal">
+<div class="coop-v3-audit-cta @(_heroCtaVisible ? "is-hidden" : "")"
+     role="complementary"
+     aria-hidden="@_heroCtaVisible.ToString().ToLowerInvariant()"
+     aria-label="@L["Coop_V3_Floating_Cta_Aria"]">
+    <Button Type="ButtonType.Primary" OnClick="OpenFormModal">
         <span class="gicon" aria-hidden="true">calendar_month</span>
         <span>@L["Coop_V3_Floating_Cta"]</span>
-    </button>
+    </Button>
 </div>
-
 @code {
     [CascadingParameter] public EventCallback OpenFormModal { get; set; }
+
+    private IJSObjectReference? _scrollModule;
+    private DotNetObjectReference<CoopAuditFloatingCtaV3>? _dotNetHelper;
+    private bool _heroCtaVisible = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _scrollModule = await JS.InvokeAsync<IJSObjectReference>("import", "/js/scrollObserver.js");
+        _dotNetHelper = DotNetObjectReference.Create(this);
+        await _scrollModule.InvokeVoidAsync(
+            "registerVisibilityObserver",
+            "coop-v3-hero-cta",
+            _dotNetHelper);
+    }
+
+    [JSInvokable]
+    public Task UpdateHeroCtaVisibility(bool isVisible)
+    {
+        if (_heroCtaVisible == isVisible)
+        {
+            return Task.CompletedTask;
+        }
+
+        _heroCtaVisible = isVisible;
+        return InvokeAsync(StateHasChanged);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_scrollModule is not null)
+        {
+            try
+            {
+                await _scrollModule.InvokeVoidAsync("unregisterVisibilityObserver", "coop-v3-hero-cta");
+                await _scrollModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // Ignore: user navigated away or the circuit disconnected.
+            }
+        }
+
+        _dotNetHelper?.Dispose();
+    }
 }

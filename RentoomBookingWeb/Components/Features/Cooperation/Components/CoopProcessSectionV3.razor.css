@@ -1,7 +1,7 @@
 .coop-v3-process {
     width: 100%;
     padding: 6rem max(24px, calc((100% - 1180px) / 2));
-    background: #f7f3ec;
+    background: #fff;
     border-top: 1px solid rgba(148,95,40,.08);
     border-bottom: 1px solid rgba(148,95,40,.08);
     box-sizing: border-box;
@@ -65,7 +65,7 @@
     border-radius: 50%;
     color: #fff;
     background: #1f5a41;
-    box-shadow: 0 0 0 10px #f7f3ec;
+    box-shadow: 0 0 0 10px #fff;
     font-size: 1.35rem;
     font-weight: 850;
 }
@@ -100,7 +100,9 @@
     height: 70px;
     border-radius: 50%;
     color: #1f5a41;
-    background: rgba(255,255,255,.8);
+    background: #f7f3ec;
+    border: 1px solid rgba(31,90,65,.12);
+    box-shadow: 0 8px 20px rgba(31,90,65,.08);
     font-size: 2rem;
 }
 
@@ -120,7 +122,7 @@
     }
 
     .coop-v3-stage-number {
-        box-shadow: 0 0 0 10px #f7f3ec;
+        box-shadow: 0 0 0 10px #fff;
     }
 }
 

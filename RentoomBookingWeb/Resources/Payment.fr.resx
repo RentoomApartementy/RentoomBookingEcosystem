@@ -577,4 +577,10 @@
   <data name="StepperCompletedAriaLabel" xml:space="preserve">
     <value>Étape achevée</value>
   </data>
+  <data name="MobileBarNextLabel" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="PriceDetailsToggleAriaLabel" xml:space="preserve">
+    <value>Afficher ou masquer les détails des prix</value>
+  </data>
 </root>

@@ -1,26 +1,22 @@
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
+@using RentoomBooking.SharedClasses.Services.Descriptions
+@using System.Text.Encodings.Web
+@using System.Text.Json
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
+@inject IStringLocalizer<RentoomBookingWeb.HomePage> HomeLocalizer;
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
-@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 
 @{
     var normalizedVersion = Version?.Trim().ToLowerInvariant();
-    var isLegacy = string.IsNullOrEmpty(normalizedVersion);
-    var isV3 = normalizedVersion == "v3" && FeatureFlags.FeatureAllowed("cooperation-landing-v3");
-    var isV2 = normalizedVersion == "v2" && FeatureFlags.FeatureAllowed("cooperation-landing-v2");
-    var isNotFound = !isLegacy && !isV2 && !isV3;
-    var isModernLanding = isV3 || isV2;
-    var pageTitle = isModernLanding ? Localizer["Coop_V2_PageTitle"] : Localizer["Cooperation_PageTitle"];
-    var metaDesc = isModernLanding ? Localizer["Coop_V2_MetaDescription"] : Localizer["Cooperation_MetaDescription"];
-    var ogTitle = isModernLanding ? Localizer["Coop_V2_OgTitle"] : Localizer["Cooperation_OgTitle"];
+    var isV3 = string.IsNullOrEmpty(normalizedVersion) || normalizedVersion == "v3";
+    var isNotFound = !isV3;
+    var pageTitle = Localizer["Cooperation_PageTitle"];
+    var metaDesc = Localizer["Cooperation_MetaDescription"];
+    var ogTitle = Localizer["Cooperation_OgTitle"];
     var cooperationBasePath = RouteService.GetLocalizedUrl("Cooperation");
-    var currentPagePath = isV3
-        ? $"{cooperationBasePath}/v3"
-        : isV2
-            ? $"{cooperationBasePath}/v2"
-            : cooperationBasePath;
+    var currentPagePath = cooperationBasePath;
 }
 
 @if (isNotFound)
@@ -43,6 +39,10 @@ else
         <meta property="og:type" content="website" />
         <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{currentPagePath}")" />
         <BreadcrumbJsonLd CurrentPageName="@Localizer["Cooperation_BreadcrumbName"]" CurrentPagePath="@currentPagePath" />
+        <script type="application/ld+json">
+            @((MarkupString)CooperationOrganizationJsonLd)
+        </script>
+        <FaqPageJsonLd Faqs="@CooperationFaqs" />
         <SeoHreflangs />
         @if (isV3)
         {
@@ -59,35 +59,9 @@ else
         </div>
         <CoopFormModal @bind-IsOpen="_isFormModalOpen" />
     }
-    else if (isV2)
-    {
-        <div class="cooperation-container-v2">
-            <CascadingValue Value="@OpenFormModalRequested">
-                <CoopHeroSectionRouteV2 />
-                <CoopFeaturesSection />
-                <CoopCalculatorSection />
-                <CoopServicesSection />
-                <CoopTestimonialsSection />
-                <CoopComparisonSection />
-                <CoopProcessSection />
-                <CoopTeamSection />
-                <CoopFaqSection />
-                <CoopCtaSection />
-            </CascadingValue>
-        </div>
-        <CoopFormModal @bind-IsOpen="_isFormModalOpen" />
-    }
     else
     {
-        <div class="cooperation-container">
-            <HeaderSection
-                ImagePath="/assets/images/header-bg-coop.jpeg"
-                Title="@Localizer["CooperationText1"]"
-                Height="230px"/>
-            <AboutUs/>
-            <Advantages/>
-            <Form/>
-        </div>
+        <RentoomBookingWeb.Components.Pages.NotFoundPage />
     }
 }
 
@@ -95,6 +69,60 @@ else
     [Parameter] public string? Version { get; set; }
 
     private bool _isFormModalOpen;
+
+    private string CooperationOrganizationJsonLd => JsonSerializer.Serialize(new Dictionary<string, object>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "Organization",
+        ["@id"] = "https://rentoom.pl/#organization",
+        ["name"] = "Rentoom",
+        ["legalName"] = "Rentoom Apartamenty sp. z o.o.",
+        ["alternateName"] = "Rentoom Apartamenty",
+        ["url"] = "https://rentoom.pl/",
+        ["logo"] = new Dictionary<string, object>
+        {
+            ["@type"] = "ImageObject",
+            ["url"] = "https://rentoom.pl/assets/images/logo-nowe-Rentoom-final-158x112.png"
+        },
+        ["description"] = HomeLocalizer["Home_OrganizationDescription"].Value,
+        ["email"] = "info@rentoom.pl",
+        ["telephone"] = "+48 881 388 001",
+        ["taxID"] = "8792727407",
+        ["address"] = new Dictionary<string, object>
+        {
+            ["@type"] = "PostalAddress",
+            ["streetAddress"] = "ul. Stanisława Szymańskiego 1B",
+            ["postalCode"] = "87-100",
+            ["addressLocality"] = "Toruń",
+            ["addressCountry"] = "PL"
+        },
+        ["contactPoint"] = new Dictionary<string, object>
+        {
+            ["@type"] = "ContactPoint",
+            ["contactType"] = "customer service",
+            ["telephone"] = "+48 881 388 001",
+            ["email"] = "info@rentoom.pl",
+            ["availableLanguage"] = new[] { "pl", "en" }
+        },
+        ["sameAs"] = new[]
+        {
+            "https://www.facebook.com/RentoomApartamenty/",
+            "https://www.instagram.com/rentoomapartamenty/"
+        }
+    }, new JsonSerializerOptions
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    });
+
+    private IReadOnlyList<FaqItemDto> CooperationFaqs => Enumerable.Range(1, 7)
+        .Select(index => new FaqItemDto
+        {
+            Question = Localizer[$"Coop_Faq{index}_Q"].Value,
+            Answer = (index == 1
+                ? Localizer["Coop_V3_Faq1_A"]
+                : Localizer[$"Coop_Faq{index}_A"]).Value
+        })
+        .ToArray();
 
     private EventCallback OpenFormModalRequested =>
         EventCallback.Factory.Create(this, () => _isFormModalOpen = true);

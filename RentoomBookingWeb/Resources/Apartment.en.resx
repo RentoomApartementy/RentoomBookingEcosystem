@@ -211,7 +211,7 @@
     <value>Book now</value>
   </data>
   <data name="ChooseDatesCta" xml:space="preserve">
-    <value>Choose dates</value>
+    <value>Select a date</value>
   </data>
   <data name="ChangeOffer" xml:space="preserve">
     <value>Change</value>
@@ -559,6 +559,6 @@
     <value>Read verified guest reviews</value>
   </data>
   <data name="ApartmentReviewAverageLabel" xml:space="preserve">
-    <value>Average guest rating: {0} out of {1}</value>
+    <value>Average guest rating: {0} per {1}</value>
   </data>
 </root>

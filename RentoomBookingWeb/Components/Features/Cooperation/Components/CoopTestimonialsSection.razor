@@ -28,6 +28,12 @@
             </footer>
         </blockquote>
     </div>
-
-    <CoopSectionCta Type="ButtonType.Secondary" />
+    @if (ShowCTAButton)
+    {
+        <CoopSectionCta Type="ButtonType.Secondary" />
+    }
 </section>
+
+@code {
+    [Parameter] public bool ShowCTAButton { get; set; } = false;
+}

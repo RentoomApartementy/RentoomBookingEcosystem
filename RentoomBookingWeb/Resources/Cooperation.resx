@@ -639,58 +639,67 @@
     <value />
   </data>
   <data name="Coop_Team1_Name" xml:space="preserve">
-    <value />
+    <value>Małgorzata Gardzielewska</value>
   </data>
   <data name="Coop_Team1_Role" xml:space="preserve">
-    <value />
+    <value>Koordynator ds. utrzymania czystości i logistyki</value>
   </data>
   <data name="Coop_Team1_Desc" xml:space="preserve">
-    <value />
+    <value>Dba, by każdy apartament był gotowy na czas — od porządku po zapas pościeli.</value>
   </data>
   <data name="Coop_Team2_Name" xml:space="preserve">
-    <value />
+    <value>Monika Kwiatkowska</value>
   </data>
   <data name="Coop_Team2_Role" xml:space="preserve">
-    <value />
+    <value>Kierownik ds. utrzymania i sprzedaży</value>
   </data>
   <data name="Coop_Team2_Desc" xml:space="preserve">
-    <value />
+    <value>Łączy sprawne działanie apartamentów z tym, co najważniejsze: pełnym kalendarzem.</value>
   </data>
   <data name="Coop_Team3_Name" xml:space="preserve">
-    <value />
+    <value>Weronika Feliniak</value>
   </data>
   <data name="Coop_Team3_Role" xml:space="preserve">
-    <value />
+    <value>Specjalistka ds. marketingu</value>
   </data>
   <data name="Coop_Team3_Desc" xml:space="preserve">
-    <value />
+    <value>Buduje widoczność Rentoom i zamienia dobry pobyt w kolejną rezerwację.</value>
   </data>
   <data name="Coop_Team4_Name" xml:space="preserve">
-    <value />
+    <value>Andrzej Pietkiewicz</value>
   </data>
   <data name="Coop_Team4_Role" xml:space="preserve">
-    <value />
+    <value>Specjalista ds. technicznego utrzymania apartamentów</value>
   </data>
   <data name="Coop_Team4_Desc" xml:space="preserve">
-    <value />
+    <value>Naprawia, usprawnia i pilnuje, by wszystko działało bez niespodzianek.</value>
   </data>
   <data name="Coop_Team5_Name" xml:space="preserve">
-    <value />
+    <value>Małgorzata Jędrusik</value>
   </data>
   <data name="Coop_Team5_Role" xml:space="preserve">
-    <value />
+    <value>Projektantka wnętrz</value>
   </data>
   <data name="Coop_Team5_Desc" xml:space="preserve">
-    <value />
+    <value>Tworzy wnętrza, które dobrze wyglądają, dobrze działają i przyciągają gości.</value>
   </data>
   <data name="Coop_Team6_Name" xml:space="preserve">
-    <value />
+    <value>Krystian Kujawa</value>
   </data>
   <data name="Coop_Team6_Role" xml:space="preserve">
-    <value />
+    <value>Dyrektor operacyjny</value>
   </data>
   <data name="Coop_Team6_Desc" xml:space="preserve">
-    <value />
+    <value>Spina pracę zespołu i dba, by Rentoom działał sprawnie każdego dnia.</value>
+  </data>
+  <data name="Coop_Team7_Name" xml:space="preserve">
+    <value>Bartosz Jędrusik</value>
+  </data>
+  <data name="Coop_Team7_Role" xml:space="preserve">
+    <value>Prezes</value>
+  </data>
+  <data name="Coop_Team7_Desc" xml:space="preserve">
+    <value>Nadaje kierunek firmie i zamienia ambitne plany w konkretne działania.</value>
   </data>
   <data name="Coop_Faq_Eyebrow" xml:space="preserve">
     <value />
@@ -752,16 +761,8 @@
   <data name="Coop_Section_Cta" xml:space="preserve">
     <value />
   </data>
-  <data name="Coop_V2_PageTitle" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Coop_V2_MetaDescription" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Coop_V2_OgTitle" xml:space="preserve">
-    <value />
-  </data>
   <!-- V3 Landing Page -->
+  <data name="Coop_V3_Hero_SeoTitle" xml:space="preserve"><value>Comprehensive apartment rental management in Toruń</value></data>
   <data name="Coop_V3_Hero_Title" xml:space="preserve"><value>Your apartment. Our care. Your profit.</value></data>
   <data name="Coop_V3_Hero_Subtitle" xml:space="preserve"><value>We take care of reservations, dynamic pricing, guest communication, cleaning, maintenance and settlements. You receive a report and a transfer.</value></data>
   <data name="Coop_V3_Hero_Cta" xml:space="preserve"><value>Book a free apartment audit</value></data>
@@ -814,9 +815,13 @@
   <data name="Coop_V3_Owner_Title" xml:space="preserve"><value>Full control without daily involvement</value></data>
   <data name="Coop_V3_Owner_Intro" xml:space="preserve"><value>You make the decisions. We provide the data, settlements and ongoing support.</value></data>
   <data name="Coop_V3_Owner_Panel" xml:space="preserve"><value>Online owner panel</value></data>
+  <data name="Coop_V3_Owner_Panel_Desc" xml:space="preserve"><value>Transparent access to your reservation calendar.</value></data>
   <data name="Coop_V3_Owner_Reports" xml:space="preserve"><value>Settlements and financial reports</value></data>
+  <data name="Coop_V3_Owner_Reports_Desc" xml:space="preserve"><value>Know exactly how much your property earns.</value></data>
   <data name="Coop_V3_Owner_Legal" xml:space="preserve"><value>Legal and administrative support</value></data>
+  <data name="Coop_V3_Owner_Legal_Desc" xml:space="preserve"><value>We ensure compliance with regulations and take care of the formalities.</value></data>
   <data name="Coop_V3_Owner_Care" xml:space="preserve"><value>Dedicated owner care</value></data>
+  <data name="Coop_V3_Owner_Care_Desc" xml:space="preserve"><value>We respond quickly and support you in every situation.</value></data>
   <data name="Coop_V3_Faq1_A" xml:space="preserve"><value>Our standard model is 30% all-in. Portal commissions are covered by Rentoom, so the settlement remains clear and predictable.</value></data>
   <data name="Coop_V3_Floating_Cta" xml:space="preserve"><value>Book a free audit</value></data>
   <data name="Coop_V3_Floating_Cta_Aria" xml:space="preserve"><value>Free apartment audit</value></data>

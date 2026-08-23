@@ -21,7 +21,7 @@
     text-transform: uppercase;
 }
 
-.coop-v3-section-heading h2 {
+.coop-v3-section-heading h1 {
     color: #111;
     font-size: clamp(2rem, 4vw, 3.2rem);
     line-height: 1.08;

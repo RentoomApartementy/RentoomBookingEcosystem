@@ -534,4 +534,31 @@
   <data name="CleaningFeeIncludedLabel" xml:space="preserve">
     <value>Reinigungsgebühr inklusive</value>
   </data>
+  <data name="DecreaseQuantity" xml:space="preserve">
+    <value>Verringerung der Menge</value>
+  </data>
+  <data name="IncreaseQuantity" xml:space="preserve">
+    <value>Erhöhung der Menge</value>
+  </data>
+  <data name="ChooseDatesCta" xml:space="preserve">
+    <value>Wählen Sie ein Datum</value>
+  </data>
+  <data name="ChangeOffer" xml:space="preserve">
+    <value>Veränderung</value>
+  </data>
+  <data name="TotalPriceLabel" xml:space="preserve">
+    <value>Gesamt</value>
+  </data>
+  <data name="StepperAriaLabel" xml:space="preserve">
+    <value>Buchungsschritte</value>
+  </data>
+  <data name="PriceDetailsToggleAriaLabel" xml:space="preserve">
+    <value>Preisdetails anzeigen oder verbergen</value>
+  </data>
+  <data name="VerifiedGuestReviewsTitle" xml:space="preserve">
+    <value>Lies verifizierte Gästebewertungen</value>
+  </data>
+  <data name="ApartmentReviewAverageLabel" xml:space="preserve">
+    <value>Durchschnittliche Gästebewertung: {0} pro {1}</value>
+  </data>
 </root>
