@@ -52,6 +52,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         private ApartmentCalendarDto? _calendar;
         private bool _loading;
+        // Days past it — freshly appended months — must render as "still loading", not as unavailable.
+        private DateOnly? _loadedThrough;
         // Frozen once resolved - the displayed "from" price shouldn't change as the visitor
         // adjusts guests or loads more months; only availability (_calendar.Days) keeps refreshing.
         private decimal? _frozenFromPrice;
@@ -235,6 +237,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                 return;
             }
 
+            var requestedThrough = LastVisibleDay();
             _loading = true;
             StateHasChanged();
             try
@@ -242,11 +245,13 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                 _calendar = await CalendarService.GetCalendarAsync(
                     Apartment.Id,
                     _today,
-                    LastVisibleDay(),
+                    requestedThrough,
                     _adults,
                     _children,
                     applyMandatoryAddonsFee: ApplyMandatoryAddonsFee,
                     mandatoryAddonCharges: _mandatoryAddonCharges);
+
+                _loadedThrough = requestedThrough;
 
                 RevalidateSelection();
 
@@ -400,6 +405,16 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         }
 
         private bool IsAwaitingEnd => _selStart is not null && _selEnd is null;
+
+        private bool IsInitialLoad => _calendar is null;
+
+        // Appending months isn't a refresh — the grid stays live, only the new days are skeletons.
+        private bool IsRefreshing => _loading && _calendar is not null && !_loadingMoreMonths;
+
+        private bool ShowLoadingPill => _loading;
+
+        private bool IsDayLoaded(DateOnly date)
+            => _calendar is not null && _loadedThrough is DateOnly through && date <= through;
 
         private string? SelectedStartIso => _selStart is DateOnly s ? Iso(s) : null;
 

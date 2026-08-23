@@ -59,68 +59,73 @@
             }
         </div>
 
-        <div class="abw-months @(_loading ? "is-refreshing" : "") @(IsAwaitingEnd ? "abw-awaiting-end" : "")"
-             data-sel-start="@SelectedStartIso"
-             @ref="_monthsRef">
-            @foreach (var monthStart in MonthStarts())
-            {
-                <div class="abw-month">
-                    <div class="abw-month-title">@MonthTitle(monthStart)</div>
-                    <div class="abw-grid">
-                        @for (var b = 0; b < LeadingBlanks(monthStart); b++)
-                        {
-                            <span class="abw-day abw-day-blank"></span>
-                        }
-                        @for (var d = 1; d <= DaysInMonth(monthStart); d++)
-                        {
-                            var date = new DateOnly(monthStart.Year, monthStart.Month, d);
-                            var pastDisabled = date < _today;
-                            var dataLoaded = _calendar is not null;
-                            var selectableNow = dataLoaded && IsSelectableNow(date);
-                            var isSelectedEnd = IsSelectedEnd(date);
-                            var isSelectedEdge = IsSelectedStart(date) || isSelectedEnd;
-                            var halfDay = dataLoaded && !pastDisabled && !isSelectedEdge && IsSingleNightGap(date);
-                            var fullyBooked = dataLoaded && !pastDisabled && !halfDay && !selectableNow && !IsAvailable(date);
-                            var loadingDay = !dataLoaded && !pastDisabled && !isSelectedEdge;
-                            var classes = "abw-day"
-                                + (selectableNow ? " abw-day-available" : "")
-                                + (halfDay ? " abw-day-booked-bottom" : "")
-                                + (fullyBooked ? " abw-day-booked" : "")
-                                + (pastDisabled ? " abw-day-disabled" : "")
-                                + (loadingDay ? " abw-day-loading" : "")
-                                + (IsSelectedStart(date) ? " abw-day-start" : "")
-                                + (isSelectedEnd ? " abw-day-end" : "")
-                                + (IsInRange(date) ? " abw-day-inrange" : "");
-                            <span class="abw-day-cell">
-                                <button type="button"
-                                        class="@classes"
-                                        data-date="@Iso(date)"
-                                        disabled="@(!selectableNow)"
-                                        @onclick="@(() => OnDayClicked(date))">
-                                    <span class="abw-day-num">@d</span>
-                                    @if (fullyBooked)
-                                    {
-                                        <span class="abw-day-strike"></span>
-                                    }
-                                </button>
-                                @if (isSelectedEnd)
-                                {
+        <div class="abw-progress @(_loading ? "is-active" : "")" aria-hidden="true"><span></span></div>
+
+        <div class="abw-months-wrap">
+            <div class="abw-months @(IsRefreshing ? "is-refreshing" : "") @(IsInitialLoad ? "is-initial-loading" : "") @(IsAwaitingEnd ? "abw-awaiting-end" : "")"
+                 data-sel-start="@SelectedStartIso"
+                 @ref="_monthsRef">
+                @foreach (var monthStart in MonthStarts())
+                {
+                    <div class="abw-month">
+                        <div class="abw-month-title">@MonthTitle(monthStart)</div>
+                        <div class="abw-grid">
+                            @for (var b = 0; b < LeadingBlanks(monthStart); b++)
+                            {
+                                <span class="abw-day abw-day-blank"></span>
+                            }
+                            @for (var d = 1; d <= DaysInMonth(monthStart); d++)
+                            {
+                                var date = new DateOnly(monthStart.Year, monthStart.Month, d);
+                                var pastDisabled = date < _today;
+                                var dataLoaded = IsDayLoaded(date);
+                                var selectableNow = dataLoaded && IsSelectableNow(date);
+                                var isSelectedEnd = IsSelectedEnd(date);
+                                var isSelectedEdge = IsSelectedStart(date) || isSelectedEnd;
+                                var halfDay = dataLoaded && !pastDisabled && !isSelectedEdge && IsSingleNightGap(date);
+                                var fullyBooked = dataLoaded && !pastDisabled && !halfDay && !selectableNow && !IsAvailable(date);
+                                var loadingDay = !dataLoaded && !pastDisabled && !isSelectedEdge;
+                                var classes = "abw-day"
+                                    + (selectableNow ? " abw-day-available" : "")
+                                    + (halfDay ? " abw-day-booked-bottom" : "")
+                                    + (fullyBooked ? " abw-day-booked" : "")
+                                    + (pastDisabled ? " abw-day-disabled" : "")
+                                    + (loadingDay ? " abw-day-loading" : "")
+                                    + (IsSelectedStart(date) ? " abw-day-start" : "")
+                                    + (isSelectedEnd ? " abw-day-end" : "")
+                                    + (IsInRange(date) ? " abw-day-inrange" : "");
+                                <span class="abw-day-cell">
                                     <button type="button"
-                                            class="abw-day-clear"
-                                            @onclick="ClearSelectionAsync"
-                                            @onclick:stopPropagation="true"
-                                            aria-label="@Localizer["CalendarClearSelection"]">×</button>
-                                }
-                            </span>
-                        }
+                                            class="@classes"
+                                            data-date="@Iso(date)"
+                                            disabled="@(!selectableNow)"
+                                            @onclick="@(() => OnDayClicked(date))">
+                                        <span class="abw-day-num">@d</span>
+                                        @if (fullyBooked)
+                                        {
+                                            <span class="abw-day-strike"></span>
+                                        }
+                                    </button>
+                                    @if (isSelectedEnd)
+                                    {
+                                        <button type="button"
+                                                class="abw-day-clear"
+                                                @onclick="ClearSelectionAsync"
+                                                @onclick:stopPropagation="true"
+                                                aria-label="@Localizer["CalendarClearSelection"]">×</button>
+                                    }
+                                </span>
+                            }
+                        </div>
                     </div>
-                </div>
-            }
-            @if (_loadingMoreMonths)
+                }
+            </div>
+
+            @if (ShowLoadingPill)
             {
-                <div class="abw-loadmore-spinner">
+                <div class="abw-loading-pill" role="status">
                     <span class="mini-spinner"></span>
-                    <span>@Localizer["CalendarLoadingMoreMonths"]</span>
+                    <span>@Localizer["CalendarLoadingAvailability"]</span>
                 </div>
             }
         </div>
