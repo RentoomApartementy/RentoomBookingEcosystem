@@ -64,7 +64,7 @@ public partial class BlogPostPage : ComponentBase
     {
         if (Post is null) return new MarkupString(string.Empty);
 
-        var canonicalUrl = $"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.Category, Post.Slug)}";
+        var canonicalUrl = SiteBase.GetAbsoluteUrl(BuildPostUrl(Post.Category, Post.Slug));
         var title = System.Text.Json.JsonSerializer.Serialize(Post.Title);
         var excerpt = System.Text.Json.JsonSerializer.Serialize(Post.Excerpt ?? Post.MetaDescription ?? Post.Title);
         var author = System.Text.Json.JsonSerializer.Serialize(Post.AuthorDisplayName);
@@ -87,11 +87,11 @@ public partial class BlogPostPage : ComponentBase
           },
           "publisher": {
             "@type": "Organization",
-            "@id": "https://rentoom.pl/#organization",
+            "@id": "{{SiteBase.GetAbsoluteUrl("/#organization")}}",
             "name": "Rentoom",
             "logo": {
               "@type": "ImageObject",
-              "url": "https://rentoom.pl/assets/images/logo-nowe-Rentoom-final-158x112.png"
+              "url": "{{SiteBase.GetAbsoluteUrl("/assets/images/logo-nowe-Rentoom-final-158x112.png")}}"
             }
           },
           "description": {{excerpt}},

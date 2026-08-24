@@ -3,6 +3,7 @@
 @using RentoomBookingWeb.Services.Localization
 @inject IRouteLocalizationService RouteService
 @inject NavigationManager NavManager
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 @implements IDisposable
 
 @foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
@@ -41,13 +42,7 @@
     {
         try
         {
-            var baseUri = NavManager.BaseUri.TrimEnd('/');
-            
-            // Fix for the file:/// protocol issue
-            if (baseUri.StartsWith("file:", StringComparison.OrdinalIgnoreCase))
-            {
-                baseUri = "https://rentoom.pl"; 
-            }
+            var baseUri = SiteBase.GetBaseUri().GetLeftPart(UriPartial.Authority).TrimEnd('/');
 
             var relativeUri = Uri.UnescapeDataString(NavManager.ToBaseRelativePath(NavManager.Uri));
             var uriParts = relativeUri.Split('?', 2);

@@ -4,6 +4,7 @@
 @using System.Globalization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -11,13 +12,13 @@
     <meta name="robots" content="index, follow" />
     <meta name="description" content="@GetSeoDescription()" />
     <meta name="keywords" content="@Localizer["Apartments_SeoKeywords"]" />
-    <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Apartments")}")" />
+    <link rel="canonical" href="@SiteBase.GetAbsoluteUrl(RouteService.GetLocalizedUrl("Apartments"))" />
 
     <meta property="og:title" content="@GetSeoTitle()" />
     <meta property="og:description" content="@GetSeoDescription()" />
     <meta property="og:image" content="@GetSeoImage()" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Apartments")}")" />
+    <meta property="og:url" content="@SiteBase.GetAbsoluteUrl(RouteService.GetLocalizedUrl("Apartments"))" />
     <BreadcrumbJsonLd CurrentPageName="@Localizer["Apartments_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Apartments")" />
     <SeoHreflangs />
 </HeadContent>

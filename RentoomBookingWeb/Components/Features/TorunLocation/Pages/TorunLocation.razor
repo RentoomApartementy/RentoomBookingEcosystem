@@ -5,6 +5,7 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 
 <PageTitle>@PageTitleText</PageTitle>
 
@@ -36,7 +37,7 @@ else
 @code {
     private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
 
-    private string CanonicalUrl => $"{Navigation.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("AboutCity")}";
+    private string CanonicalUrl => SiteBase.GetAbsoluteUrl(RouteService.GetLocalizedUrl("AboutCity"));
 
     private string PageTitleText => Localizer["TorunLocation_PageTitle"];
 

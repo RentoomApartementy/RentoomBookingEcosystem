@@ -332,6 +332,7 @@ namespace RentoomBookingWeb
             };
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<CanonicalHostRedirectMiddleware>();
             app.Use(async (context, next) =>
             {
                 context.Response.OnStarting(() =>
@@ -419,9 +420,9 @@ namespace RentoomBookingWeb
             
             app.MapControllers();
 
-            app.MapGet("/robots.txt", (HttpContext context) =>
+            app.MapGet("/robots.txt", (HttpContext context, ISiteBaseProvider siteBaseProvider) =>
             {
-                var baseUrl = $"{context.Request.Scheme}://{context.Request.Host}";
+                var baseUrl = siteBaseProvider.GetBaseUri().GetLeftPart(UriPartial.Authority).TrimEnd('/');
                 var content = app.Environment.IsProduction()
                     ? $"User-agent: *\nAllow: /\nDisallow: /rezerwuj/\nDisallow: /tpay-mock/\nSitemap: {baseUrl}/sitemap.xml"
                     : $"User-agent: *\nDisallow: /\nSitemap: {baseUrl}/sitemap.xml";

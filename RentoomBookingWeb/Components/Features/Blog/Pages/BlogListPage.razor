@@ -1,5 +1,6 @@
 @using RentoomBookingWeb.Components.Features.Blog.Components;
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 
 <PageTitle>@(string.IsNullOrWhiteSpace(Category) ? Localizer["AllPosts"] : CategoryDisplayName ?? Localizer["BlogPageTitle"])</PageTitle>
 
@@ -9,7 +10,7 @@
         <meta name="robots" content="@(CategoryNotFound ? "noindex, nofollow" : "index, follow")" />
     }
     <meta name="description" content="@Localizer["BlogDescription"]" />
-    <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildCategoryListUrl(Category)}")" />
+    <link rel="canonical" href="@SiteBase.GetAbsoluteUrl(BuildCategoryListUrl(Category))" />
     <BlogJsonLd Name="@Localizer["BlogDescription"]"
                 Description="@Localizer["BlogHeaderSubtitle"]"
                 Url="@BuildCategoryListUrl(Category)" />

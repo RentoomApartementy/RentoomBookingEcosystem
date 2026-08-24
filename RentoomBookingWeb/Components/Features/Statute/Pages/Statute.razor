@@ -7,6 +7,7 @@
 @inject NavigationManager NavManager
 @inject IStringLocalizer<RentoomBookingWeb.StatutePage> Localizer
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 
 <PageTitle>@PageTitleText</PageTitle>
 
@@ -23,7 +24,7 @@
     <meta property="og:description" content="@SeoDescription" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@CanonicalUrl" />
-    <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-statute.jpg")" />
+    <meta property="og:image" content="@SiteBase.GetAbsoluteUrl("/assets/images/header-bg-statute.jpg")" />
 
     <BreadcrumbJsonLd CurrentPageName="@CurrentBreadcrumbName" CurrentPagePath="@CurrentBreadcrumbPath" />
     <SeoHreflangs />
@@ -110,7 +111,7 @@
         ? $"{RouteService.GetLocalizedUrl("Statute")}/{Id}{(string.IsNullOrWhiteSpace(Slug) ? string.Empty : $"/{Slug}")}"
         : RouteService.GetLocalizedUrl("Statute");
 
-    private string CanonicalUrl => $"{NavManager.BaseUri.TrimEnd('/')}{CurrentBreadcrumbPath}";
+    private string CanonicalUrl => SiteBase.GetAbsoluteUrl(CurrentBreadcrumbPath);
 
     private string SeoDescription
     {
