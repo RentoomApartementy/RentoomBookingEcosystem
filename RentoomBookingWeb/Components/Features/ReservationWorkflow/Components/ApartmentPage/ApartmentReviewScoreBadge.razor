@@ -1,4 +1,5 @@
 @using System.Globalization
+@using System.Diagnostics
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Models
 @implements IDisposable
@@ -6,7 +7,12 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<RentoomBookingWeb.Apartment> Localizer
 @inject ILogger<ApartmentReviewScoreBadge> Logger
 
-@if (_aggregate?.AverageScore is not null)
+@if (_isLoading)
+{
+    <span class="apartment-review-score apartment-review-score-loading"
+          aria-hidden="true"></span>
+}
+else if (_aggregate?.AverageScore is not null)
 {
     <span class="apartment-review-score"
           aria-label="@AccessibleLabel"
@@ -21,6 +27,9 @@
     private ApartmentReviewAggregateDto? _aggregate;
     private CancellationTokenSource? _loadCancellation;
     private int? _loadedApartmentItemId;
+    private bool _isLoading;
+    private bool _loadStarted;
+    private bool _disposed;
 
     private string FormattedScore => _aggregate is null
         ? string.Empty
@@ -35,9 +44,9 @@
             FormattedScore,
             _aggregate.RatingScale.ToString(CultureInfo.CurrentUICulture)];
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
-        if (_loadedApartmentItemId == ApartmentItemId)
+        if (_loadStarted && _loadedApartmentItemId == ApartmentItemId)
         {
             return;
         }
@@ -47,9 +56,33 @@
         _loadCancellation?.Dispose();
         _loadCancellation = new CancellationTokenSource();
         _aggregate = null;
+        _isLoading = true;
+        _loadStarted = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_loadStarted || _disposed)
+        {
+            return;
+        }
+
+        _loadStarted = true;
+        await LoadAggregateAsync();
+    }
+
+    private async Task LoadAggregateAsync()
+    {
+        var stopwatch = Stopwatch.StartNew();
+        var cancellationToken = _loadCancellation?.Token ?? CancellationToken.None;
 
         if (ApartmentItemId is not int apartmentItemId || apartmentItemId <= 0)
         {
+            _isLoading = false;
+            if (!_disposed)
+            {
+                await InvokeAsync(StateHasChanged);
+            }
             return;
         }
 
@@ -57,9 +90,9 @@
         {
             _aggregate = await ReviewReader.GetApartmentReviewAggregateAsync(
                 apartmentItemId,
-                _loadCancellation.Token);
+                cancellationToken);
         }
-        catch (OperationCanceledException) when (_loadCancellation.IsCancellationRequested)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             _aggregate = null;
         }
@@ -71,10 +104,23 @@
                 "Failed to load aggregate review score for apartment item {ApartmentItemId}.",
                 apartmentItemId);
         }
+        finally
+        {
+            _isLoading = false;
+            Logger.LogDebug(
+                "ApartmentReviewScoreBadge timing ApartmentItemId {ApartmentItemId}: {ElapsedMilliseconds} ms",
+                ApartmentItemId,
+                stopwatch.ElapsedMilliseconds);
+            if (!_disposed)
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+        }
     }
 
     public void Dispose()
     {
+        _disposed = true;
         _loadCancellation?.Cancel();
         _loadCancellation?.Dispose();
     }

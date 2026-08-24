@@ -5,6 +5,8 @@
             <img class="images-left"
                  src="@ImagesList.First().Url"
                  alt="@MainPhotoAlt"
+                 loading="eager"
+                 fetchpriority="high"
                  @onclick="() => OpenGallery(0)">
 
             <div class="images-right">
@@ -12,12 +14,14 @@
                 {
                     <img src="@ImagesList[1].Url"
                          alt="@PhotoAltFor(1)"
+                         loading="lazy"
                          @onclick="() => OpenGallery(1)">
                 }
                 @if (ImagesList.Count > 2)
                 {
                     <img src="@ImagesList[2].Url"
                          alt="@PhotoAltFor(2)"
+                         loading="lazy"
                          @onclick="() => OpenGallery(2)">
                 }
             </div>
@@ -35,6 +39,7 @@
                     <div class="other-image">
                         <img src="@image.Url"
                              alt="@PhotoAltFor(currentIndex)"
+                             loading="lazy"
                              @onclick="() => OpenGallery(currentIndex)">
                     </div>
                     sliderIndex++;

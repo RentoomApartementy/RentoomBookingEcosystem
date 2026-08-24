@@ -1,4 +1,5 @@
 @using System.Globalization
+@using System.Diagnostics
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Models
 @using Microsoft.Extensions.Localization
@@ -7,7 +8,14 @@
 @inject IStringLocalizer<HomePage> Localizer
 @inject ILogger<OpinionsSection> Logger
 
-@if (_reviews.Count > 0)
+@if (_isLoading)
+{
+    <section class="opinions-section opinions-loading" aria-busy="true" aria-labelledby="@HeadingId">
+        <h2 class="visually-hidden" id="@HeadingId">@SectionTitle</h2>
+        <div class="opinions-loading-placeholder" aria-hidden="true"></div>
+    </section>
+}
+else if (_reviews.Count > 0)
 {
     <section class="opinions-section" aria-labelledby="@HeadingId">
         <h2 class="opinions-title" id="@HeadingId">
@@ -28,6 +36,12 @@
 @code {
     private IReadOnlyList<ApartmentReviewCardDto> _reviews = Array.Empty<ApartmentReviewCardDto>();
     private CancellationTokenSource? _loadCancellation;
+    private bool _isLoading = true;
+    private bool _loadStarted;
+    private bool _disposed;
+    private int? _lastApartmentItemId;
+    private int _lastMaximumItems;
+    private string? _lastLanguage;
 
     [Parameter] public int? ApartmentItemId { get; set; }
     [Parameter] public bool ShowApartmentName { get; set; } = true;
@@ -42,13 +56,44 @@
         ? $"apartment-opinions-{id}"
         : "home-opinions";
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
+        var language = CultureInfo.CurrentUICulture.Name;
+        if (_loadStarted &&
+            _lastApartmentItemId == ApartmentItemId &&
+            _lastMaximumItems == MaximumItems &&
+            string.Equals(_lastLanguage, language, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        _lastApartmentItemId = ApartmentItemId;
+        _lastMaximumItems = MaximumItems;
+        _lastLanguage = language;
         _loadCancellation?.Cancel();
         _loadCancellation?.Dispose();
         _loadCancellation = new CancellationTokenSource();
+        _reviews = Array.Empty<ApartmentReviewCardDto>();
+        _isLoading = true;
+        _loadStarted = false;
+    }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_loadStarted || _disposed)
+        {
+            return;
+        }
+
+        _loadStarted = true;
+        await LoadReviewsAsync();
+    }
+
+    private async Task LoadReviewsAsync()
+    {
+        var stopwatch = Stopwatch.StartNew();
         var language = CultureInfo.CurrentUICulture.Name;
+        var cancellationToken = _loadCancellation?.Token ?? CancellationToken.None;
 
         try
         {
@@ -57,12 +102,12 @@
                     apartmentItemId,
                     language,
                     limit: MaximumItems,
-                    cancellationToken: _loadCancellation.Token)
+                    cancellationToken: cancellationToken)
                 : await ReviewReader.GetLatestReviewsPerApartmentAsync(
                     language,
-                    cancellationToken: _loadCancellation.Token);
+                    cancellationToken: cancellationToken);
         }
-        catch (OperationCanceledException) when (_loadCancellation.IsCancellationRequested)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             _reviews = Array.Empty<ApartmentReviewCardDto>();
         }
@@ -75,10 +120,23 @@
                 ApartmentItemId,
                 language);
         }
+        finally
+        {
+            _isLoading = false;
+            Logger.LogDebug(
+                "OpinionsSection timing ApartmentItemId {ApartmentItemId}: {ElapsedMilliseconds} ms",
+                ApartmentItemId,
+                stopwatch.ElapsedMilliseconds);
+            if (!_disposed)
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+        }
     }
 
     public void Dispose()
     {
+        _disposed = true;
         _loadCancellation?.Cancel();
         _loadCancellation?.Dispose();
     }

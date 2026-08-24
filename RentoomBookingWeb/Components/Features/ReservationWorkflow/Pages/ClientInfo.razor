@@ -410,6 +410,9 @@
             .OrderBy(x => x.Region == "PL" ? 0 : 1)
             .ThenBy(x => x.Region)
             .ToList();
+
+        // Poland is the default country for a new client phone number.
+        _phoneCountryCode = "48";
     }
 
     private string GetFlag(string region)

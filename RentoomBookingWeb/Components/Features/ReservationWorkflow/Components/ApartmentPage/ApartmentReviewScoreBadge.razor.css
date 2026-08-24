@@ -13,6 +13,22 @@
     line-height: 1;
 }
 
+.apartment-review-score-loading {
+    background: #e6eee8;
+    animation: apartment-review-score-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes apartment-review-score-pulse {
+    0%, 100% { opacity: .7; }
+    50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .apartment-review-score-loading {
+        animation: none;
+    }
+}
+
 @media (max-width: 768px) {
     .apartment-review-score {
         width: 46px;

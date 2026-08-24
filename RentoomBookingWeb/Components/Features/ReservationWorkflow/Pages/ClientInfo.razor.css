@@ -223,6 +223,19 @@
     color: #333;
 }
 
+/* Keep the accessible label available to screen readers without affecting the control layout. */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* Dodatkowy styl pod kątem kastomowego selecta */
 .prefix-select {
     cursor: pointer;
@@ -232,13 +245,15 @@
     background-repeat: no-repeat;
     background-position-x: right;
     background-position-y: center;
-    padding-right: 18px !important; /* Robi miejsce na strzałkę */
+    padding-right: 22px !important; /* Space for the arrow */
+    min-width: 0;
+    white-space: nowrap;
 }
 
 /* Układ podziału telefonu: [Kraj] [Numer telefonu] */
 .phone-grid-container {
     display: grid;
-    grid-template-columns: 120px 1fr; /* Na desktopie select ma równo 120px */
+    grid-template-columns: 136px 1fr;
     gap: 1rem;
     width: 100%;
 }
@@ -295,7 +310,7 @@
     /* Wyjątek: Telefon zostawiamy w jednej linii, zmniejszając minimalnie selecta */
     .phone-grid-container {
         display: grid;
-        grid-template-columns: 125px 1fr; /* Select na mobile ma 100px szerokości */
+        grid-template-columns: 136px 1fr;
         gap: 0.6rem; /* Mniejszy odstęp między nimi */
     }
 
