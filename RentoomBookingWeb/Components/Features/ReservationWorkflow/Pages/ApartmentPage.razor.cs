@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -121,6 +122,13 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         private string? _seoRouteChildren;
         private bool _seoRouteShouldNoIndex;
         private VacationRentalDatedOfferInput? _seoDatedOffer;
+        private string? _cachedJsonLd;
+        private int _jsonLdVersion;
+        private int _cachedJsonLdVersion = -1;
+        private bool _deferredLoadStarted;
+        private bool _disposed;
+        private Task? _deferredLoadTask;
+        private readonly CancellationTokenSource _lifetimeCancellation = new();
 
         protected string? _pendingStartDate;
         protected string? _pendingEndDate;
@@ -712,6 +720,11 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             var apartment = _apartment;
             if (apartment == null) return new MarkupString("");
 
+            if (_cachedJsonLdVersion == _jsonLdVersion && _cachedJsonLd is not null)
+            {
+                return new MarkupString(_cachedJsonLd);
+            }
+
             var images = (_objectMediums ?? new List<ObjectMedium>())
                 .Where(medium => string.Equals(medium.Extension, "jpg", StringComparison.OrdinalIgnoreCase)
                                || string.Equals(medium.Extension, "jpeg", StringComparison.OrdinalIgnoreCase))
@@ -748,7 +761,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                         _calendarFromOffer.Children)
                 };
 
-            var json = VacationRentalJsonLdBuilder.Build(new VacationRentalJsonLdInput
+            _cachedJsonLd = VacationRentalJsonLdBuilder.Build(new VacationRentalJsonLdInput
             {
                 Apartment = apartment,
                 CanonicalUrl = GetCanonicalUrl(),
@@ -761,7 +774,52 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 DatedOffer = _seoDatedOffer
             });
 
-            return new MarkupString(json);
+            _cachedJsonLdVersion = _jsonLdVersion;
+            return new MarkupString(_cachedJsonLd);
+        }
+
+        private void InvalidateJsonLdCache()
+        {
+            _jsonLdVersion++;
+        }
+
+        private async Task TimedAsync(string operationName, Func<Task> operation)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            try
+            {
+                await operation();
+            }
+            finally
+            {
+                Logger.LogDebug(
+                    "ApartmentPage timing {Operation}: {ElapsedMilliseconds} ms",
+                    operationName,
+                    stopwatch.ElapsedMilliseconds);
+            }
+        }
+
+        private async Task RunDeferredAsync(string operationName, Func<Task> operation)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            try
+            {
+                await operation();
+            }
+            catch (OperationCanceledException) when (_lifetimeCancellation.IsCancellationRequested)
+            {
+            }
+            catch (Exception exception)
+            {
+                Logger.LogWarning(exception, "Deferred ApartmentPage operation failed: {Operation}", operationName);
+            }
+            finally
+            {
+                Logger.LogDebug(
+                    "ApartmentPage deferred timing {Operation}: {ElapsedMilliseconds} ms",
+                    operationName,
+                    stopwatch.ElapsedMilliseconds);
+            }
         }
 
         protected bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
@@ -936,21 +994,19 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             CaptureSeoRouteContext();
             _reservationTokenGuid = ReservationTokenGuid;
 
-            _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
-            await LoadSeoDatedOfferAsync();
-            await GetObjectMedia();
-            await GetApartmentSocialMedia();
-            await GetNearbyAttractions();
-
-            _ = LoadRelatedPostsInBackgroundAsync(Id, CultureInfo.CurrentUICulture.Name);
+            await TimedAsync(
+                "GetApartmentByIdAsync",
+                async () => _apartment = await ApartmentsService.GetApartmentByIdAsync(Id));
 
             if (_reservationTokenGuid.HasValue)
             {
-                await TryLoadReservationDraftAsync();
+                await TimedAsync("TryLoadReservationDraftAsync", TryLoadReservationDraftAsync);
             }
 
             if (_apartment != null)
             {
+                InvalidateJsonLdCache();
+
                 WorkflowTelemetry.TrackEvent(
                     "ApartmentDetailViewed",
                     new Dictionary<string, string?>
@@ -964,47 +1020,21 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                         ["Children"] = Children
                     });
 
-                await GetObjectDescription(_apartment.Id, CurrentLanguage);
+                var apartmentId = _apartment.Id;
+                await Task.WhenAll(
+                    TimedAsync("GetObjectMedia", GetObjectMedia),
+                    TimedAsync(
+                        "GetObjectDescription",
+                        () => GetObjectDescription(apartmentId, CurrentLanguage)),
+                    TimedAsync(
+                        "GetAmenities",
+                        async () => _amenities = await GetAmenities(apartmentId)));
 
-                try
-                {
-                    _aiDescription = await AiDescriptionService.GetActiveDescriptionAsync(_apartment.Id, CultureInfo.CurrentUICulture.Name);
-                    if (_aiDescription != null)
-                    {
-                        Console.WriteLine($"[AI-Description] SUCCESS: Found AI description for ApartmentId: {_apartment.Id}, Language: {CultureInfo.CurrentUICulture.Name}, Variant: {_aiDescription.VariantType}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[AI-Description] INFO: No AI description found for ApartmentId: {_apartment.Id}, Language: {CultureInfo.CurrentUICulture.Name}. Using IdoBooking fallback.");
-                       
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[AI-Description] ERROR: Exception while fetching AI description: {ex.Message}");
-                }
-
-                _amenities = await GetAmenities(_apartment.Id);
-                try
-                {
-                    _seoAmenities = await GetAmenities(_apartment.Id, "eng");
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogWarning(ex, "Failed to load English JSON-LD amenities for apartment {ApartmentId}.", _apartment.Id);
-                    _seoAmenities = _amenities;
-                }
+                InvalidateJsonLdCache();
                 _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
-
-                _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
-                InitializeMandatoryAddons();
-                UpdateReservationPricingContext();
-                RefreshAddonsParams();
-                await LoadUpsellsAsync();
-
             }
 
-            await GetOffer();
+            await TimedAsync("GetOffer", GetOffer);
 
             // Route ma już daty/gości — pokaż od razu ten sam wynik w kompaktowym panelu pod kalendarzem,
             // bez drugiego zapytania do API (te same parametry co CurrentRequest powyżej).
@@ -1017,8 +1047,6 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 _pendingOffersResponse = _offersResponse;
                 _pendingSelectedOfferType = _selectedOfferType;
             }
-
-            await RecalculateActiveBonusPreviewAsync();
 
             UpsellTexts = new UpsellTextConfig()
             {
@@ -1038,6 +1066,68 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 PriceLabel = UpsellLocalizer["Price"],
                 Currency = CurrencyLocalizer["PLN"],
             };
+        }
+
+        private Task LoadDeferredApartmentDataAsync()
+        {
+            if (_apartment is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            var apartmentId = _apartment.Id;
+            var culture = CultureInfo.CurrentUICulture.Name;
+
+            return LoadDeferredApartmentDataCoreAsync(apartmentId, culture);
+        }
+
+        private async Task LoadDeferredApartmentDataCoreAsync(int apartmentId, string culture)
+        {
+            await Task.WhenAll(
+                RunDeferredAsync("LoadSeoDatedOfferAsync", LoadSeoDatedOfferAsync),
+                RunDeferredAsync("GetApartmentSocialMedia", GetApartmentSocialMedia),
+                RunDeferredAsync("GetNearbyAttractions", GetNearbyAttractions),
+                RunDeferredAsync(
+                    "GetActiveDescriptionAsync",
+                    async () => _aiDescription = await AiDescriptionService.GetActiveDescriptionAsync(apartmentId, culture)),
+                RunDeferredAsync(
+                    "GetSeoAmenities",
+                    async () => _seoAmenities = await GetAmenities(apartmentId, "eng")),
+                RunDeferredAsync(
+                    "LoadRelatedPosts",
+                    () => LoadRelatedPostsInBackgroundAsync(apartmentId, culture)));
+
+            if (_disposed || _lifetimeCancellation.IsCancellationRequested)
+            {
+                return;
+            }
+
+            InvalidateJsonLdCache();
+            await InvokeAsync(StateHasChanged);
+        }
+
+        private async Task LoadDeferredBookingDataAsync()
+        {
+            if (_apartment is null)
+            {
+                return;
+            }
+
+            await RunDeferredAsync(
+                "LoadBookingExtras",
+                async () =>
+                {
+                    _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
+                    InitializeMandatoryAddons();
+                    UpdateReservationPricingContext();
+                    RefreshAddonsParams();
+                    await LoadUpsellsAsync();
+                });
+
+            if (!_disposed && !_lifetimeCancellation.IsCancellationRequested)
+            {
+                await InvokeAsync(StateHasChanged);
+            }
         }
 
         private async Task TryLoadReservationDraftAsync()
@@ -1090,6 +1180,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         private bool _googlePageViewTracked = false;
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            if (firstRender && !_deferredLoadStarted && _apartment is not null)
+            {
+                _deferredLoadStarted = true;
+                _deferredLoadTask = Task.WhenAll(
+                    RunDeferredAsync("LoadDeferredApartmentData", LoadDeferredApartmentDataAsync),
+                    RunDeferredAsync("LoadDeferredBookingData", LoadDeferredBookingDataAsync));
+            }
+
             if (!_observerInitialized)
             {
                 _observerInitialized = true;
@@ -1912,6 +2010,9 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         public void Dispose()
         {
+            _disposed = true;
+            _lifetimeCancellation.Cancel();
+            _lifetimeCancellation.Dispose();
             _scrollObjRef?.Dispose();
         }
     }
