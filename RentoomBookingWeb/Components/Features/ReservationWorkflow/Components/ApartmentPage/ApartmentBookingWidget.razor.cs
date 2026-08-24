@@ -485,6 +485,33 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             await NotifyRangeAsync();
         }
 
+        public async Task SelectNearestAvailableTermAsync()
+        {
+            if (_calendar is null)
+            {
+                return;
+            }
+
+            var lastCheckout = LastVisibleDay().AddDays(1);
+            for (var start = _today; start < lastCheckout; start = start.AddDays(1))
+            {
+                if (!IsAvailable(start))
+                {
+                    continue;
+                }
+
+                var end = start.AddDays(MinStayFor(start));
+                if (end <= lastCheckout && IsRangeAllNightsAvailable(start, end))
+                {
+                    _dateNotice = null;
+                    _selStart = start;
+                    _selEnd = end;
+                    await NotifyRangeAsync();
+                    return;
+                }
+            }
+        }
+
         private bool HasCompleteRange => _selStart is not null && _selEnd is not null;
 
         private async Task NotifyRangeAsync()

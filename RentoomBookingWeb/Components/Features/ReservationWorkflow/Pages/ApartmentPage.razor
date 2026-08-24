@@ -93,6 +93,7 @@
                     }
                 </div>
                 <ApartmentBookingWidget
+                    @ref="_bookingWidget"
                     Apartment="_apartment"
                     StartDate="@StartDate"
                     EndDate="@EndDate"
@@ -122,6 +123,12 @@
                             OnBookNow="ConfirmPendingBooking"
                             Layout="Vertical"/> @*Można tez zrobić "Horizontal" (w dwóch kolumnach obok siebie) - narazie na testy bo niedokończony*@
                     </div>
+                }
+                else
+                {
+                    <ApartmentOfferPlaceholder
+                        Localizer="Localizer"
+                        OnSelectDates="SelectNearestAvailableTerm" />
                 }
             </div>
 

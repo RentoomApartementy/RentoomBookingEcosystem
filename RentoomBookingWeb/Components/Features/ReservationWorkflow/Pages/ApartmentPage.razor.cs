@@ -27,6 +27,7 @@ using RentoomBooking.SharedClasses.Services.Seo;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBookingWeb.Components.Enums;
+using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage;
 using RentoomBookingWeb.Helpers;
 using RentoomBookingWeb.Services;
 using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents;
@@ -132,6 +133,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected string? _pendingStartDate;
         protected string? _pendingEndDate;
+        private ApartmentBookingWidget? _bookingWidget;
         protected string? _pendingAdults;
         protected string? _pendingChildren;
         protected PricingOffersResponse? _pendingOffersResponse;
@@ -1620,6 +1622,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected void SelectSuggestionDate(AvailableTerm term)
         {
             _selectedSuggestionDate = term;
+        }
+
+        private async Task SelectNearestAvailableTerm()
+        {
+            if (_bookingWidget is not null)
+            {
+                await _bookingWidget.SelectNearestAvailableTermAsync();
+            }
         }
 
         protected static string FormatSuggestionDateRange(AvailableTerm term)
