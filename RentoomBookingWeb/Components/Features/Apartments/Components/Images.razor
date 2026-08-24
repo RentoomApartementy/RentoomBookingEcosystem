@@ -12,14 +12,14 @@
             <div class="images-right">
                 @if (ImagesList.Count > 1)
                 {
-                    <img src="@ImagesList[1].Url"
+                    <img src="@GalleryPreviewUrl(1)"
                          alt="@PhotoAltFor(1)"
                          loading="lazy"
                          @onclick="() => OpenGallery(1)">
                 }
                 @if (ImagesList.Count > 2)
                 {
-                    <img src="@ImagesList[2].Url"
+                    <img src="@GalleryPreviewUrl(2)"
                          alt="@PhotoAltFor(2)"
                          loading="lazy"
                          @onclick="() => OpenGallery(2)">
@@ -37,7 +37,7 @@
                 {
                     var currentIndex = sliderIndex;
                     <div class="other-image">
-                        <img src="@image.Url"
+                        <img src="@GalleryPreviewUrl(currentIndex)"
                              alt="@PhotoAltFor(currentIndex)"
                              loading="lazy"
                              @onclick="() => OpenGallery(currentIndex)">
@@ -85,7 +85,7 @@ else
                 @for (int i = 0; i < ImagesList.Count; i++)
                 {
                     var index = i;
-                    <img src="@ImagesList[i].Url" 
+                    <img src="@GalleryPreviewUrl(i)"
                           class="@(index == _currentImageIndex ? "thumbnail-image active" : "thumbnail-image")"
                           @onclick="() => SelectImage(index)"
                           alt="@PhotoAltFor(i)" />
