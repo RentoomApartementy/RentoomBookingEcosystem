@@ -199,7 +199,7 @@ public static class VacationRentalJsonLdBuilder
         if (checkoutTime is not null) rental["checkoutTime"] = checkoutTime;
 
         var offers = BuildOffers(input, canonicalUrl, accommodationId, checkinTime, checkoutTime);
-        AddIfNotEmpty(rental, "makesOffer", offers);
+        //AddIfNotEmpty(rental, "makesOffer", offers); //<<-- usunięte bo powoduje błedy w konsoli. do sprawdzenia głębiej bo się nie zgadzają wartości zgodnie ze schema
 
         RemoveNullAndEmptyValues(rental);
         RemoveNullAndEmptyValues(accommodation);
@@ -326,8 +326,8 @@ public static class VacationRentalJsonLdBuilder
     private static (string? CheckinTime, string? CheckoutTime) GetCheckTimes(ApartmentObject apartment)
     {
         var location = apartment.ObjectLocation?.LocalizationItem;
-        var checkin = TryNormalizeTime(location?.CheckInHours?.From, out var checkinValue) ? checkinValue : null;
-        var checkout = TryNormalizeTime(location?.CheckOutHours?.To, out var checkoutValue) ? checkoutValue : null;
+        var checkin = "15:00:00";//TryNormalizeTime(location?.CheckInHours?.From, out var checkinValue) ? checkinValue : null;
+        var checkout = "11:00:00"; //TryNormalizeTime(location?.CheckOutHours?.To, out var checkoutValue) ? checkoutValue : null;
         return (checkin, checkout);
     }
 
