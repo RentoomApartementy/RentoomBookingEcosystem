@@ -51,6 +51,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] public IJSRuntime JSRuntime { get; set; } = default!;
         [Inject] public IAvailabilityFinderService2 AvailabilityFinder { get; set; } = default!;
         [Inject] public NavigationManager NavManager { get; set; } = default!;
+        [Inject] public ISiteBaseProvider SiteBase { get; set; } = default!;
         [Inject] public ReservationWorkflowTelemetry WorkflowTelemetry { get; set; } = default!;
         [Inject] internal IStringLocalizer<Apartment> Localizer { get; set; } = default!;
         [Inject] internal IStringLocalizer<Upsell> UpsellLocalizer { get; set; } = default!;
@@ -687,7 +688,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             {
                 return img;
             }
-            return $"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg";
+            return SiteBase.GetAbsoluteUrl("/assets/images/header-bg-contact.jpeg");
         }
 
         protected string GetSeoImageAlt()
@@ -714,7 +715,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             var slug = !string.IsNullOrWhiteSpace(_apartment?.Name)
                 ? _apartment.Name.ToSlug()
                 : Slug;
-            return $"{NavManager.BaseUri.TrimEnd('/')}{localizedBase}/{Id}/{slug}";
+            return SiteBase.GetAbsoluteUrl($"{localizedBase}/{Id}/{slug}");
         }
 
         protected MarkupString GetJsonLd()

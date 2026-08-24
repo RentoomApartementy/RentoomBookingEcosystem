@@ -1,32 +1,42 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
 
 namespace RentoomBookingWeb.Services
 {
-    //aby uzyskac podstawowy URI strony dla Tpay (bo w settings dla tpay jest tylko relaetive path dla successurl i errorurl itp.. )
+    // Provides the configured public site origin for payment and SEO URLs.
     public interface ISiteBaseProvider
     {
         Uri GetBaseUri();
+        string GetAbsoluteUrl(string path);
     }
 
     public sealed class SiteBaseProvider : ISiteBaseProvider
     {
-        private readonly NavigationManager _nav;
-        private readonly IHttpContextAccessor _hca;
+        private const string DefaultSiteBaseUrl = "https://rentoom.pl";
+        private readonly Uri _baseUri;
 
-        public SiteBaseProvider(NavigationManager nav, IHttpContextAccessor hca)
+        public SiteBaseProvider(IConfiguration configuration)
         {
-            _nav = nav;
-            _hca = hca;
+            var configuredBaseUrl = configuration["RentoomSiteBaseUrl"];
+            if (!Uri.TryCreate(configuredBaseUrl, UriKind.Absolute, out var configuredUri)
+                || (configuredUri.Scheme != Uri.UriSchemeHttp && configuredUri.Scheme != Uri.UriSchemeHttps))
+            {
+                configuredUri = new Uri(DefaultSiteBaseUrl);
+            }
+
+            _baseUri = new Uri(configuredUri.GetLeftPart(UriPartial.Authority).TrimEnd('/'));
         }
 
-        public Uri GetBaseUri()
-        {
-            var ctx = _hca.HttpContext;
-            if (ctx != null)
-                return new Uri($"{ctx.Request.Scheme}://{ctx.Request.Host}{ctx.Request.PathBase}");
+        public Uri GetBaseUri() => _baseUri;
 
-            // works during Blazor interactive flow when HttpContext may be null
-            return new Uri(_nav.BaseUri);
+        public string GetAbsoluteUrl(string path)
+        {
+            if (Uri.TryCreate(path, UriKind.Absolute, out var absoluteUri)
+                && (absoluteUri.Scheme == Uri.UriSchemeHttp || absoluteUri.Scheme == Uri.UriSchemeHttps))
+            {
+                return absoluteUri.AbsoluteUri;
+            }
+
+            return new Uri(_baseUri, path.TrimStart('/')).AbsoluteUri;
         }
     }
 }

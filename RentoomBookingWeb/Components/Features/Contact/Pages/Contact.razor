@@ -7,6 +7,7 @@
 @inject IStringLocalizer<RentoomBookingWeb.Contact> Localizer;
 @inject BitrixLeadCaptureService LeadCaptureService
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 
 <PageTitle>@Localizer["Contact_PageTitle"]</PageTitle>
 
@@ -14,13 +15,13 @@
     <meta name="robots" content="index, follow" />
     <meta name="description" content="@Localizer["Contact_MetaDescription"]" />
     <meta name="keywords" content="@Localizer["Contact_MetaKeywords"]" />
-    <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Contact")}")" />
+    <link rel="canonical" href="@SiteBase.GetAbsoluteUrl(RouteService.GetLocalizedUrl("Contact"))" />
 
     <meta property="og:title" content="@Localizer["Contact_OgTitle"]" />
     <meta property="og:description" content="@Localizer["Contact_OgDescription"]" />
-    <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg")" />
+    <meta property="og:image" content="@SiteBase.GetAbsoluteUrl("/assets/images/header-bg-contact.jpeg")" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Contact")}")" />
+    <meta property="og:url" content="@SiteBase.GetAbsoluteUrl(RouteService.GetLocalizedUrl("Contact"))" />
     <BreadcrumbJsonLd CurrentPageName="@Localizer["ContactText"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Contact")" />
     <SeoHreflangs />
 </HeadContent>

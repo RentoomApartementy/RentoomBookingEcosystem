@@ -10,6 +10,7 @@
 @inject NavigationManager NavManager
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
 @inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 
 <PageTitle>@(Post?.MetaTitle ?? Post?.Title ?? "Blog")</PageTitle>
 
@@ -26,7 +27,7 @@
         <meta property="og:title" content="@(Post.MetaTitle ?? Post.Title)" />
         <meta property="og:description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.Category, Post.Slug)}")" />
+        <meta property="og:url" content="@SiteBase.GetAbsoluteUrl(BuildPostUrl(Post.Category, Post.Slug))" />
         @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
         {
             <meta property="og:image" content="@Post.HeroImageUrl" />
@@ -69,7 +70,7 @@
         }
         @if (!Post.IsPreview)
         {
-            <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.Category, Post.Slug)}")" />
+            <link rel="canonical" href="@SiteBase.GetAbsoluteUrl(BuildPostUrl(Post.Category, Post.Slug))" />
             <SeoHreflangs />
         }
     </HeadContent>

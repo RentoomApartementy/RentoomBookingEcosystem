@@ -6,6 +6,7 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<SharedResources> Localizer
 @inject IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 
 @if (!string.IsNullOrWhiteSpace(JsonLd))
 {
@@ -109,11 +110,11 @@
 
         try
         {
-            return Navigation.ToAbsoluteUri(path).AbsoluteUri;
+            return SiteBase.GetAbsoluteUrl(path);
         }
         catch
         {
-            return $"{Navigation.BaseUri.TrimEnd('/')}/{path.TrimStart('/')}";
+            return SiteBase.GetAbsoluteUrl(path);
         }
     }
 }

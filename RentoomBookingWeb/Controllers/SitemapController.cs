@@ -23,25 +23,28 @@ namespace RentoomBookingWeb.Controllers
         private readonly IRouteLocalizationService _routeService;
         private readonly IBlogContentReader _blogContentReader;
         private readonly FeatureFlagsService _featureFlags;
+        private readonly ISiteBaseProvider _siteBaseProvider;
 
         public SitemapController(
             IApartmentsService apartmentsService, 
             IIdoApartmentService idoApartmentService,
             IRouteLocalizationService routeService,
             IBlogContentReader blogContentReader,
-            FeatureFlagsService featureFlags)
+            FeatureFlagsService featureFlags,
+            ISiteBaseProvider siteBaseProvider)
         {
             _apartmentsService = apartmentsService;
             _idoApartmentService = idoApartmentService;
             _routeService = routeService;
             _blogContentReader = blogContentReader;
             _featureFlags = featureFlags;
+            _siteBaseProvider = siteBaseProvider;
         }
 
         [Route("sitemap.xml")]
         public IActionResult GetSitemapIndex()
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+            var baseUrl = _siteBaseProvider.GetBaseUri().GetLeftPart(UriPartial.Authority).TrimEnd('/');
             XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
 
             var cultures = SupportedLanguagesProvider.SupportedCultureNames;
@@ -89,7 +92,7 @@ namespace RentoomBookingWeb.Controllers
                 staticPageKeys.Add("BlogList");
             }
 
-            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+            var baseUrl = _siteBaseProvider.GetBaseUri().GetLeftPart(UriPartial.Authority).TrimEnd('/');
             XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
             XNamespace xhtml = "http://www.w3.org/1999/xhtml";
 
@@ -210,7 +213,7 @@ namespace RentoomBookingWeb.Controllers
         {
             var result = await _apartmentsService.GetAllApartmentsList();
             var apartments = result?.Items ?? new List<ApartmentObject>();
-            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+            var baseUrl = _siteBaseProvider.GetBaseUri().GetLeftPart(UriPartial.Authority).TrimEnd('/');
 
             var sb = new StringBuilder();
             sb.AppendLine("# Rentoom - Apartamenty w Toruniu");

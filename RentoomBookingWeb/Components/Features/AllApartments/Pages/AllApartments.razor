@@ -7,6 +7,7 @@
 @inject IApartmentsService ApartmentsService
 @inject NavigationManager Navigation
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
 
@@ -85,7 +86,7 @@
 </div>
 
 @code {
-    private string CanonicalUrl => $"{Navigation.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("AllApartments")}";
+    private string CanonicalUrl => SiteBase.GetAbsoluteUrl(RouteService.GetLocalizedUrl("AllApartments"));
     private List<ApartmentObject> _apartments = new();
     private bool _isLoading = true;
     private string _searchText = string.Empty;

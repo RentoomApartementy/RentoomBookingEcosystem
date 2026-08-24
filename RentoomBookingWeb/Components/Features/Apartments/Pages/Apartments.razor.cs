@@ -156,7 +156,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
 
         private string GetSeoImage()
         {
-            return $"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg";
+            return SiteBase.GetAbsoluteUrl("/assets/images/header-bg-contact.jpeg");
         }
     }
     

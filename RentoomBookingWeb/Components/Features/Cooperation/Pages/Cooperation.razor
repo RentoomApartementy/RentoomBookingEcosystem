@@ -7,6 +7,7 @@
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
 @inject IStringLocalizer<RentoomBookingWeb.HomePage> HomeLocalizer;
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.ISiteBaseProvider SiteBase
 
 @{
     var normalizedVersion = Version?.Trim().ToLowerInvariant();
@@ -31,13 +32,13 @@ else
         <meta name="robots" content="index, follow" />
         <meta name="description" content="@metaDesc" />
         <meta name="keywords" content="@Localizer["Cooperation_MetaKeywords"]" />
-        <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{currentPagePath}")" />
+        <link rel="canonical" href="@SiteBase.GetAbsoluteUrl(currentPagePath)" />
 
         <meta property="og:title" content="@ogTitle" />
         <meta property="og:description" content="@metaDesc" />
-        <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-coop.jpeg")" />
+        <meta property="og:image" content="@SiteBase.GetAbsoluteUrl("/assets/images/header-bg-coop.jpeg")" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{currentPagePath}")" />
+        <meta property="og:url" content="@SiteBase.GetAbsoluteUrl(currentPagePath)" />
         <BreadcrumbJsonLd CurrentPageName="@Localizer["Cooperation_BreadcrumbName"]" CurrentPagePath="@currentPagePath" />
         <script type="application/ld+json">
             @((MarkupString)CooperationOrganizationJsonLd)
@@ -74,15 +75,15 @@ else
     {
         ["@context"] = "https://schema.org",
         ["@type"] = "Organization",
-        ["@id"] = "https://rentoom.pl/#organization",
+        ["@id"] = SiteBase.GetAbsoluteUrl("/#organization"),
         ["name"] = "Rentoom",
         ["legalName"] = "Rentoom Apartamenty sp. z o.o.",
         ["alternateName"] = "Rentoom Apartamenty",
-        ["url"] = "https://rentoom.pl/",
+        ["url"] = SiteBase.GetAbsoluteUrl("/"),
         ["logo"] = new Dictionary<string, object>
         {
             ["@type"] = "ImageObject",
-            ["url"] = "https://rentoom.pl/assets/images/logo-nowe-Rentoom-final-158x112.png"
+            ["url"] = SiteBase.GetAbsoluteUrl("/assets/images/logo-nowe-Rentoom-final-158x112.png")
         },
         ["description"] = HomeLocalizer["Home_OrganizationDescription"].Value,
         ["email"] = "info@rentoom.pl",
