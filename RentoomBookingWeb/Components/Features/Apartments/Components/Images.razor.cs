@@ -36,6 +36,17 @@ public partial class Images : ComponentBase, IAsyncDisposable
         }
     }
 
+    private string? GalleryPreviewUrl(int index)
+    {
+        if (ImagesList is null || index < 0 || index >= ImagesList.Count)
+        {
+            return null;
+        }
+
+        var image = ImagesList[index];
+        return string.IsNullOrWhiteSpace(image.CardUrl) ? image.Url : image.CardUrl;
+    }
+
     private bool _isModalOpen = false;
     private bool _wasModalOpen = false;
     private int _currentImageIndex = 0;

@@ -1,18 +1,30 @@
-<section class="header-section @(HasImage ? "" : "skeleton-bg") @(IsShadow ? "header-shadow" : "")"
+<section class="header-section @(HasImage ? "" : "skeleton-bg") @(IsShadow ? "header-shadow" : "") @(RenderPriorityImage ? "header-section--priority-image" : "")"
          style="@BackgroundStyle"
          aria-label="@Title">
-    @if (HeadingLevel == 1)
+    @if (RenderPriorityImage)
     {
-        <h1>@Title</h1>
+        <img class="header-section__image"
+             src="@ImagePath"
+             alt=""
+             aria-hidden="true"
+             loading="eager"
+             fetchpriority="high" />
     }
-    else if (HeadingLevel == 2)
-    {
-        <h2>@Title</h2>
-    }
-    else
-    {
-        <div class="h1-style">@Title</div>
-    }
+
+    <div class="header-section__content">
+        @if (HeadingLevel == 1)
+        {
+            <h1>@Title</h1>
+        }
+        else if (HeadingLevel == 2)
+        {
+            <h2>@Title</h2>
+        }
+        else
+        {
+            <div class="h1-style">@Title</div>
+        }
+    </div>
 </section>
 
 @code {
@@ -21,11 +33,13 @@
     [Parameter] public string Height { get; set; } = "250px";
     [Parameter] public bool IsShadow { get; set; } = false;
     [Parameter] public int HeadingLevel { get; set; } = 1;
+    [Parameter] public bool UsePriorityImage { get; set; }
 
     private bool HasImage => !string.IsNullOrWhiteSpace(ImagePath);
+    private bool RenderPriorityImage => UsePriorityImage && HasImage;
 
     private string BackgroundStyle =>
-        (HasImage
+        (HasImage && !RenderPriorityImage
             ? $"background-image: url('{ImagePath}'); "
             : "") +
         "background-repeat: no-repeat; " +
