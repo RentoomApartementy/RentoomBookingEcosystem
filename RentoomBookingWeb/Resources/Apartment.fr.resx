@@ -561,4 +561,7 @@
   <data name="ApartmentReviewAverageLabel" xml:space="preserve">
     <value>Note moyenne des invités : {0} par {1}</value>
   </data>
+  <data name="CalendarLoadingAvailability" xml:space="preserve">
+    <value>Je vérifie la disponibilité...</value>
+  </data>
 </root>

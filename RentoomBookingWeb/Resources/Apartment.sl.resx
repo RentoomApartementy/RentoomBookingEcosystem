@@ -561,4 +561,7 @@
   <data name="ApartmentReviewAverageLabel" xml:space="preserve">
     <value>Povprečna ocena gostov: {0} na {1}</value>
   </data>
+  <data name="CalendarLoadingAvailability" xml:space="preserve">
+    <value>Preverjam razpoložljivost...</value>
+  </data>
 </root>
