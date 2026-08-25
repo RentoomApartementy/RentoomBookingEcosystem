@@ -74,4 +74,10 @@
   <data name="Statute" xml:space="preserve">
     <value>Taisyklės ir sąlygos</value>
   </data>
+  <data name="BlogList" xml:space="preserve">
+    <value>Tinklaraštis</value>
+  </data>
+  <data name="BlogPost" xml:space="preserve">
+    <value>Tinklaraštis</value>
+  </data>
 </root>

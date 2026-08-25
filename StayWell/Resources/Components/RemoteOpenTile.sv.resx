@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Fjärröppning av dörren</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Kontrollerar låstillgänglighet...</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Din bokning har avslutats. Fjärröppning är inte längre möjlig.</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Fjärröppning kommer att vara möjlig från {0} på incheckningsdagen.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Bearbetning</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Öppna dörrar</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Tryck för att öppna</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Fjärröppning är för närvarande otillgänglig.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Försök igen</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Försök igen i {0}</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Felöppning</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Fel vid avstängning</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Serveranslutningsfel</value>
+  </data>
+</root>

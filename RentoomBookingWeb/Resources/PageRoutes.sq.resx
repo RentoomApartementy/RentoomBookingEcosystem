@@ -74,4 +74,10 @@
   <data name="Statute" xml:space="preserve">
     <value>Termat dhe Kushtet</value>
   </data>
+  <data name="BlogList" xml:space="preserve">
+    <value>Blogu</value>
+  </data>
+  <data name="BlogPost" xml:space="preserve">
+    <value>Blogu</value>
+  </data>
 </root>

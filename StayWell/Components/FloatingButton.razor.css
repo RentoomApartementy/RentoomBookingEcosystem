@@ -46,3 +46,22 @@
     pointer-events: none;
     filter: grayscale(0.5);
 }
+
+.fab-button.is-loading {
+    cursor: progress;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner--small {
+    width: 22px;
+    height: 22px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-left-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}

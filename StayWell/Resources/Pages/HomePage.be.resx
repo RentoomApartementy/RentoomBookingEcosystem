@@ -149,7 +149,7 @@
     <value>Дом</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Інструкцыі па рэгістрацыі</value>
+    <value>Уваходзь у будынак</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Інструкцыі</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Вазок</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Гэта браніраванне скончылася</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Тваё знаходжанне скончылася. Спадзяёмся, што ўсё прайшло паспяхова — запрашаем вас зноў забраніраваць у Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Пераклады генеруюцца аўтаматычна і могуць утрымліваць памылкі. Мы заклікаем вас паведаміць пра гэта.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Рэгіструйся</value>
   </data>
 </root>

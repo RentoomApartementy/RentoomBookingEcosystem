@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Dein Wohnungscode</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Bestätigen</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>oder</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Kein Code für das Schloss. Kontaktieren Sie den Support!</value>
+  </data>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Ihr Code ist am Tag des Check-ins von {0} verfügbar.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Ihre Buchung ist beendet. Der Passcode ist nicht mehr verfügbar.</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Neuen Code generieren</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Neuer Code für {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Erzeugung... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Wichtig: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Gültig von: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Gültig bis: {0}</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Frühere Codes</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Ursprünglicher Code</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Ein neuer Passcode wurde erfolgreich generiert.</value>
+  </data>
+</root>

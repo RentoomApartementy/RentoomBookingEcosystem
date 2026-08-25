@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Cód d'árasán</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Deimhnigh</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>nó</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Níl aon chód don ghlas. Déan teagmháil leis an tacaíocht!</value>
+  </data>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Beidh do chód ar fáil ó {0} ar lá na seiceála isteach.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Tá d'áirithint críochnaithe. Níl an paschód ar fáil a thuilleadh.</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Cruthaigh Cód Nua</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Cód nua le haghaidh {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Á ghiniúint... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Tábhachtach: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Bailí ó: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Bailí go dtí: {0}</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Cóid roimhe seo</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Cód bunaidh</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Gineadh paschód nua go rathúil.</value>
+  </data>
+</root>

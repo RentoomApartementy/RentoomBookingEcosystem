@@ -149,7 +149,7 @@
     <value>Начало</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Инструкции за регистрация</value>
+    <value>Влез в сградата</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Инструкции</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Количка</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Тази резервация е изтекла</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Престоят ти свърши. Надяваме се да е бил успешен — каним ви да резервирате отново в Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Преводите се генерират автоматично и могат да съдържат грешки. Насърчаваме ви да ги докладвате.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Регистриране</value>
   </data>
 </root>

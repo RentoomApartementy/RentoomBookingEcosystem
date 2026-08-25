@@ -15,6 +15,7 @@
 @inject LayoutState LayoutState
 @inject IJSRuntime JSRuntime
 @inject FeatureFlagsService FeatureFlagsService
+@inject NavigationManager Navigation
 
 <div class="layout-page @(HasEnvironmentBanner ? "layout-page--has-environment-banner" : string.Empty)">
     <EnvironmentBanner EnvironmentName="@BannerEnvironmentName" />
@@ -27,9 +28,15 @@
         </div>
     }
     <div class="layout-body" id="main-body">
-        @Body
+        <div class="content-gate@(LayoutState.IsContentReady ? string.Empty : " content-gate--hidden")">
+            @Body
+        </div>
+        @if (!LayoutState.IsContentReady)
+        {
+            <FullPageLoader />
+        }
     </div>
-    @if (LayoutState.ShowFooter)
+    @if (LayoutState.ShowFooter && LayoutState.IsContentReady)
     {
         <div class="layout-footer-nav">
             <FooterNavigation />
@@ -54,6 +61,7 @@
     private string _modalTitle = string.Empty;
     private RenderFragment? _modalContent;
     private Toast? _toastComponent;
+    private bool _bootLoaderHidden = false;
     private string BannerEnvironmentName => FeatureFlagsService.CurrentEnvironmentName;
     private bool HasEnvironmentBanner => EnvironmentBannerState.ShouldDisplay(BannerEnvironmentName);
 
@@ -62,6 +70,15 @@
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("initHeaderScroll", "main-body", "main-header");
+            // WASM zbootowany — boot loader przechodzi z paska postępu w fazę pulsowania (ładowanie danych).
+            await JSRuntime.InvokeVoidAsync("bootLoader.dataPhase");
+        }
+
+        // Pierwsze IsContentReady = treść jest już wyrenderowana pod overlayem — można go płynnie zdjąć.
+        if (!_bootLoaderHidden && LayoutState.IsContentReady)
+        {
+            _bootLoaderHidden = true;
+            await JSRuntime.InvokeVoidAsync("bootLoader.hide");
         }
     }
 
@@ -84,7 +101,26 @@
         ToastService.OnShow += ShowToast;
         ToastService.OnHide += HideToast;
 
+        Navigation.LocationChanged += OnLocationChanged;
+        _lastLocation = Navigation.Uri;
+
         InvokeAsync(StateHasChanged);
+    }
+
+    private string? _lastLocation;
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        // Ponowny klik w link na biezacy adres nie moze zrzucac scrolla na gore
+        // (np. drugi klik w ten sam przycisk stopki podczas dojazdu do sekcji).
+        if (string.Equals(e.Location, _lastLocation, StringComparison.Ordinal))
+            return;
+        _lastLocation = e.Location;
+
+        InvokeAsync(async () =>
+        {
+            await JSRuntime.InvokeVoidAsync("scrollContainerToTop", "main-body");
+        });
     }
 
     private void ShowModal(string title, RenderFragment? content, ModalVariant variant)
@@ -116,6 +152,7 @@
 
     public async ValueTask DisposeAsync()
     {
+        Navigation.LocationChanged -= OnLocationChanged;
         await JSRuntime.InvokeVoidAsync("removeHeaderScroll", "main-body");
         ReservationState.OnChange -= StateHasChanged;
         MediaState.OnChange -= StateHasChanged;

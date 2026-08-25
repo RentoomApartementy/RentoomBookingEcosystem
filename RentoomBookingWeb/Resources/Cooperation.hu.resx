@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kapcsolat</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Bérleti menedzsment toruń, lakásszolgáltatás, karbantartásmentes befektetés, rentoom együttműködés, bérleti nyereség optimalizálása, rövid távú bérleti torú</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Alakítsa át lakását karbantartásmentes befektetésré a Rentoom-ommal. Átfogó bérleti menedzsmentet kínálunk Toruńban, jövedelmi optimalizálást és 24/7 vendégkiszolgálást. Fogadj a minőségre és a tapasztalatra.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Együttműködés - Rentoom | Professzionális bérleti menedzsment</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Együttműködés</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Mi vagyunk a piacvezető Toruńban. Teljes körű szolgáltatást, innovatív technológiákat és a profitod maximalizálását kínáljuk. Nyugodj meg, dolgozunk neked.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Együttműködés - Rentoom | Bérleményi Menedzsment Toruń</value>
+  </data>
 </root>

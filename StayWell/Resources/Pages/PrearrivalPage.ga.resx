@@ -337,4 +337,7 @@ Tá rialacháin cíosa i mBéarla ar fáil ag www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Téarmaí agus Coinníollacha agus Toilithe</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Rialacháin um Fanacht</value>
+  </data>
 </root>

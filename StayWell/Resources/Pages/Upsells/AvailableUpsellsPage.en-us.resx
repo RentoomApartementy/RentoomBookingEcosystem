@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="UpsellsListSubtitle" xml:space="preserve">
+    <value>Available add-ons for purchase</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Vouchers</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="UpsellsListTitle" xml:space="preserve">
+    <value>Vouchers</value>
+  </data>
+  <data name="NoAvailableUpsells" xml:space="preserve">
+    <value>No add-ons available</value>
+  </data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>one-time</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>pers./day</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>View Details</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Valid from</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Valid for the entire stay. Required to show code at redemption.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Valid for</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>Stay</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Nights</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR not available</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Voucher Redemption</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Enlarge</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>apt./day</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Terms and Conditions</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>QR voucher code</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>Available add-ons for purchase</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Used</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Show this code to the staff to redeem your voucher.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>Your code</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Show in restaurant</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Vouchers</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>Code to be entered manually</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>guests</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Show voucher code</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>No limit</value>
+  </data>
+  <data name="AddButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="DeleteButtonText" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+</root>

@@ -1,0 +1,290 @@
+@page "/reservation/{token}/CheckIn"
+@using RentoomBooking.StayWell.Components
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions
+@using Microsoft.Extensions.Localization
+@using Microsoft.JSInterop
+@using RentoomBooking.StayWell.Services
+
+@inject IStringLocalizer<CheckInPage> Localizer
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@inject FeatureFlagsService FeatureFlagsService
+
+@inherits Models.PageBase
+@implements IAsyncDisposable
+
+<PageTitle>@Localizer["PageTitle"]</PageTitle>
+
+<section id="open-focus-target" class="checkin-section checkin-section--scroll-target @(IsActiveFocus("open") ? "checkin-section--active" : string.Empty)">
+    @*<h3 class="checkin-section__title">@Localizer["ApartmentCodeTitle"]</h3>*@
+    <ApartmentAccessCode Token="@Token" />
+    <RemoteOpenTile Token="@Token" />
+
+    <button class="lock-guide-tile" @onclick="ShowLockGuide">
+        <span class="lock-guide-tile__icon-wrap">
+            <img src="/icons/door-open.svg" alt="" aria-hidden="true" />
+        </span>
+        <span class="lock-guide-tile__text">
+            <span class="lock-guide-tile__title">@Localizer["LockGuideTitle"]</span>
+            <span class="lock-guide-tile__subtitle">@Localizer["LockGuideSubtitle"]</span>
+        </span>
+        <img src="/icons/chevron-right.svg" class="lock-guide-tile__chevron" alt="" aria-hidden="true" />
+    </button>
+
+    <LockGuideModal IsOpen="@_isLockGuideOpen"
+                    Title="@Localizer["LockGuideTitle"]"
+                    OnClose="CloseLockGuide" />
+</section>
+
+<div id="building-codes-focus-target" class="checkin-focus-group checkin-section--scroll-target @(IsActiveFocus("instructions") ? "checkin-focus-group--active" : string.Empty)">
+    <section class="checkin-section">
+        <h3 class="checkin-section__title">@Localizer["BuildingCodesTitle"]</h3>
+        <AccessCodesList ParkingSpotNumber="@ParkingSpotNumber"
+                         ParkingMapUrl="@ParkingMapUrl"
+                         ApartmentNumber="@ApartmentNumber" />
+    </section>
+
+    <section class="checkin-section">
+        <h3 class="checkin-section__title">@Localizer["InstructionsTitle"]</h3>
+        <div class="checkin-roadmap-scroll">
+        @if (ApartmentState.IsLoading)
+        {
+            @for (int i = 0; i < 3; i++)
+            {
+                <div class="checkin-skeleton-card">
+                    <div class="checkin-skeleton-card__image"></div>
+                    <div class="checkin-skeleton-card__title"></div>
+                    <div class="checkin-skeleton-card__line"></div>
+                </div>
+            }
+        }
+        else if (Steps.Count == 0)
+        {
+            <div class="checkin-empty">
+                <img src="/icons/octagon-alert.svg" alt="" aria-hidden="true" />
+                <p>@Localizer["NoSteps"]</p>
+            </div>
+        }
+        else
+        {
+            @for (int i = 0; i < Steps.Count; i++)
+            {
+                var step = Steps[i];
+                <CheckInStep Index="i"
+                             Title="@step.Name"
+                             Description="@step.Description"
+                             ImageUrl="@StepImageUrls[i]"
+                             IsLast="i == Steps.Count - 1"
+                             AllImageUrls="@StepImageUrls"
+                             AllDescriptions="@StepDescriptions" />
+            }
+        }
+    </div>
+    </section>
+</div>
+
+@code {
+    private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "focus")]
+    public string? Focus { get; set; }
+
+    private string? _activeFocus;
+    private string? _lastHandledFocus;
+    // Ustawiane przy kazdym LocationChanged — wymusza ponowny dojazd do sekcji
+    // nawet gdy ?focus= sie nie zmienil (podwojny klik w ten sam przycisk stopki).
+    private bool _focusNavPending;
+
+    private static readonly Dictionary<string, string> FocusTargetIds = new(StringComparer.OrdinalIgnoreCase)
+    {
+        { "open", "open-focus-target" },
+        { "instructions", "building-codes-focus-target" }
+    };
+
+    private bool IsActiveFocus(string focus) =>
+        string.Equals(_activeFocus, focus, StringComparison.OrdinalIgnoreCase);
+
+    private IReadOnlyList<ApartmentArrivalInstructionStepDTO> Steps =>
+        ApartmentState.ArrivalInstructionSteps ?? Array.Empty<ApartmentArrivalInstructionStepDTO>();
+
+    private string[] StepImageUrls => Steps.Select(s => NormalizeImageUrl(s.ImageUrl)).ToArray();
+    private string[] StepDescriptions => Steps.Select(s => s.Description ?? string.Empty).ToArray();
+
+    private string? ParkingSpotNumber =>
+        LocksState.GetLocalizedParkingSpotNumber(GlobalizationService.CurrentCulture.TwoLetterISOLanguageName);
+
+    private string? ApartmentNumber =>
+        ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode;
+
+    private string? ParkingMapUrl
+    {
+        get
+        {
+            var url = ReservationState.CurrentReservationRecord?.State.ParkingMapUrl;
+            return string.IsNullOrWhiteSpace(url) ? null : url.Trim();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        GlobalizationService.OnChange += OnLanguageChanged;
+        ApartmentState.OnChange += OnStateChanged;
+        LocksState.OnChange += OnStateChanged;
+        Navigation.LocationChanged += OnNavigated;
+        OnLanguageChanged();
+
+        if (!string.IsNullOrWhiteSpace(Token))
+        {
+            if (LocksState.ApartmentItemCodes is null)
+            {
+                _ = LocksState.GetApartmentItemCodesAsync(Token);
+            }
+
+            if (!LocksState.IsStatusResolved)
+            {
+                _ = LocksState.CheckTTLockStatusAsync(Token);
+            }
+
+            if (FeatureFlagsService.FeatureAllowed("dev-mock-lock"))
+            {
+                _ = Task.Run(async () =>
+                {
+                    await LocksState.LoadAccessCodesAsync(Token);
+                    await LocksState.RestoreDevMockCodesAsync(Token);
+                    await LocksState.EnsureInitialDevMockCodeAsync(Token);
+                });
+            }
+            else
+            {
+                _ = LocksState.LoadAccessCodesAsync(Token);
+            }
+        }
+    }
+
+    private void OnLanguageChanged() =>
+        InvokeAsync(async () =>
+        {
+            var apartmentItemId = ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.objectItemId;
+            if (apartmentItemId is > 0)
+            {
+                await ApartmentState.GetArrivalInstructionStepsAsync(
+                    apartmentItemId.Value,
+                    GlobalizationService.CurrentCulture.Name);
+            }
+
+            StateHasChanged();
+        });
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("setupCheckInRoadmap");
+        }
+
+        // Reaguje na kazda nawigacje na te strone, nie tylko na zmiane wartosci ?focus=...
+        // — ponowny klik w ten sam przycisk stopki tez ma dojechac do sekcji.
+        if (_focusNavPending || !string.Equals(Focus, _lastHandledFocus, StringComparison.OrdinalIgnoreCase))
+        {
+            _focusNavPending = false;
+            _lastHandledFocus = Focus;
+            // Fire-and-forget: render nie moze czekac 2,6 s na wygasniecie podswietlenia.
+            _ = FocusRequestedSectionAsync();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    // Anuluje wygaszanie podswietlenia z poprzedniego kliku, zeby przy szybkim
+    // przeklikiwaniu stopki stary Task.Delay nie gasil swiezo podswietlonej sekcji.
+    private CancellationTokenSource? _focusCts;
+
+    private async Task FocusRequestedSectionAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Focus) ||
+            !FocusTargetIds.TryGetValue(Focus, out var targetId))
+        {
+            return;
+        }
+
+        _focusCts?.Cancel();
+        _focusCts?.Dispose();
+        var cts = _focusCts = new CancellationTokenSource();
+
+        // Podswietlenie od razu — czekanie na koniec scrolla czyta sie jak lag.
+        _activeFocus = Focus;
+        await InvokeAsync(StateHasChanged);
+
+        // Kolejny klik w trakcie scrolla po prostu przekierowuje smooth scroll na nowy cel.
+        await JS.InvokeVoidAsync("scrollInMainBodyToElement", targetId);
+
+        try
+        {
+            await Task.Delay(2600, cts.Token);
+        }
+        catch (TaskCanceledException)
+        {
+            return; // nowszy klik przejal podswietlenie
+        }
+
+        _activeFocus = null;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void OnStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnNavigated(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        _focusNavPending = true;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private bool _isLockGuideOpen;
+
+    private void ShowLockGuide() => _isLockGuideOpen = true;
+
+    private void CloseLockGuide() => _isLockGuideOpen = false;
+
+    private string NormalizeImageUrl(string? imageUrl)
+    {
+        if (string.IsNullOrWhiteSpace(imageUrl))
+        {
+            return InstructionPlaceholderUrl;
+        }
+
+        var normalized = imageUrl.Trim().Replace("\\", "/");
+        if (Uri.TryCreate(normalized, UriKind.Absolute, out var absolute))
+        {
+            return absolute.ToString();
+        }
+
+        return Navigation.ToAbsoluteUri(normalized.TrimStart('/')).ToString();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("teardownCheckInRoadmap");
+        }
+        catch
+        {
+        }
+    }
+
+    public override void Dispose()
+    {
+        _focusCts?.Cancel();
+        _focusCts?.Dispose();
+        Navigation.LocationChanged -= OnNavigated;
+        GlobalizationService.OnChange -= OnLanguageChanged;
+        ApartmentState.OnChange -= OnStateChanged;
+        LocksState.OnChange -= OnStateChanged;
+        base.Dispose();
+    }
+}

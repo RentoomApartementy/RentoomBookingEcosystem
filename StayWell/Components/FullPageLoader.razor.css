@@ -1,0 +1,22 @@
+.full-page-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 60vh;
+}
+
+.full-page-loader__spinner {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 3px solid rgba(33, 87, 62, 0.15);
+    border-top-color: var(--rentoom-green-dark, #21573e);
+    animation: full-page-loader-spin 0.8s linear infinite;
+}
+
+@keyframes full-page-loader-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

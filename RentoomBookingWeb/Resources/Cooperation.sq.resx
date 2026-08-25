@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kontaktoni</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Menaxhimi i qirasë Toruń, shërbimi i apartamenteve, investimi pa mirëmbajtje, bashkëpunimi rentom, optimizimi i fitimit të qirasë, qiraja afatshkurtër</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Kthejeni apartamentin tuaj në një investim pa mirëmbajtje me Rentoom. Ne ofrojmë menaxhim gjithëpërfshirës të qirasë në Toruń, optimizim të të ardhurave dhe shërbim mysafirësh 24/7. Bast në cilësi dhe përvojë.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Bashkëpunimi - Rentoom | Menaxhimi profesional i qirasë</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Bashkëpunimi</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Ne jemi lider i tregut në Toruń. Ne ofrojmë shërbim të plotë, teknologji inovative dhe maksimizim të fitimeve tuaja. Jini të qetë, ne po punojmë për ju.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Bashkëpunimi - Rentoom | Menaxhimi i qirasë Toruń</value>
+  </data>
 </root>

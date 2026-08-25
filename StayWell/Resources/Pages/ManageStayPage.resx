@@ -148,9 +148,9 @@
     <value>Purchased</value>
   </data>
   <data name="Report" xml:space="preserve">
-    <value>Report a problem</value>
+    <value>Report a fault</value>
   </data>
   <data name="ReportDescription" xml:space="preserve">
-    <value>Defect, a question or a request to the staff.</value>
+    <value>A fault or damage in the apartment.</value>
   </data>
 </root>

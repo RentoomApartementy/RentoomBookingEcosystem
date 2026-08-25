@@ -132,6 +132,9 @@
   <data name="CheckIn" xml:space="preserve">
     <value>Zameldowanie</value>
   </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Zamelduj się</value>
+  </data>
   <data name="CheckOut" xml:space="preserve">
     <value>Wymeldowanie</value>
   </data>
@@ -148,7 +151,7 @@
     <value>Główna</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Instrukcja Zameldowania</value>
+    <value>Wejdź do budynku</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Instrukcja</value>
@@ -188,6 +191,12 @@
   </data>
   <data name="ReservationCanceledDesc" xml:space="preserve">
     <value>Ta rezerwacja nie jest już aktywna. Skontaktuj się z Rentoom, jeśli potrzebujesz pomocy.</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Ta rezerwacja wygasła</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Twój pobyt już się zakończył. Mamy nadzieję, że był udany — zapraszamy do ponownej rezerwacji w Rentoom.</value>
   </data>
   <data name="AiChatTitle" xml:space="preserve">
     <value>StayWell AI</value>

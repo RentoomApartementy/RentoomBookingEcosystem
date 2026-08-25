@@ -297,4 +297,40 @@ Tutto quello che devi fare è chiudere la porta dietro di te.</value>
   <data name="PageTitle" xml:space="preserve">
     <value>Appartamento aperto</value>
   </data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>Quale castello hai davanti a te?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Confrontalo con quello che vedi sulla porta.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Blocco girevole</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Tastiera su una manopola rotonda. Dopo il codice, giri la manopola.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Blocco a pannello</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>Un pannello allungato con una tastiera, una maniglia sotto.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>Cosa vuoi fare?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Apri la porta</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>Entro</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Chiudi la porta</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>Esco e chiudo dietro di me</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Indietro</value>
+  </data>
 </root>

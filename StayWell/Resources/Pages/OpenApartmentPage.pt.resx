@@ -297,4 +297,40 @@ Tudo que você precisa fazer é fechar a porta atrás de você.</value>
   <data name="PageTitle" xml:space="preserve">
     <value>Apartamento aberto</value>
   </data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>Qual castelo você tem à sua frente?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Compare com o que você vê na porta.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Trava Giratória</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Teclado em um botão redondo. Depois do código, você gira o botão.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Trava de painel</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>Um painel alongado com um teclado, uma alça embaixo.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>O que você quer fazer?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Abra a porta</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>Eu entro</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Feche a porta</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>Saio e me fecho atrás de mim</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Voltar</value>
+  </data>
 </root>

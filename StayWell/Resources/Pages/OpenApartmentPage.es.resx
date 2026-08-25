@@ -297,4 +297,40 @@ Solo tienes que cerrar la puerta tras de ti.</value>
   <data name="PageTitle" xml:space="preserve">
     <value>Apartamento abierto</value>
   </data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>¿Qué castillo tienes delante?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Compáralo con lo que ves en la puerta.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Candado giratorio</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Teclado en un mando redondo. Después del código, giras el pomo.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Bloqueo de paneles</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>Un panel alargado con un teclado, un mango debajo.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>¿Qué quieres hacer?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Abre la puerta</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>Entro</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Cierra la puerta</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>Salgo y me cierro detrás de mí</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Atrás</value>
+  </data>
 </root>

@@ -19,7 +19,7 @@
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <div class="image-wrapper">
-    @if (MediaState.IsLoading || ReservationState.IsLoading || ImageUrl == string.Empty)
+    @if (MediaState.IsLoading || ReservationState.IsLoading || string.IsNullOrEmpty(ImageUrl))
     {
         <div class="skeleton"></div>
     }
@@ -50,28 +50,56 @@ else
                       CheckOutTime="@ReservationState.CheckOutTime" />
     </div>
 
-    <div class="tile--row">
-        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage")'>
-            <div class="tile-icon">
-                <img class="fas" src="/icons/book.svg" />
-            </div>
-            <div class="tile-text">@Localizer["Instructions"]</div>
+    @if (checkIn != default) // && now >= checkIn.AddMinutes(-15))
+    {
+        <div class="checkin-button-wrapper">
+            <button type="button" class="checkin-button" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/CheckIn")'>
+                <span class="checkin-button-text">@Localizer["CheckInNow"]</span>
+                <img class="checkin-button-pointer" src="/icons/pointer.svg" alt="" />
+            </button>
         </div>
+    }
 
-        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage")'>
+    <div class="tile--row">
+        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/CheckIn?focus=instructions")'>
+            <div class="tile-header">
+                <span class="tile-text">@Localizer["Instructions"]</span>
+                <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
+            </div>
+            <div class="tile-icon">
+                <img class="fas" src="/icons/building.svg" />
+            </div>
+        </div>
+        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/CheckIn?focus=open")'>
+            <div class="tile-header">
+                <span class="tile-text">@Localizer["OpenApartment"]</span>
+                <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
+            </div>
             <div class="tile-icon">
                 <img class="fas" src="/icons/lock.svg" />
             </div>
-            <div class="tile-text">@Localizer["OpenApartment"]</div>
+            @if (!LocksState.IsLoading && LocksState.CurrentCode is not null
+                 && (ReservationState.IsCodeAvailable || FeatureFlagsService.FeatureAllowed("dev-mock-lock")))
+            {
+                <div class="tile-access-code">
+                    <span class="tile-access-code__number">@LocksState.CurrentCode.Code</span>
+                    <span class="tile-access-code__sep">·</span>
+                    <span class="tile-access-code__hash">#</span>
+                    <span class="tile-access-code__sep">·</span>
+                    <img class="tile-access-code__key" src="/icons/key-round.svg" alt="" />
+                </div>
+            }
         </div>
-
         @if (FeatureFlagsService.FeatureAllowed("ai-assistant"))
         {
             <div class="tile" @onclick="OpenAiChat">
+                <div class="tile-header">
+                    <span class="tile-text">@Localizer["AiAssistant"]</span>
+                    <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
+                </div>
                 <div class="tile-icon">
                     <img class="fas" src="/icons/chat-ai-staywell.jpg" />
                 </div>
-                <div class="tile-text">@Localizer["AiAssistant"]</div>
             </div>
         }
 
@@ -80,6 +108,10 @@ else
 
 
         <div class="tile vouchers" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage")'>
+            <div class="tile-header">
+                <span class="tile-text tile-text-vouchers">@Localizer["MyVouchers"]</span>
+                <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
+            </div>
             <div class="tile-icon-vouchers">
                 <img class="fas" src="/icons/ticket-percent.svg" />
                 @if (PurchasedVouchersCount > 0)
@@ -87,8 +119,8 @@ else
                     <span class="vouchers-badge">@PurchasedVouchersCount</span>
                 }
             </div>
-            <div class="tile-text-vouchers">@Localizer["MyVouchers"]</div>
         </div>
+
      }
     </div>
 
@@ -200,8 +232,32 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await LoadPurchasedVouchersCountAsync();
         LoadData();
+        // Licznik voucherów ładuje się w tle — nie blokuje pierwszego renderu strony.
+        _ = LoadPurchasedVouchersCountAsync();
+
+        if (!string.IsNullOrWhiteSpace(Token))
+        {
+            if (!LocksState.IsStatusResolved)
+            {
+                _ = LocksState.CheckTTLockStatusAsync(Token);
+            }
+
+            if (FeatureFlagsService.FeatureAllowed("dev-mock-lock"))
+            {
+                _ = Task.Run(async () =>
+                {
+                    await LocksState.LoadAccessCodesAsync(Token);
+                    await LocksState.RestoreDevMockCodesAsync(Token);
+                    await LocksState.EnsureInitialDevMockCodeAsync(Token);
+                });
+            }
+            else if (LocksState.CurrentCode is null)
+            {
+                _ = LocksState.LoadAccessCodesAsync(Token);
+            }
+        }
+
         DateTime.TryParseExact(Reservation?.ReservationDetails?.dateFrom, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var ci);
         DateTime.TryParseExact(Reservation?.ReservationDetails?.dateTo, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var co);
         checkIn = ci;
@@ -217,12 +273,21 @@ else
             return;
         }
 
-        var purchasedSummary = await BackendApi.GetPurchasedUpsellsByReservationTokenAsync(Token);
-        var purchasedVoucherLines = purchasedSummary?.PurchasedUpsellsWithVouchers ?? [];
+        try
+        {
+            var purchasedSummary = await BackendApi.GetPurchasedUpsellsByReservationTokenAsync(Token);
+            var purchasedVoucherLines = purchasedSummary?.PurchasedUpsellsWithVouchers ?? [];
 
-        PurchasedVouchersCount = purchasedVoucherLines
-            .Where(line => line.Voucher is not null)
-            .Sum(line => line.Quantity > 0 ? line.Quantity : 0);
+            PurchasedVouchersCount = purchasedVoucherLines
+                .Where(line => line.Voucher is not null)
+                .Sum(line => line.Quantity > 0 ? line.Quantity : 0);
+
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"LoadPurchasedVouchersCountAsync failed: {ex}");
+        }
     }
 
     private void LoadData()

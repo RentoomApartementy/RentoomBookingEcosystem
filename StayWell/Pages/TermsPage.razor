@@ -17,22 +17,27 @@
 
 <div class="terms-container">
     <div class="content-section">
-        <div class="reservation-section main-terms-card @(IsShowingTerms ? "is-tos-view" : "") @(IsShowingRegistration ? "is-registration-view" : "")">
+        <div class="reservation-section main-terms-card @(IsShowingRules ? "is-rules-view" : "") @(IsShowingTerms ? "is-tos-view" : "") @(IsShowingRegistration ? "is-registration-view" : "")">
 
             <div class="transition-container @(_isTransitioning ? "fade-out" : "fade-in")">
-                @if (CurrentView == ViewState.Steps)
+                @if (CurrentView == ViewState.Rules)
                 {
-                    var step = steps[_currentStep];
-                    <div class="step-view">
-                        <div class="image-container">
-                            @if (!string.IsNullOrEmpty(step.Image))
+                    <div class="rules-view">
+                        <h3 class="rules-title">@Localizer["HouseRulesTitle"]</h3>
+                        <ul class="rules-list">
+                            @foreach (var rule in rules)
                             {
-                                <img src="@step.Image" class="step-image" alt="step" />
+                                <li class="rule-row">
+                                    <div class="rule-icon">
+                                        @if (!string.IsNullOrEmpty(rule.Image))
+                                        {
+                                            <img src="@rule.Image" alt="" />
+                                        }
+                                    </div>
+                                    <p class="rule-text">@rule.Text</p>
+                                </li>
                             }
-                        </div>
-                        <div class="text-container">
-                            <p>@step.Text</p>
-                        </div>
+                        </ul>
                     </div>
                 }
                 else if (CurrentView == ViewState.Terms)
@@ -104,7 +109,10 @@
                             </label>
                             <input class="reg-input @(IsEmailValid ? "is-valid" : "")"
                                    id="email" type="email" placeholder="@Localizer["EmailPlaceholder"]"
-                                   @bind="_mail" @bind:event="oninput" />
+                                   value="@_mail"
+                                   @oninput="OnEmailChanged"
+                                   @onchange="OnEmailChanged"
+                                   inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off" />
                         </div>
 
                         <div class="reg-actions">
@@ -153,15 +161,18 @@
     </div>
 </div>
 
-    <FloatingButton Text="@(CurrentView == ViewState.Steps ? Localizer["Continue"] : CurrentView == ViewState.Terms ? Localizer["Accept"] : Localizer["Confirm"])"
+    <FloatingButton Text="@(CurrentView == ViewState.Rules ? Localizer["Continue"] : CurrentView == ViewState.Terms ? Localizer["Accept"] : Localizer["Confirm"])"
         IconPath="@(CurrentView != ViewState.RegistrationCard ? "/icons/chevron-right.svg" : "/icons/handshake.svg")"
         IsDisabled="IsButtonDisabled"
+        IsLoading="_isAdvancing"
         OnClick="HandleNextClick" />
 
 @code {
-    private enum ViewState { Steps, Terms, RegistrationCard }
+    protected override bool DeferSecondaryData => true;
 
-    private (string Image, string Text)[] steps => new[]
+    private enum ViewState { Rules, Terms, RegistrationCard }
+
+    private (string Image, string Text)[] rules => new[]
     {
         ("/images/clock.png", $"{Localizer["Step11"]} {ReservationState.CheckInTime:HH\\:mm} {Localizer["Step12"]} {ReservationState.CheckOutTime:HH\\:mm} {Localizer["Step13"]}"),
         ("/images/broken-window.png", $"{Localizer["Step2"]}"),
@@ -171,6 +182,7 @@
 
     private int _currentStep = 0;
     private bool _isTransitioning = false;
+    private bool _isAdvancing = false;
 
     private string? _mail;
     private TimeSpan? _checkInTime;
@@ -182,13 +194,17 @@
     private bool _isTermsLoading = true;
     private bool _termsLoadError = false;
 
-    private int TotalStatesCount => steps.Length + 2;
+    private const int RulesStep = 0;
+    private const int TermsStep = 1;
+
+    private int TotalStatesCount => 3;
 
     private ViewState CurrentView =>
-        _currentStep < steps.Length ? ViewState.Steps :
-        _currentStep == steps.Length ? ViewState.Terms :
+        _currentStep == RulesStep ? ViewState.Rules :
+        _currentStep == TermsStep ? ViewState.Terms :
         ViewState.RegistrationCard;
 
+    private bool IsShowingRules => CurrentView == ViewState.Rules;
     private bool IsShowingTerms => CurrentView == ViewState.Terms;
     private bool IsShowingRegistration => CurrentView == ViewState.RegistrationCard;
     private bool IsEmailValid => !string.IsNullOrWhiteSpace(_mail) && _mail.Contains("@") && _mail.Contains(".");
@@ -259,24 +275,21 @@
             _termsLoadError = false;
             var language = CultureInfo.CurrentUICulture.Name;
 
-            _termsSources = await BackendApi.GetTermsForDisplayAsync(language);
+
+            var termsTask = BackendApi.GetTermsForDisplayAsync(language);
+            var agreedTask = SafeGetAgreedTermsAsync(language);
+            await Task.WhenAll(termsTask, agreedTask);
+
+            _termsSources = await termsTask;
             _userSelections = _termsSources.ToDictionary(t => t.Id, _ => false);
 
-            try
+            foreach (var agreedTerm in await agreedTask)
             {
-                var agreedTerms = await BackendApi.GetAgreedTermsByReservationAsync(Token!, language);
-                foreach (var agreedTerm in agreedTerms)
+                if (_userSelections.ContainsKey(agreedTerm.TermsSourceId) && agreedTerm.IsAccepted)
                 {
-                    if (_userSelections.ContainsKey(agreedTerm.TermsSourceId) && agreedTerm.IsAccepted)
-                    {
-                        _userSelections[agreedTerm.TermsSourceId] = true;
-                        _preAccepted.Add(agreedTerm.TermsSourceId);
-                    }
+                    _userSelections[agreedTerm.TermsSourceId] = true;
+                    _preAccepted.Add(agreedTerm.TermsSourceId);
                 }
-            }
-            catch
-            {
-                // No agreed terms yet
             }
         }
         catch
@@ -286,6 +299,18 @@
         finally
         {
             _isTermsLoading = false;
+        }
+    }
+
+    private async Task<List<CustomerAgreedTermDto>> SafeGetAgreedTermsAsync(string language)
+    {
+        try
+        {
+            return await BackendApi.GetAgreedTermsByReservationAsync(Token!, language);
+        }
+        catch
+        {
+            return new();
         }
     }
 
@@ -317,6 +342,12 @@
                 @((MarkupString)(term.HtmlContent ?? ""))
             </div>
         );
+    }
+
+    private void OnEmailChanged(ChangeEventArgs e)
+    {
+        _mail = e.Value?.ToString();
+        StateHasChanged();
     }
 
     private void TryInitializeMail()
@@ -367,20 +398,31 @@
 
     private async Task HandleNextClick()
     {
-        if (IsButtonDisabled) return;
+        if (IsButtonDisabled || _isAdvancing) return;
 
-        if (IsShowingTerms)
+        _isAdvancing = true;
+        StateHasChanged();
+
+        try
         {
-            await AcceptTermsAsync();
-            await MoveToNext();
+            if (IsShowingTerms)
+            {
+                await AcceptTermsAsync();
+                await MoveToNext();
+            }
+            else if (IsShowingRegistration)
+            {
+                await SaveRegistrationAndFinish();
+            }
+            else
+            {
+                await MoveToNext();
+            }
         }
-        else if (IsShowingRegistration)
+        finally
         {
-            await SaveRegistrationAndFinish();
-        }
-        else
-        {
-            await MoveToNext();
+            _isAdvancing = false;
+            StateHasChanged();
         }
     }
 

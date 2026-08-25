@@ -42,6 +42,7 @@ namespace RentoomBooking.StayWell.States
         public bool IsPasscodeLoading { get; private set; }
         public int PasscodeLoadingElapsedSeconds { get; private set; }
 
+        public bool AreCodesLoaded => AccessCodes is not null;
         public BackendApi.AccessCodeDto? CurrentCode => AccessCodes?.CurrentCode;
         public List<BackendApi.AccessCodeDto> AllCodes => AccessCodes?.History ?? [];
         public bool CanGenerate => AccessCodes?.CanGenerate ?? false;
@@ -483,6 +484,55 @@ namespace RentoomBooking.StayWell.States
             {
                 SetLoading(false);
             }
+        }
+
+        public string? GetLocalizedParkingSpotNumber(string twoLetterLanguage)
+        {
+            var apartmentItemCodes = ApartmentItemCodes;
+            if (apartmentItemCodes is null)
+            {
+                return null;
+            }
+
+            if (string.Equals(twoLetterLanguage, "pl", StringComparison.OrdinalIgnoreCase) ||
+                string.IsNullOrWhiteSpace(apartmentItemCodes.ParkingSpotNumberTranslationsJson))
+            {
+                return apartmentItemCodes.ParkingSpotNumber;
+            }
+
+            try
+            {
+                var translations = System.Text.Json.JsonSerializer.Deserialize<List<ParkingSpotTranslation>>(
+                    apartmentItemCodes.ParkingSpotNumberTranslationsJson);
+
+                var languageMatch = translations?
+                    .FirstOrDefault(t => string.Equals(t.Language, twoLetterLanguage, StringComparison.OrdinalIgnoreCase))?
+                    .Value;
+
+                if (!string.IsNullOrWhiteSpace(languageMatch))
+                {
+                    return languageMatch;
+                }
+                var englishMatch = translations?
+                    .FirstOrDefault(t => string.Equals(t.Language, "en", StringComparison.OrdinalIgnoreCase))?
+                    .Value;
+
+                if (!string.IsNullOrWhiteSpace(englishMatch))
+                {
+                    return englishMatch;
+                }
+            }
+            catch (System.Text.Json.JsonException)
+            {
+            }
+
+            return apartmentItemCodes.ParkingSpotNumber;
+        }
+
+        private class ParkingSpotTranslation
+        {
+            public string Language { get; set; } = string.Empty;
+            public string? Value { get; set; }
         }
 
         public event Action? OnChange;

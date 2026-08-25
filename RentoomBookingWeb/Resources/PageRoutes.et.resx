@@ -74,4 +74,10 @@
   <data name="Statute" xml:space="preserve">
     <value>Tingimused ja tingimused</value>
   </data>
+  <data name="BlogList" xml:space="preserve">
+    <value>Blogi</value>
+  </data>
+  <data name="BlogPost" xml:space="preserve">
+    <value>Blogi</value>
+  </data>
 </root>

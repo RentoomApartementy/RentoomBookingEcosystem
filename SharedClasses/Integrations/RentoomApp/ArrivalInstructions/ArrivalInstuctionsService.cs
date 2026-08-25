@@ -36,10 +36,10 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
                 .AsNoTracking()
                 .Where(step => step.ApartmentItemId == apartmentId);
 
-            if (!string.Equals(normalizedLanguage, DefaultLanguage, StringComparison.OrdinalIgnoreCase))
+            foreach (var candidate in BuildLanguageFallbackChain(normalizedLanguage))
             {
                 var languageSteps = await baseQuery
-                    .Where(step => step.Language.ToLower() == normalizedLanguage)
+                    .Where(step => step.Language.ToLower() == candidate)
                     .OrderBy(step => step.Sequence)
                     .ToListAsync(cancellationToken);
 
@@ -59,6 +59,20 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
             return defaultSteps
                 .Select(MapToDto)
                 .ToList();
+        }
+
+        private static IEnumerable<string> BuildLanguageFallbackChain(string normalizedLanguage)
+        {
+            if (!string.Equals(normalizedLanguage, DefaultLanguage, StringComparison.OrdinalIgnoreCase))
+            {
+                yield return normalizedLanguage;
+
+                if (!string.Equals(normalizedLanguage, "pl", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(normalizedLanguage, "en", StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return "en";
+                }
+            }
         }
 
         private static string NormalizeLanguage(string? language)
@@ -92,7 +106,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
                 "de" => "de",
                 "deu" => "de",
                 "iv" => DefaultLanguage,
-                _ => DefaultLanguage
+                _ => lowered
             };
         }
 

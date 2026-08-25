@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Contactul putea fi salvat, dar acordul nu putea fi realizat. Verifică Bitrix înainte de reexpediere.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Copiază numărul PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Copiază numărul EUR</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Copiază numărul contului EUR pe clipboard</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Ai întrebări despre administrarea închirierilor? Contactează-ne! Verifică adresa și detaliile noastre bancare.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Contactați Rentoom, Biroul Rentoom Toruń, Managementul Chiriilor Contact, Date de facturi Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Contact - Rentoom | Biroul de Servicii și Management de Închirieri Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Contact - Rentoom | Managementul Contractelor de Închiriere Profesionale</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Copiază numărul contului PLN pe clipboard</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Contactează echipa Rentoom din Toruń. Detalii de adresă, numere de cont bancar (PLN/EUR) și un formular de contact. Serviciu profesionist de închiriere.</value>
+  </data>
 </root>

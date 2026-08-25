@@ -149,7 +149,7 @@
     <value>Zuhause</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Check-in-Anweisungen</value>
+    <value>Betreten Sie das Gebäude</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Anleitung</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Wagen</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Diese Reservierung ist abgelaufen</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Dein Aufenthalt ist vorbei. Wir hoffen, es war ein Erfolg – wir laden Sie ein, erneut bei Rentoom zu buchen.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Übersetzungen werden automatisch generiert und können Fehler enthalten. Wir ermutigen Sie, sie zu melden.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>WLAN</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Check-in</value>
   </data>
 </root>

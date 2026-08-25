@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Контакт</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Управління орендою Toruń, обслуговування квартир, інвестиції без обслуговування, співпраця з Rentoom, оптимізація прибутку оренди, короткострокова оренда Toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Перетворіть свою квартиру на інвестицію без потреби в догляді з Rentoom. Ми пропонуємо комплексне управління орендою в Торуні, оптимізацію доходу та цілодобове обслуговування гостей. Ставте на якість і досвід.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Співпраця - Rentoom | Професійне управління орендою</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Співпраця</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Ми є лідером ринку в Торуні. Ми пропонуємо повний спектр послуг, інноваційні технології та максимізацію вашого прибутку. Спокійно, ми працюємо на тебе.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Співпраця - Rentoom | Управління орендою в Торуні</value>
+  </data>
 </root>

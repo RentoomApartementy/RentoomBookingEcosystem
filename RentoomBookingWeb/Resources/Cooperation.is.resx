@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Samband</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Leigustjórnun Toruń, þjónusta við íbúðir, viðhaldslaus fjárfesting, samstarf við Rentoom, hagræðing leiguhagnaðar, skammtímaleiga Toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Breyttu íbúðinni þinni í viðhaldslausa fjárfestingu með Rentoom. Við bjóðum upp á alhliða leigustjórnun í Toruń, tekjuhagræðingu og 24/7 þjónustu við gesti. Veðjaðu á gæði og reynslu.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Samstarf - Rentoom | Fagleg leigustjórnun</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Samstarf</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Við erum markaðsleiðandi í Toruń. Við bjóðum upp á fulla þjónustu, nýstárlega tækni og hámarka hagnað þinn. Hvíldu þig, við vinnum fyrir þig.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Samstarf - Rentoom | Leigustjórnun Toruń</value>
+  </data>
 </root>

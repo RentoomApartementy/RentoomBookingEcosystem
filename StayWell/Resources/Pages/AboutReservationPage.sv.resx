@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Visa dokumentet</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Vald ankomsttid</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Jag vet inte än</value>
+  </data>
 </root>

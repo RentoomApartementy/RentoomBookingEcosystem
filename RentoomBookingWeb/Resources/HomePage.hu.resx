@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Tudjon meg többet</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Partnereink</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Jól ismert helyi márkákkal dolgozunk együtt, hogy egyedülállóvá tegyük tartózkodását Toruńban</value>
+  </data>
 </root>

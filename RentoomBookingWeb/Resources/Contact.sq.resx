@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontakti mund të ruhej, por marrëveshja nuk mund të krijohej. Kontrolloni Bitrix përpara se të ridërgoni.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopjo numrin PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopje e numrit EUR</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Kopjoni numrin e llogarisë EUR në kujtesën e fundit</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Keni pyetje në lidhje me menaxhimin e qirasë? Na kontaktoni! Kontrolloni adresën dhe të dhënat tona bankare.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Kontaktoni Rentoom, Zyra e Rentoom Toruń, Kontakti i Menaxhimit të Qirasë, Të dhënat e faturës Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kontaktoni</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kontaktoni - Rentoom | Zyra e Shërbimit dhe Menaxhimit të Qirasë Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kontaktoni - Rentoom | Menaxhimi profesional i qirasë</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Kopjoni numrin e llogarisë PLN në kujtesën e fundit</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Kontaktoni ekipin e Rentoom në Toruń. Detajet e adresës, numrat e llogarive bankare (PLN/EUR) dhe një formular kontakti. Shërbim profesional me qira.</value>
+  </data>
 </root>

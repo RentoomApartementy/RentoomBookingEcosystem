@@ -297,4 +297,40 @@ All you have to do is close the door behind you.</value>
   <data name="PageTitle" xml:space="preserve">
     <value>Open apartment</value>
   </data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>Which castle do you have in front of you?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Compare it with what you see on the door.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Swivel Lock</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Keyboard on a round knob. After the code, you turn the knob.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Panel lock</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>An elongated panel with a keyboard, a handle underneath.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>What do you want to do?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Open the door</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>I go inside</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Close the door</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>I go out and close behind me</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
 </root>

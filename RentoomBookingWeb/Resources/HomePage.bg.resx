@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Научете повече</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Нашите партньори</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Работим с доказани местни марки, за да направим престоят ви в Торун уникален</value>
+  </data>
 </root>

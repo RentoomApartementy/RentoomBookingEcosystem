@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kuntatt</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Ġestjoni tal-Kiri Toruń, Servizz ta' Appartamenti, Investiment mingħajr manutenzjoni, Kooperazzjoni Rentoom, Ottimizzazzjoni tal-Profitt tal-Kiri, Kiri ta' Żmien Qasir Toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Ibdel l-appartament tiegħek f'investiment mingħajr manutenzjoni ma' Rentoom. Noffru ġestjoni komprensiva tal-kera f'Toruń, ottimizzazzjoni tad-dħul u servizz għall-mistednin 24/7. Imħatra fuq il-kwalità u l-esperjenza.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Kooperazzjoni - Rentoom | Ġestjoni tal-Kiri Professjonali</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Kooperazzjoni</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Aħna l-mexxejja tas-suq f'Toruń. Noffru servizz sħiħ, teknoloġiji innovattivi u massimizzazzjoni tal-profitti tiegħek. Ħu mistrieħ, qed naħdmu għalik.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Kooperazzjoni - Rentoom | Ġestjoni tal-Kiri Toruń</value>
+  </data>
 </root>

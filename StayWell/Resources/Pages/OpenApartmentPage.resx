@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -298,4 +298,40 @@ Just close the door behind you.</value>
     
     
   <value>Open apartment</value></data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>Which lock is in front of you?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Match it against what you see on the door.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Spinning lock</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Keypad on a round knob. After the code you turn the knob.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Panel lock</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>A tall panel with a keypad, handle underneath.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>What do you want to do?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Open the door</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>I'm coming in</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Lock the door</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>I'm leaving and locking up</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
 </root>

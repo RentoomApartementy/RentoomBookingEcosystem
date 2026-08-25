@@ -149,7 +149,7 @@
     <value>Hem</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Incheckningsinstruktioner</value>
+    <value>Gå in i byggnaden</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Instruktioner</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Vagn</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Denna reservation har löpt ut</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Din vistelse är över. Vi hoppas att det blev en framgång – vi bjuder in dig att boka igen på Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Översättningar genereras automatiskt och kan innehålla fel. Vi uppmuntrar dig att anmäla dem.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Checka in</value>
   </data>
 </root>

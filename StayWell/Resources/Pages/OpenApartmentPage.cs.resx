@@ -297,4 +297,40 @@ Stačí za sebou zavřít dveře.</value>
   <data name="PageTitle" xml:space="preserve">
     <value>Otevřený byt</value>
   </data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>Který hrad máš před sebou?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Porovnejte to s tím, co vidíte na dveřích.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Otočný zámek</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Klávesnice na kulatém knoflíku. Po kódu otočíte knoflíkem.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Panelový zámek</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>Prodloužený panel s klávesnicí, rukojeť pod ním.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>Co chceš dělat?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Otevři dveře</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>Jdu dovnitř</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Zavři dveře</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>Jdu ven a přibližuji se za mnou</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Zpět</value>
+  </data>
 </root>

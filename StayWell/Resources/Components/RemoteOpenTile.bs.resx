@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Daljinsko otvaranje vrata</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Provjeravam dostupnost brava...</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Vaša rezervacija je završena. Daljinsko otvaranje više nije dostupno.</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Daljinsko otvaranje biće dostupno od {0} na dan prijave.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Obrada</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Otvorena vrata</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Pritisni za otvaranje</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Daljinsko otvaranje trenutno nije dostupno.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Molimo pokušajte ponovo</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Pokušaj ponovo {0}</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Greška pri otvaranju</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Greška pri gašenju</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Greška veze sa serverom</value>
+  </data>
+</root>

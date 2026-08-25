@@ -337,4 +337,7 @@ Hyresregler på engelska finns tillgängliga på www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Villkor och samtycken</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Uppehållsregler</value>
+  </data>
 </root>

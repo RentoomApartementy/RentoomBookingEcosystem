@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Yhteys voitiin pelastaa, mutta sopimusta ei voitu tehdä. Tarkista Bitrix ennen uudelleenlähetystä.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopioi PLN-numero</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopioi EUR-numero</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Kopioi EUR-tilinumero lehtiöön</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Onko sinulla kysymyksiä vuokranhallinnasta? Ota yhteyttä meihin! Tarkista osoitteemme ja pankkitietomme.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Ota yhteyttä Rentoomiin, Rentoom Toruń Office, Rental Management Contact, Rentoom laskutiedot</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Yhteystiedot</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Yhteystiedot - Rentoom | Vuokrauspalvelu- ja hallintotoimisto Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Yhteystiedot - Rentoom | Ammatillinen vuokrasopimusten hallinta</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Kopioi PLN-tilinumero lehtiöön</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Ota yhteyttä Rentoom-tiimiin Toruńissa. Osoitetiedot, pankkitilinumerot (PLN/EUR) ja yhteydenottolomake. Ammattimainen vuokrauspalvelu.</value>
+  </data>
 </root>

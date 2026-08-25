@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Il-kuntatt seta' jiġi salvat, iżda l-ftehim ma setax jinħoloq. Iċċekkja lil Bitrix qabel terġa' tibgħat.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopja n-numru PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopja n-numru EUR</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Kopja n-numru tal-kont EUR fuq il-klipboard</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Għandek mistoqsijiet dwar il-ġestjoni tal-kera? Ikkuntattjana! Iċċekkja l-indirizz u d-dettalji tal-bank tagħna.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Ikkuntattja lil Rentoom, Uffiċċju ta' Rentoom Toruń, Kuntatt għall-Ġestjoni tal-Kiri, Data tal-fatturi ta' Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kuntatt</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kuntatt - Rentoom | Uffiċċju tas-Servizz u l-Ġestjoni tal-Kiri Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kuntatt - Rentoom | Ġestjoni tal-Kiri Professjonali</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Ikkopja n-numru tal-kont PLN fuq il-klipboard</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Ikkuntattja lit-tim Rentoom f'Toruń. Dettalji tal-indirizz, numri tal-kontijiet bankarji (PLN/EUR) u formola ta' kuntatt. Servizz professjonali ta' kiri.</value>
+  </data>
 </root>

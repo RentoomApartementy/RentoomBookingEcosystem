@@ -1,0 +1,284 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.StayWell.Services
+@using RentoomBooking.StayWell.Components.AnimationsComponents
+
+@inject IStringLocalizer<RentoomBooking.StayWell.Pages.OpenApartmentPage> Localizer
+@inject GlobalizationService GlobalizationService
+@inject IJSRuntime JS
+
+@implements IDisposable
+
+<div class="guide-card @(Frameless ? "guide-card--frameless" : "")">
+
+    <div class="guide-viewport" @ref="_viewport">
+
+        @* Oba kroki z pytaniami leza w jednej komorce gridu, wiec CSS sam wyrownuje
+           ich wysokosc - bez mierzenia w JS, ktore przegrywa wyscig z ladowaniem fontu. *@
+        @if (CurrentStep < 3)
+        {
+            <div class="guide-ask">
+
+                <div class="guide-step @(CurrentStep == 1 ? string.Empty : "guide-step--idle")">
+                    <h4 class="guide-question">@Localizer["LockWizardLockQuestion"]</h4>
+                    <p class="guide-question__hint">@Localizer["LockWizardLockHint"]</p>
+
+                    <div class="guide-options">
+                        <button type="button" class="lock-option" @onclick="() => ChooseLock(LockKind.Cylinder)">
+                            <span class="lock-stage lock-stage--thumb">
+                                <LockAnimation ViewBox="125 45 250 410" DurationMs="8000" Preview="true" />
+                            </span>
+                            <span class="lock-option__text">
+                                <span class="lock-option__title">@Localizer["LockTypeSpinningName"]</span>
+                                <span class="lock-option__desc">@Localizer["LockTypeSpinningDesc"]</span>
+                            </span>
+                            <img src="/icons/chevron-right.svg" class="lock-option__chevron" alt="" aria-hidden="true" />
+                        </button>
+
+                        <button type="button" class="lock-option" @onclick="() => ChooseLock(LockKind.Panel)">
+                            <span class="lock-stage lock-stage--thumb">
+                                <LockPanelAnimation ViewBox="160 10 230 460" />
+                            </span>
+                            <span class="lock-option__text">
+                                <span class="lock-option__title">@Localizer["LockTypePanelName"]</span>
+                                <span class="lock-option__desc">@Localizer["LockTypePanelDesc"]</span>
+                            </span>
+                            <img src="/icons/chevron-right.svg" class="lock-option__chevron" alt="" aria-hidden="true" />
+                        </button>
+                    </div>
+                </div>
+
+                <div class="guide-step @(CurrentStep == 2 ? string.Empty : "guide-step--idle")">
+                    <button type="button" class="guide-back" @onclick="GoBack">
+                        <img src="/icons/chevron-left.svg" alt="" aria-hidden="true" />
+                        @Localizer["LockWizardBack"]
+                    </button>
+
+                    <h4 class="guide-question">@Localizer["LockWizardActionQuestion"]</h4>
+
+                    <div class="guide-options">
+                        <button type="button" class="action-option" @onclick="() => ChooseAction(GuideAction.Open)">
+                            <span class="action-option__icon">
+                                <img src="/icons/door-open.svg" alt="" aria-hidden="true" />
+                            </span>
+                            <span class="lock-option__text">
+                                <span class="lock-option__title">@Localizer["LockWizardActionOpen"]</span>
+                                <span class="lock-option__desc">@Localizer["LockWizardActionOpenHint"]</span>
+                            </span>
+                            <img src="/icons/chevron-right.svg" class="lock-option__chevron" alt="" aria-hidden="true" />
+                        </button>
+
+                        <button type="button" class="action-option" @onclick="() => ChooseAction(GuideAction.Close)">
+                            <span class="action-option__icon">
+                                <img src="/icons/lock.svg" alt="" aria-hidden="true" />
+                            </span>
+                            <span class="lock-option__text">
+                                <span class="lock-option__title">@Localizer["LockWizardActionClose"]</span>
+                                <span class="lock-option__desc">@Localizer["LockWizardActionCloseHint"]</span>
+                            </span>
+                            <img src="/icons/chevron-right.svg" class="lock-option__chevron" alt="" aria-hidden="true" />
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="guide-step">
+                <button type="button" class="guide-back" @onclick="GoBack">
+                    <img src="/icons/chevron-left.svg" alt="" aria-hidden="true" />
+                    @Localizer["LockWizardBack"]
+                </button>
+
+                <div class="lock-stage lock-stage--full">
+                    @if (_lock == LockKind.Cylinder)
+                    {
+                        <LockAnimation ViewBox="125 45 250 410" />
+                    }
+                    else
+                    {
+                        <LockPanelAnimation ViewBox="160 10 230 460" />
+                    }
+                </div>
+                @if (_lock == LockKind.Cylinder)
+                {
+                    <p class="lock-stage__caption">@Localizer["CylinderTopView"]</p>
+                }
+
+                <div class="instruction-content">
+                    @FormatInstructionText(Localizer[InstructionKey])
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    // Wysokosc kroku 3 nie da sie animowac z height:auto, wiec ustawiamy ja w pikselach.
+    window.syncGuideHeight = (viewport) => {
+        if (!viewport) return;
+
+        const apply = () => {
+            const inner = viewport.firstElementChild;
+            if (!inner) return;
+            const height = inner.offsetHeight;
+
+            // Pierwsze ustawienie bez animacji - inaczej panel rozwija sie od zera.
+            if (!viewport.style.height) {
+                viewport.style.transition = "none";
+                viewport.style.height = height + "px";
+                void viewport.offsetHeight;
+                viewport.style.transition = "";
+                return;
+            }
+
+            viewport.style.height = height + "px";
+        };
+
+        apply();
+
+        // Pomiar przed zaladowaniem Montserrata klamie - font zastepczy jest wyzszy.
+        if (document.fonts && document.fonts.status !== "loaded") {
+            document.fonts.ready.then(apply);
+        }
+    };
+</script>
+
+@code {
+    [Parameter] public bool Frameless { get; set; }
+
+    private ElementReference _viewport;
+    private int _renderedStep;
+
+    private enum LockKind { Cylinder, Panel }
+    private enum GuideAction { Open, Close }
+
+    private LockKind? _lock;
+    private GuideAction? _action;
+
+    private int CurrentStep => _lock is null ? 1 : _action is null ? 2 : 3;
+
+    private string InstructionKey => (_lock, _action) switch
+    {
+        (LockKind.Cylinder, GuideAction.Open) => "InstructionCylinderOpen",
+        (LockKind.Cylinder, GuideAction.Close) => "InstructionCylinderClose",
+        (LockKind.Panel, GuideAction.Open) => "InstructionPanelOpen",
+        _ => "InstructionPanelClose"
+    };
+
+    protected override void OnInitialized()
+    {
+        GlobalizationService.OnChange += StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender || _renderedStep != CurrentStep)
+        {
+            _renderedStep = CurrentStep;
+            await JS.InvokeVoidAsync("syncGuideHeight", _viewport);
+        }
+    }
+
+    private void ChooseLock(LockKind kind)
+    {
+        _lock = kind;
+    }
+
+    private void ChooseAction(GuideAction action)
+    {
+        _action = action;
+    }
+
+    private void GoBack()
+    {
+        if (_action is not null)
+        {
+            _action = null;
+        }
+        else
+        {
+            _lock = null;
+        }
+    }
+
+    public void Dispose()
+    {
+        GlobalizationService.OnChange -= StateHasChanged;
+    }
+
+    private static MarkupString FormatInstructionText(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return new MarkupString(string.Empty);
+
+        var lines = text.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
+
+        var sb = new System.Text.StringBuilder();
+        var steps = new List<(string StepText, List<string> Hints, string? Continuation)>();
+        var notes = new List<string>();
+
+        void FlushSteps()
+        {
+            if (steps.Count == 0) return;
+            sb.Append("<ol class=\"instruction-steps\">");
+            foreach (var (stepText, hints, continuation) in steps)
+            {
+                sb.Append("<li class=\"instruction-steps__step\">")
+                    .Append($"<span class=\"instruction-steps__step-text\">{System.Net.WebUtility.HtmlEncode(stepText)}</span>");
+                if (hints.Count > 0)
+                {
+                    sb.Append("<div class=\"instruction-steps__body\">");
+                    foreach (var hint in hints)
+                        sb.Append($"<div class=\"instruction-steps__hint\">{System.Net.WebUtility.HtmlEncode(hint)}</div>");
+                    sb.Append("</div>");
+                }
+                if (continuation is not null)
+                    sb.Append($"<div class=\"instruction-steps__continuation\">{System.Net.WebUtility.HtmlEncode(continuation)}</div>");
+                sb.Append("</li>");
+            }
+            sb.Append("</ol>");
+            steps.Clear();
+        }
+
+        foreach (var rawLine in lines)
+        {
+            var line = rawLine.Trim();
+            if (string.IsNullOrEmpty(line)) continue;
+
+            if (line.StartsWith("## ", StringComparison.Ordinal))
+            {
+                FlushSteps();
+                sb.Append($"<div class=\"instruction-section-heading\">{System.Net.WebUtility.HtmlEncode(line[3..].Trim())}</div>");
+                continue;
+            }
+
+            var stepMatch = System.Text.RegularExpressions.Regex.Match(line, @"^(\d+)\.\s+(.+)$");
+            if (stepMatch.Success)
+            {
+                steps.Add((stepMatch.Groups[2].Value, [], null));
+                continue;
+            }
+
+            if (steps.Count == 0)
+            {
+                notes.Add(line);
+                continue;
+            }
+
+            if (line.StartsWith('(') && line.EndsWith(')'))
+            {
+                steps[^1].Hints.Add(line[1..^1]);
+                continue;
+            }
+            var (st, hints, _) = steps[^1];
+            steps[^1] = (st, hints, line);
+        }
+
+        FlushSteps();
+        foreach (var note in notes)
+            sb.Append($"<p class=\"instruction-note\">{System.Net.WebUtility.HtmlEncode(note)}</p>");
+
+        return new MarkupString(sb.ToString());
+    }
+}

@@ -132,6 +132,9 @@
   <data name="CheckIn" xml:space="preserve">
     <value>Check-in</value>
   </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Check in</value>
+  </data>
   <data name="CheckOut" xml:space="preserve">
     <value>Check-out</value>
   </data>
@@ -190,6 +193,12 @@
   <data name="ReservationCanceledDesc" xml:space="preserve">
     <value>This reservation is no longer active. Please contact Rentoom if you need help.</value>
   </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>This reservation has expired</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Your stay has already ended. We hope you enjoyed it — feel free to book with Rentoom again.</value>
+  </data>
   <data name="AiChatTitle" xml:space="preserve">
     <value>StayWell AI</value>
   </data>
@@ -210,5 +219,11 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Shopping Cart</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Translations are automatically generated and may contain errors. We encourage you to report them.</value>
   </data>
 </root>

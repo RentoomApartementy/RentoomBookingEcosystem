@@ -74,4 +74,10 @@
   <data name="Statute" xml:space="preserve">
     <value>Условия и положения</value>
   </data>
+  <data name="BlogList" xml:space="preserve">
+    <value>Блог</value>
+  </data>
+  <data name="BlogPost" xml:space="preserve">
+    <value>Блог</value>
+  </data>
 </root>

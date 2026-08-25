@@ -2,6 +2,7 @@
 @using StayWell.Services
 @using Microsoft.Extensions.Localization
 @using System.Globalization
+@using RentoomBooking.SharedFrontend.Localization
 @inject ModalService ModalService
 @inject GlobalizationService GlobalizationService
 @implements IDisposable
@@ -15,18 +16,19 @@
 <div class="header">
     <div class="left">
         <img class="logo" src="/images/resized-logo.png"/>
-        <div class="texts">
+        @*<div class="texts">
             <span class="name"><span class="stay">Stay</span><span class="stay">Well</span></span>
             <span class="reservation-id">
                 @reservationId
             </span>
-        </div>
+        </div>*@
     </div>
     <div class="right-wrapper">
 
         <div class="Languages">
-            <button @onclick="@ChangeLangButton" style="background: none; border: none">
-                <img src="/icons/languages.svg" />
+            <button class="lang-btn" @onclick="@ChangeLangButton">
+                <img class="lang-icon" src="/icons/languages.svg" />
+                <img class="lang-flag" src="@SupportedLanguagesProvider.GetFlagIconPath(GlobalizationService.CurrentCulture)" alt="" />
             </button>
         </div>
 

@@ -337,4 +337,7 @@ Ingliskeelsed rendireeglid on saadaval aadressil www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Tingimused ja nõusolekud</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Viibimise reeglid</value>
+  </data>
 </root>

@@ -21,6 +21,10 @@
             <img src="/icons/square-parking.svg" alt="@Localizer["ParkingFooter"]" />
             <span>@Localizer["ParkingFooter"]</span>
         </button>
+        <button class="footer-menu-item @(IsActive($"/reservation/{TokenFromUrl}/WifiPage") ? "active" : "")" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/WifiPage"))">
+            <img src="/icons/wifi.svg" alt="@Localizer["WifiFooter"]" />
+            <span>@Localizer["WifiFooter"]</span>
+        </button>
 
 
         @if(FeatureFlagsService.FeatureAllowed("loyalty-programme"))
@@ -33,19 +37,13 @@
     </div>
 
     <div class="footer-navigation-row">
-        <NavigationButton href="@($"/reservation/{TokenFromUrl}/InstructionsPage")"
-                          active="@IsActive($"/reservation/{TokenFromUrl}/InstructionsPage")"
-                          Text="@Localizer["InstructionsFooter"]">
-            <Icon>
-                <img src="/icons/book.svg" alt="Instrukcja" />
-            </Icon>
-        </NavigationButton>
+        <div class="footer-nav-indicator @(_activeIndex >= 0 ? "show" : "") @_indicatorDir @(_indicatorDir != "" ? (_pulseToggle ? "neck-a" : "neck-b") : "")" style="--i:@_pillIndex"></div>
 
-        <NavigationButton href="@($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
-                          active="@IsActive($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
-                          Text="@Localizer["Open"]">
+        <NavigationButton href="@($"/reservation/{TokenFromUrl}/CheckIn")"
+                          active="@IsCheckInPage()"
+                          Text="@Localizer["CheckInNow"]">
             <Icon>
-                <img src="/icons/lock.svg" alt="Otwórz" />
+                <img src="/icons/door-open.svg" alt="" />
             </Icon>
         </NavigationButton>
 
@@ -64,30 +62,72 @@
                 <img src="/icons/lamp.svg" alt="Zarządzaj" />
             </Icon>
         </NavigationButton>
-
-        <div class="footer-nav-btn-wrapper">
-            <button class="footer-nav-btn @(_menuOpen ? "active" : "")" @onclick="ToggleMenu">
-                <div class="footer-nav-icon">
-                    <span class="burger-icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                </div>
-                <span class="footer-nav-text">Menu</span>
-            </button>
-        </div>
     </div>
+
+    <button class="footer-more-bubble @(_menuOpen ? "active" : "")" @onclick="ToggleMenu"
+            aria-expanded="@(_menuOpen ? "true" : "false")">
+        <div class="footer-nav-icon">
+            <span class="burger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        </div>
+        <span class="footer-nav-text">@Localizer["More"].Value.TrimEnd('.')</span>
+    </button>
 </div>
 
 @code {
     private bool _menuOpen = false;
+
+    // Which nav column the pill marks: 0-2 nav buttons, -1 = hidden (page isn't in the footer).
+    private int _activeIndex = -1;
+    // Column the pill is physically positioned over. Held at the last real button while hidden,
+    // so leaving the footer fades the pill out in place instead of sliding it off to the left.
+    private int _pillIndex = 1;
+    // Travel direction class so the trailing edge can lag and stretch the pill.
+    private string _indicatorDir = "";
+    // Alternates each move so the raindrop "neck" animation restarts every time.
+    private bool _pulseToggle;
+
+    // Nav column the pill should mark, derived from the current route. The "more" bubble sits
+    // outside the pill row, so opening the menu never drags the active pill anywhere.
+    private int CalculateActiveIndex()
+    {
+        var t = TokenFromUrl;
+        if (IsCheckInPage()) return 0;
+        if (IsActive(new List<string> { $"/reservation/{t}/HomePage", $"/reservation/{t}/", $"/reservation/{t}" })) return 1;
+        if (IsActive($"/reservation/{t}/ManageStayPage")) return 2;
+        return -1;
+    }
+
+    private void RefreshIndicator()
+    {
+        var idx = CalculateActiveIndex();
+        if (idx == _activeIndex) return;
+
+        // Only stretch when sliding between two real buttons; a fade-in shouldn't.
+        if (idx >= 0 && _activeIndex >= 0)
+        {
+            _indicatorDir = idx > _activeIndex ? "to-right" : "to-left";
+            _pulseToggle = !_pulseToggle; // restart the neck animation on every move
+        }
+        else
+        {
+            _indicatorDir = "";
+        }
+        _activeIndex = idx;
+        // Keep the pill parked on the last real button when the page has no footer entry,
+        // so the fade-out happens in place rather than animating over to column -1.
+        if (idx >= 0) _pillIndex = idx;
+    }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         Navigation.LocationChanged += OnLocationChanged;
         GlobalizationService.OnChange += StateHasChanged;
+        RefreshIndicator();
     }
 
     private string? TokenFromUrl
@@ -105,12 +145,14 @@
     private async Task ToggleMenu()
     {
         _menuOpen = !_menuOpen;
+        RefreshIndicator();
         await SetBodyScroll(!_menuOpen);
     }
 
     private async Task CloseMenu()
     {
         _menuOpen = false;
+        RefreshIndicator();
         await SetBodyScroll(true);
     }
 
@@ -127,6 +169,7 @@
     )
     {
         _menuOpen = false;
+        RefreshIndicator();
         await SetBodyScroll(true);
         StateHasChanged();
     }
@@ -140,6 +183,15 @@
         GlobalizationService.OnChange -= StateHasChanged;
         if (_menuOpen)
             JS.InvokeVoidAsync("eval", "var b=document.getElementById('main-body');if(b)b.style.overflowY=''");
+    }
+
+    // Jeden przycisk stopki obsługuje cały meldunek (instrukcje wejścia i otwieranie),
+    // więc aktywność liczymy po samej ścieżce — niezależnie od ?focus=..., którym
+    // kafelki strony głównej celują w konkretną sekcję tej strony.
+    private bool IsCheckInPage()
+    {
+        var path = "/" + Navigation.ToBaseRelativePath(Navigation.Uri).Split('?', '#')[0].Trim('/');
+        return path.Equals($"/reservation/{TokenFromUrl}/CheckIn", StringComparison.OrdinalIgnoreCase);
     }
 
     private bool IsActive(string href)

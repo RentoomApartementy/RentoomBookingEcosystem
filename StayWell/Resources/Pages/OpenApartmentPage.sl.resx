@@ -297,4 +297,40 @@ Vse, kar moraš storiti, je, da zapreš vrata za sabo.</value>
   <data name="PageTitle" xml:space="preserve">
     <value>Odprto stanovanje</value>
   </data>
+  <data name="LockWizardLockQuestion" xml:space="preserve">
+    <value>Kateri grad imaš pred seboj?</value>
+  </data>
+  <data name="LockWizardLockHint" xml:space="preserve">
+    <value>Primerjaj to s tem, kar vidiš na vratih.</value>
+  </data>
+  <data name="LockTypeSpinningName" xml:space="preserve">
+    <value>Vrtljiva ključavnica</value>
+  </data>
+  <data name="LockTypeSpinningDesc" xml:space="preserve">
+    <value>Tipkovnica na okroglem gumbu. Po kodi obrneš gumb.</value>
+  </data>
+  <data name="LockTypePanelName" xml:space="preserve">
+    <value>Ključavnica panela</value>
+  </data>
+  <data name="LockTypePanelDesc" xml:space="preserve">
+    <value>Podolgovata plošča s tipkovnico, ročaj spodaj.</value>
+  </data>
+  <data name="LockWizardActionQuestion" xml:space="preserve">
+    <value>Kaj želiš početi?</value>
+  </data>
+  <data name="LockWizardActionOpen" xml:space="preserve">
+    <value>Odpri vrata</value>
+  </data>
+  <data name="LockWizardActionOpenHint" xml:space="preserve">
+    <value>Jaz grem noter</value>
+  </data>
+  <data name="LockWizardActionClose" xml:space="preserve">
+    <value>Zapri vrata</value>
+  </data>
+  <data name="LockWizardActionCloseHint" xml:space="preserve">
+    <value>Jaz grem ven in se zaprem za mano</value>
+  </data>
+  <data name="LockWizardBack" xml:space="preserve">
+    <value>Nazaj</value>
+  </data>
 </root>
