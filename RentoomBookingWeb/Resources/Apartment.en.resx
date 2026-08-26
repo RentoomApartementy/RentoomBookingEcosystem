@@ -562,6 +562,6 @@
     <value>Average guest rating: {0} per {1}</value>
   </data>
   <data name="CalendarLoadingAvailability" xml:space="preserve">
-    <value>I'm checking availability...</value>
+    <value>Checking availability...</value>
   </data>
 </root>

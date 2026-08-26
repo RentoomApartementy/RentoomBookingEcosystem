@@ -562,6 +562,6 @@
     <value>Povprečna ocena gostov: {0} na {1}</value>
   </data>
   <data name="CalendarLoadingAvailability" xml:space="preserve">
-    <value>Preverjam razpoložljivost...</value>
+    <value>Preverjanje razpoložljivosti...</value>
   </data>
 </root>

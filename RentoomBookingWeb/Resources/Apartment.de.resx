@@ -562,6 +562,6 @@
     <value>Durchschnittliche Gästebewertung: {0} pro {1}</value>
   </data>
   <data name="CalendarLoadingAvailability" xml:space="preserve">
-    <value>Ich prüfe die Verfügbarkeit...</value>
+    <value>Verfügbarkeit wird geprüft...</value>
   </data>
 </root>

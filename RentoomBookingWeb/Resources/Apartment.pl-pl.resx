@@ -523,7 +523,7 @@
     <value>Pokaż więcej</value>
   </data>
   <data name="CalendarLoadingAvailability" xml:space="preserve">
-    <value>Sprawdzam dostępność...</value>
+    <value>Sprawdzanie dostępności...</value>
   </data>
   <data name="CalendarLoadingMoreMonths" xml:space="preserve">
     <value>Ładowanie kolejnych miesięcy...</value>

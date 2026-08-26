@@ -562,4 +562,7 @@
   <data name="ApartmentReviewAverageLabel" xml:space="preserve">
     <value>Średnia ocena gości: {0} na {1}</value>
   </data>
+  <data name="CalendarLoadingAvailability" xml:space="preserve">
+    <value>Sprawdzanie dostępności...</value>
+  </data>
 </root>
