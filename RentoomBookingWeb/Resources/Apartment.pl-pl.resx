@@ -526,7 +526,7 @@
     <value>Sprawdzam dostępność...</value>
   </data>
   <data name="CalendarLoadingMoreMonths" xml:space="preserve">
-    <value>Ładuję kolejne miesiące...</value>
+    <value>Ładowanie kolejnych miesięcy...</value>
   </data>
   <data name="CalendarMaxOccupancy" xml:space="preserve">
     <value>Maksymalna liczba gości to {0}</value>

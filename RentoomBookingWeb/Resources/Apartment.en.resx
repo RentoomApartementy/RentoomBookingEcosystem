@@ -541,7 +541,7 @@
     <value>Show more</value>
   </data>
   <data name="CalendarLoadingMoreMonths" xml:space="preserve">
-    <value>I'm loading the next months...</value>
+    <value>Loading more months...</value>
   </data>
   <data name="CalendarMaxOccupancy" xml:space="preserve">
     <value>The maximum number of guests is {0}</value>

@@ -529,7 +529,7 @@
     <value>{0} km</value>
   </data>
   <data name="CalendarLoadingMoreMonths" xml:space="preserve">
-    <value>Budu nakládat příští měsíce...</value>
+    <value>Načítání dalších měsíců...</value>
   </data>
   <data name="CleaningFeeIncludedLabel" xml:space="preserve">
     <value>Zahrnuta je úklidová částka</value>
