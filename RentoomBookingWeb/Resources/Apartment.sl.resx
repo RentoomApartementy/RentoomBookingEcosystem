@@ -529,7 +529,7 @@
     <value>{0} km</value>
   </data>
   <data name="CalendarLoadingMoreMonths" xml:space="preserve">
-    <value>Nakladam naslednje mesece...</value>
+    <value>Nalaganje naslednjih mesecev...</value>
   </data>
   <data name="CleaningFeeIncludedLabel" xml:space="preserve">
     <value>Vključena je strošek čiščenja</value>
@@ -560,5 +560,8 @@
   </data>
   <data name="ApartmentReviewAverageLabel" xml:space="preserve">
     <value>Povprečna ocena gostov: {0} na {1}</value>
+  </data>
+  <data name="CalendarLoadingAvailability" xml:space="preserve">
+    <value>Preverjanje razpoložljivosti...</value>
   </data>
 </root>

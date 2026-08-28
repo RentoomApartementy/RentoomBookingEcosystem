@@ -205,7 +205,7 @@
     <value>Package</value>
   </data>
   <data name="SuggestedDateLoading" xml:space="preserve">
-    <value>Checking Availability...</value>
+    <value>Checking availability</value>
   </data>
   <data name="SuggestedDateFoundText" xml:space="preserve">
     <value>Found Availability</value>

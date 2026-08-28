@@ -205,7 +205,7 @@
     <value>Paket</value>
   </data>
   <data name="SuggestedDateLoading" xml:space="preserve">
-    <value>Überprüfung der Verfügbarkeit</value>
+    <value>Verfügbarkeit wird geprüft</value>
   </data>
   <data name="SuggestedDateFoundText" xml:space="preserve">
     <value>Kurzfrist verfügbar</value>

@@ -542,7 +542,7 @@
     <value>Pokaż więcej</value>
   </data>
   <data name="CalendarLoadingMoreMonths" xml:space="preserve">
-    <value>Ładuję kolejne miesiące...</value>
+    <value>Ładowanie kolejnych miesięcy...</value>
   </data>
   <data name="CalendarMaxOccupancy" xml:space="preserve">
     <value>Maksymalna liczba gości to {0}</value>
@@ -561,5 +561,8 @@
   </data>
   <data name="ApartmentReviewAverageLabel" xml:space="preserve">
     <value>Średnia ocena gości: {0} na {1}</value>
+  </data>
+  <data name="CalendarLoadingAvailability" xml:space="preserve">
+    <value>Sprawdzanie dostępności...</value>
   </data>
 </root>

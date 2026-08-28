@@ -529,7 +529,7 @@
     <value>{0} km</value>
   </data>
   <data name="CalendarLoadingMoreMonths" xml:space="preserve">
-    <value>Voy a cargar los próximos meses...</value>
+    <value>Cargando más meses...</value>
   </data>
   <data name="CleaningFeeIncludedLabel" xml:space="preserve">
     <value>Coste de limpieza incluido</value>
@@ -560,5 +560,8 @@
   </data>
   <data name="ApartmentReviewAverageLabel" xml:space="preserve">
     <value>Valoración media de los huéspedes: {0} por {1}</value>
+  </data>
+  <data name="CalendarLoadingAvailability" xml:space="preserve">
+    <value>Comprobando disponibilidad...</value>
   </data>
 </root>

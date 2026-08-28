@@ -52,6 +52,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         private ApartmentCalendarDto? _calendar;
         private bool _loading;
+        // Days past it — freshly appended months — must render as "still loading", not as unavailable.
+        private DateOnly? _loadedThrough;
         // Frozen once resolved - the displayed "from" price shouldn't change as the visitor
         // adjusts guests or loads more months; only availability (_calendar.Days) keeps refreshing.
         private decimal? _frozenFromPrice;
@@ -70,7 +72,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         private string? _dateNotice;
 
         private IJSObjectReference? _scrollModule;
-        private bool _scrolledToSelection;
+        private bool _scrolledToAnchor;
 
         private ElementReference _monthsRef;
         private DotNetObjectReference<ApartmentBookingWidget>? _objRef;
@@ -157,11 +159,11 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                 await _calendarScrollModule.InvokeVoidAsync("init", _objRef, _monthsRef);
             }
 
-            if (firstRender && _selStart is not null && !_scrolledToSelection)
+            if (firstRender && !_scrolledToAnchor && ScrollAnchorSelector() is string anchorSelector)
             {
-                _scrolledToSelection = true;
+                _scrolledToAnchor = true;
                 _scrollModule ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
-                await _scrollModule.InvokeVoidAsync("scrollStartDayNearTop", ".abw-day-start", ".abw-months");
+                await _scrollModule.InvokeVoidAsync("scrollDayNearTop", anchorSelector, ".abw-months");
             }
         }
 
@@ -235,6 +237,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                 return;
             }
 
+            var requestedThrough = LastVisibleDay();
             _loading = true;
             StateHasChanged();
             try
@@ -242,11 +245,13 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                 _calendar = await CalendarService.GetCalendarAsync(
                     Apartment.Id,
                     _today,
-                    LastVisibleDay(),
+                    requestedThrough,
                     _adults,
                     _children,
                     applyMandatoryAddonsFee: ApplyMandatoryAddonsFee,
                     mandatoryAddonCharges: _mandatoryAddonCharges);
+
+                _loadedThrough = requestedThrough;
 
                 RevalidateSelection();
 
@@ -349,6 +354,25 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             }
         }
 
+        /// <summary>Day the calendar scrolls to on open, or null to leave it at the top. With a range
+        /// from the URL it's the selected check-in; otherwise the Monday a week before today, so the
+        /// current week sits right under the sticky month title with one week of context above it —
+        /// late in the month the elapsed days would otherwise fill the whole scroll viewport.</summary>
+        private string? ScrollAnchorSelector()
+        {
+            if (_selStart is not null)
+            {
+                return ".abw-day-start";
+            }
+
+            var anchor = MondayOf(_today).AddDays(-7);
+            return anchor > FirstOfMonth(_today)
+                ? $".abw-day[data-date='{Iso(anchor)}']"
+                : null;
+        }
+
+        private static DateOnly MondayOf(DateOnly date) => date.AddDays(-(((int)date.DayOfWeek + 6) % 7));
+
         /// <summary>Monday-first leading blank count for a month's first day.</summary>
         private static int LeadingBlanks(DateOnly monthStart)
             => ((int)monthStart.DayOfWeek + 6) % 7;
@@ -398,6 +422,22 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             var awaitingEnd = _selStart is DateOnly s && _selEnd is null && date > s;
             return awaitingEnd ? CanBeEnd(date) : CanBeStart(date);
         }
+
+        private bool IsAwaitingEnd => _selStart is not null && _selEnd is null;
+
+        private bool IsInitialLoad => _calendar is null;
+
+        // Appending months isn't a refresh — the grid stays live, only the new days are skeletons.
+        private bool IsRefreshing => _loading && _calendar is not null && !_loadingMoreMonths;
+
+        private bool ShowLoadingPill => _loading;
+
+        private bool IsDayLoaded(DateOnly date)
+            => _calendar is not null && _loadedThrough is DateOnly through && date <= through;
+
+        private string? SelectedStartIso => _selStart is DateOnly s ? Iso(s) : null;
+
+        private static string Iso(DateOnly date) => date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
         private bool IsSelectedStart(DateOnly date) => _selStart == date;
         private bool IsSelectedEnd(DateOnly date) => _selEnd == date;
